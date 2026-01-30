@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_JcRUYPvIEfC2iLJ2NvxHLA" name="CatanSimulatorDomainModel">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_JwhtIPvIEfC2iLJ2NvxHLA">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Package" xmi:id="_R9WQUP4HEfCOd8UCBhMXvw" name="catanUML">
+    <packagedElement xmi:type="uml:Class" xmi:id="_G1_hYP4HEfCOd8UCBhMXvw" name="Player"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_IJB2kP4HEfCOd8UCBhMXvw" name="GameMaster">
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_fkSnIP4HEfCOd8UCBhMXvw" name="players" visibility="private" type="_G1_hYP4HEfCOd8UCBhMXvw" isOrdered="true">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ZVBzEP4IEfCOd8UCBhMXvw" name="LiteralInteger1" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ZVDBMP4IEfCOd8UCBhMXvw" name="LiteralUnlimitedNatural1" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_kig0oP4HEfCOd8UCBhMXvw" name="currentRound" visibility="private">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedAttribute>
+      <ownedOperation xmi:type="uml:Operation" xmi:id="_7xbLQP4HEfCOd8UCBhMXvw" name="Operation3"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_5ku0wP4IEfCOd8UCBhMXvw" name="Board"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_7uBcgP4IEfCOd8UCBhMXvw" name="Tile"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_-gm44P4IEfCOd8UCBhMXvw" name="Vertex"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_JXcfkP4JEfCOd8UCBhMXvw" name="Dice"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_PXR7EP4JEfCOd8UCBhMXvw" name="RuleValidator"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_W1mGwP4JEfCOd8UCBhMXvw" name="Road"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_bOG_IP4JEfCOd8UCBhMXvw" name="PlayerAction"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_eWWicP4JEfCOd8UCBhMXvw" name="Resources"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_ioAk4P4JEfCOd8UCBhMXvw" name="Buildings"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_mKd_AP4JEfCOd8UCBhMXvw" name="City"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_og2AgP4JEfCOd8UCBhMXvw" name="Settlement"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_tt4tIP4JEfCOd8UCBhMXvw" name="BuildRoadAction"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_v6LlkP4JEfCOd8UCBhMXvw" name="BuildSettlementAction"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_6kZFgP4JEfCOd8UCBhMXvw" name="BuildCityAction"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_8f7lIP4JEfCOd8UCBhMXvw" name="PassAction"/>
+  </packagedElement>
+</uml:Model>
