@@ -245,7 +245,7 @@ public class Board {
      * 
      * @param building The building to place
      */
-    public void placeBuilding(Building building) {
+    public void placeBuilding(Buildings building) {
         // Building placement is handled through the vertex
         // This method is included for UML compliance
     }

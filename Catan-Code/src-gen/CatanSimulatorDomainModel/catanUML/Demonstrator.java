@@ -2,6 +2,13 @@ package CatanSimulatorDomainModel.catanUML;
 
 import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
 import CatanSimulatorDomainModel.catanUML.util.ConfigReader;
+import CatanSimulatorDomainModel.catanUML.model.Player;
+import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
+import CatanSimulatorDomainModel.catanUML.model.Buildings;
+import CatanSimulatorDomainModel.catanUML.model.Settlement;
+import CatanSimulatorDomainModel.catanUML.model.City;
+import java.util.List;
+
 /**
  * Demonstrator class for the Catan Simulator.
  * 
@@ -130,6 +137,11 @@ public class Demonstrator {
         // - Set up dice and rule validator
         GameMaster game = new GameMaster(config.getMaxRounds());
         
+        
+        // INITIALIZATION PHASE (Custom additions to trigger activity)
+        // 1. Get the list of players from the game
+        // (You may need to add a getPlayers() method to GameMaster if it doesn't exist)
+
         // ============================================================
         // SIMULATION PHASE (R1.3, R1.4, R1.5, R1.6, R1.7, R1.8)
         // ============================================================
@@ -139,6 +151,31 @@ public class Demonstrator {
         // - Enforce game invariants through RuleValidator (R1.6)
         // - Print formatted output (R1.7)
         // - Force building when >7 cards (R1.8)
+        
+        List<Player> players = game.getPlayers();
+        
+        // Map vertices for starting settlements (just pick 4 spread out ones)
+        int[] startingVertices = {0, 10, 20, 30}; 
+        
+        for (int i = 0; i < players.size(); i++) {
+            Player p = players.get(i);
+            
+            // Give resources (Wood/Brick for roads, Wheat/Sheep for settlements)
+            p.collectResource(ResourceType.WOOD, 20);
+            p.collectResource(ResourceType.BRICK, 20);
+            p.collectResource(ResourceType.WHEAT, 20);
+            p.collectResource(ResourceType.SHEEP, 20);
+            p.collectResource(ResourceType.ORE, 20);
+            
+            // Place one initial settlement so they can build out from it
+            Settlement s = new Settlement(p);
+            game.getBoard().getVertex(startingVertices[i]).setBuilding(s);
+            p.addBuilding(s);
+        }
+        
+        System.out.println("Player 1 buildings: " + players.get(0).getBuildingsBuilt().size());
+        System.out.println("Vertex 0 adjacents: " + game.getBoard().getVertex(0).getAdjacentVertices().size());
+        
         game.startSimulation();
         
         // ============================================================

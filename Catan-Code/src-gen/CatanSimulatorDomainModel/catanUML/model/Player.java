@@ -19,7 +19,7 @@ public class Player {
     private ResourceHand hand;
     private int victoryPoints;
     private List<Road> roadsBuilt;
-    private List<Building> buildingsBuilt;
+    private List<Buildings> buildingsBuilt;
     private Random random;
 
     /**
@@ -47,7 +47,7 @@ public class Player {
         boolean mustBuild = hand.totalCards() > 7;
         
         // Try to build something if possible
-        Move move = decideMove(game, mustBuild);
+        PlayerAction move = decideMove(game, mustBuild);
         move.execute(game);
     }
 
@@ -65,16 +65,16 @@ public class Player {
      * @param mustBuild Whether player must attempt to build (>7 cards)
      * @return The selected move
      */
-    private Move decideMove(GameMaster game, boolean mustBuild) {
-        List<Move> possibleMoves = new ArrayList<>();
+    private PlayerAction decideMove(GameMaster game, boolean mustBuild) {
+        List<PlayerAction> possibleMoves = new ArrayList<>();
 
         // Try to build a city (highest priority - 2 VP)
         if (canAfford(Cost.cityCost())) {
-            for (Building building : buildingsBuilt) {
+            for (Buildings building : buildingsBuilt) {
                 if (building instanceof Settlement) {
                     Vertex location = building.getLocation();
                     if (game.getRuleValidator().canBuildCity(this, location)) {
-                        possibleMoves.add(new BuildCityMove(this, location));
+                        possibleMoves.add(new BuildCityAction(this, location));
                     }
                 }
             }
@@ -84,7 +84,7 @@ public class Player {
         if (canAfford(Cost.settlementCost())) {
             for (Vertex vertex : game.getBoard().getVertices()) {
                 if (game.getRuleValidator().canBuildSettlement(this, vertex)) {
-                    possibleMoves.add(new BuildSettlementMove(this, vertex));
+                    possibleMoves.add(new BuildSettlementAction(this, vertex));
                 }
             }
         }
@@ -94,7 +94,7 @@ public class Player {
             for (Vertex v1 : game.getBoard().getVertices()) {
                 for (Vertex v2 : v1.getAdjacentVertices()) {
                     if (game.getRuleValidator().canBuildRoad(this, v1, v2)) {
-                        possibleMoves.add(new BuildRoadMove(this, v1, v2));
+                        possibleMoves.add(new BuildRoadAction(this, v1, v2));
                     }
                 }
             }
@@ -102,7 +102,7 @@ public class Player {
 
         // If must build but can't, or choose to pass
         if (possibleMoves.isEmpty() || (!mustBuild && random.nextDouble() < 0.3)) {
-            return new PassMove(this);
+            return new PassAction(this);
         }
 
         // Randomly select from possible moves
@@ -166,7 +166,7 @@ public class Player {
      * 
      * @param building The building to add
      */
-    public void addBuilding(Building building) {
+    public void addBuilding(Buildings building) {
         buildingsBuilt.add(building);
     }
 
@@ -175,7 +175,7 @@ public class Player {
     public ResourceHand getHand() { return hand; }
     public int getVictoryPoints() { return victoryPoints; }
     public List<Road> getRoadsBuilt() { return roadsBuilt; }
-    public List<Building> getBuildingsBuilt() { return buildingsBuilt; }
+    public List<Buildings> getBuildingsBuilt() { return buildingsBuilt; }
 
     @Override
     public String toString() {

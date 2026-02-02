@@ -11,7 +11,7 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * 
  * R1.6: Cities must replace existing settlements.
  */
-public class BuildCityMove extends Move {
+public class BuildCityAction extends PlayerAction {
     private Vertex location;
 
     /**
@@ -20,7 +20,7 @@ public class BuildCityMove extends Move {
      * @param player The player building the city
      * @param location The vertex where the city will be placed (must have a settlement)
      */
-    public BuildCityMove(Player player, Vertex location) {
+    public BuildCityAction(Player player, Vertex location) {
         super(player);
         this.location = location;
     }
@@ -43,7 +43,7 @@ public class BuildCityMove extends Move {
         player.spendResources(Cost.cityCost());
 
         // Get the old settlement
-        Building oldBuilding = location.getBuilding();
+        Buildings oldBuilding = location.getBuilding();
         
         // Create and place city
         City city = new City(player);

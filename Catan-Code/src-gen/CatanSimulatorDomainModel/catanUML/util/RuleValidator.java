@@ -136,7 +136,11 @@ public class RuleValidator {
      */
     public boolean canBuildCity(Player player, Vertex location) {
         // Must have a settlement at this location
-        Building building = location.getBuilding();
+    	if (location == null) {
+            return false;
+        }
+    	
+        Buildings building = location.getBuilding();
         if (building == null || !(building instanceof Settlement)) {
             return false;
         }
@@ -167,7 +171,7 @@ public class RuleValidator {
     }
 
     /**
-     * Sets the board for this validator.
+     * Sets the board for this.
      * Used if the board changes during the game.
      * 
      * @param board The new board to validate against

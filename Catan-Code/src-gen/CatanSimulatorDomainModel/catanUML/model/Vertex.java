@@ -13,7 +13,7 @@ import java.util.List;
 public class Vertex {
     private int id;
     private Player owner;
-    private Building building;
+    private Buildings building;
     private List<Vertex> adjacentVertices;
 
     /**
@@ -64,7 +64,7 @@ public class Vertex {
      * 
      * @param building The building to place
      */
-    public void placeBuilding(Building building) {
+    public void placeBuilding(Buildings building) {
         this.building = building;
         this.owner = building.getOwner();
     }
@@ -83,9 +83,9 @@ public class Vertex {
     // Getters and setters
     public int getId() { return id; }
     public Player getOwner() { return owner; }
-    public Building getBuilding() { return building; }
+    public Buildings getBuilding() { return building; }
     public List<Vertex> getAdjacentVertices() { return adjacentVertices; }
     
     public void setOwner(Player owner) { this.owner = owner; }
-    public void setBuilding(Building building) { this.building = building; }
+    public void setBuilding(Buildings building) { this.building = building; }
 }

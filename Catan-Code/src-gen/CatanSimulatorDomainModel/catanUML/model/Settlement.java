@@ -8,7 +8,7 @@ package CatanSimulatorDomainModel.catanUML.model;
  * Victory Points: 1
  * Can be upgraded to a City.
  */
-public class Settlement extends Building {
+public class Settlement extends Buildings {
     
     /**
      * Constructs a Settlement owned by the specified player.

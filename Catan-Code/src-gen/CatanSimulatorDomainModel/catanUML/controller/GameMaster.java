@@ -10,7 +10,7 @@ import java.util.List;
  * import CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.troller for the Catan simulation.
  * 
  * Controls turn order, game loop, dice rolling, and victory checks.
- * This is the central orchestrator for the entire simulation.
+ * This is where the entire simulation is ran.
  * 
  * Responsibilities:
  * - Initialize board and players (R1.1, R1.2)
@@ -141,7 +141,7 @@ public class GameMaster {
                 // Award resources to players with buildings on adjacent vertices
                 for (Vertex vertex : tile.getAdjacentVertices()) {
                     if (vertex.isOccupied()) {
-                        Building building = vertex.getBuilding();
+                        Buildings building = vertex.getBuilding();
                         Player owner = building.getOwner();
                         
                         // Settlements produce 1, cities produce 2

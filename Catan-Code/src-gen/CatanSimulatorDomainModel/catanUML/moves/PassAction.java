@@ -12,14 +12,14 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * - Player chooses not to build (random decision)
  * - No valid moves are available
  */
-public class PassMove extends Move {
+public class PassAction extends PlayerAction {
 
     /**
      * Constructs a PassMove.
      * 
      * @param player The player passing their turn
      */
-    public PassMove(Player player) {
+    public PassAction(Player player) {
         super(player);
     }
 

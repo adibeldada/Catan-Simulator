@@ -10,7 +10,7 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * 
  * The road is added to both the board and the player's collection.
  */
-public class BuildRoadMove extends Move {
+public class BuildRoadAction extends PlayerAction {
     private Vertex start;
     private Vertex end;
 
@@ -21,7 +21,7 @@ public class BuildRoadMove extends Move {
      * @param start The starting vertex
      * @param end The ending vertex
      */
-    public BuildRoadMove(Player player, Vertex start, Vertex end) {
+    public BuildRoadAction(Player player, Vertex start, Vertex end) {
         super(player);
         this.start = start;
         this.end = end;

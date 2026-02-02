@@ -8,7 +8,7 @@ package CatanSimulatorDomainModel.catanUML.model;
  * Victory Points: 2
  * Cities produce twice as many resources as settlements.
  */
-public class City extends Building {
+public class City extends Buildings {
     
     /**
      * Constructs a City owned by the specified player.

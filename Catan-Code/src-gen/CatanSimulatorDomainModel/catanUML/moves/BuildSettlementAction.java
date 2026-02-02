@@ -11,7 +11,7 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * 
  * The settlement is added to both the vertex and the player's collection.
  */
-public class BuildSettlementMove extends Move {
+public class BuildSettlementAction extends PlayerAction {
     private Vertex location;
 
     /**
@@ -20,7 +20,7 @@ public class BuildSettlementMove extends Move {
      * @param player The player building the settlement
      * @param location The vertex where the settlement will be placed
      */
-    public BuildSettlementMove(Player player, Vertex location) {
+    public BuildSettlementAction(Player player, Vertex location) {
         super(player);
         this.location = location;
     }

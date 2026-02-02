@@ -11,7 +11,7 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * The execute() method performs the action and updates game state.
  * The describe() method provides a human-readable description for logging.
  */
-public abstract class Move {
+public abstract class PlayerAction {
     protected Player player;
 
     /**
@@ -19,7 +19,7 @@ public abstract class Move {
      * 
      * @param player The player making this move
      */
-    public Move(Player player) {
+    public PlayerAction(Player player) {
         this.player = player;
     }
 
