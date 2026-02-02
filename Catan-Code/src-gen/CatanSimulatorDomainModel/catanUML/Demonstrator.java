@@ -5,9 +5,14 @@ import CatanSimulatorDomainModel.catanUML.util.ConfigReader;
 import CatanSimulatorDomainModel.catanUML.model.Player;
 import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
 import CatanSimulatorDomainModel.catanUML.model.Buildings;
+import CatanSimulatorDomainModel.catanUML.model.Road;
 import CatanSimulatorDomainModel.catanUML.model.Settlement;
+import CatanSimulatorDomainModel.catanUML.model.Vertex;
 import CatanSimulatorDomainModel.catanUML.model.City;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Demonstrator class for the Catan Simulator.
@@ -153,9 +158,11 @@ public class Demonstrator {
         // - Force building when >7 cards (R1.8)
         
         List<Player> players = game.getPlayers();
+        List<Integer> assignedVertices = new ArrayList<>();
+        Random rand = new Random();
         
         // Map vertices for starting settlements (just pick 4 spread out ones)
-        int[] startingVertices = {0, 10, 20, 30}; 
+        //int[] startingVertices = {42, 50, 26, 33}; 
         
         for (int i = 0; i < players.size(); i++) {
             Player p = players.get(i);
@@ -167,10 +174,43 @@ public class Demonstrator {
             p.collectResource(ResourceType.SHEEP, 20);
             p.collectResource(ResourceType.ORE, 20);
             
+            Vertex startVertex = null;
+            boolean validSpotFound = false;
+            
+            while (!validSpotFound) {
+            	int randomIndex = rand.nextInt(54); // Tiles: 0-18, Vertices: 0-53
+                Vertex candidate = game.getBoard().getVertex(randomIndex);
+
+                // CHECK 1: Is it a dead zone? (Must have at least 2 neighbors to be useful)
+                boolean isNotDeadZone = candidate.getAdjacentVertices().size() >= 2;
+
+                // CHECK 2: Is it too close to another player? (Distance Rule)
+                boolean respectsDistance = true;
+                for (int occupiedId : assignedVertices) {
+                	Vertex occupied = game.getBoard().getVertex(occupiedId);
+                	if (candidate == occupied || candidate.getAdjacentVertices().contains(occupied)) {
+                		respectsDistance = false;
+                		break;
+                	}
+                }
+                
+                if (isNotDeadZone && respectsDistance) {
+                    startVertex = candidate;
+                    assignedVertices.add(randomIndex);
+                    validSpotFound = true;
+                }
+            }
+            
+            
             // Place one initial settlement so they can build out from it
             Settlement s = new Settlement(p);
-            game.getBoard().getVertex(startingVertices[i]).setBuilding(s);
+            startVertex.placeBuilding(s); 	
             p.addBuilding(s);
+            p.addVictoryPoints(1);
+            
+            Vertex neighbor = startVertex.getAdjacentVertices().get(0);	
+            Road r = new Road(p, startVertex, neighbor);
+            p.addRoad(r);
         }
         
         System.out.println("Player 1 buildings: " + players.get(0).getBuildingsBuilt().size());
