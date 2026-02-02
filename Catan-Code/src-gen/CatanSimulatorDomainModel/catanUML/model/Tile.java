@@ -1,11 +1,8 @@
-package model;
-
-import enums.ResourceType;
-import import CatanSimulatorDomainModel.catanUML.CatanSimulatorDomainMimport CatanSimulatorDomainModel.catanUML.import CatanSimulatorDomainModel.catanUML.CatanSimulatorDomainMimport CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.import CatanSimulatorDomainModel.catanUML.il.ArrayList;
-import CatanSimulatorDomainModel.catanUML.mport CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.til.List;
-
+import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
+import java.util.ArrayList;
+import java.util.List;
 /**
- * Rimport CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.ts a resource tile on the board.
+ * Rimport CatanSimulatorDomainModel.catanUML.ts a resource tile on the board.
  * 
  * Each tile has a resource type and a number token (2-12).
  * When the number is rolled, the tile produces resources for

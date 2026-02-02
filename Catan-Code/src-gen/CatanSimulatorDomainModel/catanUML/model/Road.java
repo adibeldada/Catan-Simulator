@@ -1,4 +1,4 @@
-package model;
+package CatanSimulatorDomainModel.catanUML.model;
 
 /**
  * Represents a road connecting two vertices.

@@ -1,8 +1,7 @@
 package CatanSimulatorDomainModel.catanUML;
-import controller.GameMaster;
 
-import util.ConfigReader;
-
+import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
+import CatanSimulatorDomainModel.catanUML.util.ConfigReader;
 /**
  * Demonstrator class for the Catan Simulator.
  * 

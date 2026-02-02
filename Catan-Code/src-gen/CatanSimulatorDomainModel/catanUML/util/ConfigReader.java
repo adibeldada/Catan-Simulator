@@ -1,10 +1,8 @@
-package util;
-package CatanSimulatorDomainModel.catanUML;
+package CatanSimulatorDomainModel.catanUML.util;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
 /**
  * Reads configuration from a file.
  * 

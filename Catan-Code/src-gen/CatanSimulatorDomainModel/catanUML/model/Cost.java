@@ -1,4 +1,4 @@
-package model;
+package CatanSimulatorDomainModel.catanUML.model;
 
 /**
  * Represents the resource cost for building structures in Catan.

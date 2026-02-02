@@ -1,9 +1,8 @@
-package model;
+package CatanSimulatorDomainModel.catanUML.model;
 
-import enums.ResourceType;
+import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * Represents the game board with tiles, vertices, and roads.
  * 

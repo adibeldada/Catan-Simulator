@@ -1,6 +1,6 @@
-package model;
+package CatanSimulatorDomainModel.catanUML.model;
 
-import enums.ResourceType;
+import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
 
 /**
  * Tracks the resources held by a player.

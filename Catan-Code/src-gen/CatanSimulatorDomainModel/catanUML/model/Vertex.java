@@ -1,8 +1,7 @@
-package model;
+package CatanSimulatorDomainModel.catanUML.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * Represents a vertex on the board where buildings can be placed.
  * 

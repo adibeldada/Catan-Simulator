@@ -1,9 +1,9 @@
-package moves;
+package CatanSimulatorDomainModel.catanUML.moves;
 
-import model.*;
-import controller.import CatanSimulatorDomainModel.catanUML.CatanSimulimport CatanSimulatorDomainModel.catanUML.ainModel.caimport CatanSimulatorDomainModel.catanUML.CatanSimulimport CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.ainModel.caimport CatanSimulatorDomainModel.catanUML.ter;
+import CatanSimulatorDomainModel.catanUML.model.*;
+import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
 
-/*import CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.epresents the action of building a road.
+/*import CatanSimulatorDomainModel.catanUML.epresents the action of building a road.
  * 
  * Cost: 1 wood, 1 brick
  * Effect: Creates a road connecting two vertices

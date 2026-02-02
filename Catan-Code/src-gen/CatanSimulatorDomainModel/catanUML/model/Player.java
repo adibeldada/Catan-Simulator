@@ -1,12 +1,11 @@
-package model;
+package CatanSimulatorDomainModel.catanUML.model;
 
-import enums.ResourceType;
-import controller.GameMaster;
-import moves.*;
+import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
+import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
+import CatanSimulatorDomainModel.catanUML.moves.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 /**
  * Represents a player in the game.
  * 

@@ -1,8 +1,7 @@
-package moves;
+package CatanSimulatorDomainModel.catanUML.moves;
 
-import model.Player;
-import controller.GameMaster;
-
+import CatanSimulatorDomainModel.catanUML.model.Player;
+import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
 /**
  * Abstract base class for player moves/actions.
  * 

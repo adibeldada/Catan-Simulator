@@ -1,4 +1,4 @@
-package enums;
+package CatanSimulatorDomainModel.catanUML.enums;
 
 /**
  * Enum representing the different types of resources in Settlers of Catan.

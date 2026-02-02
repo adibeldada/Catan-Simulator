@@ -1,8 +1,7 @@
-package moves;
+package CatanSimulatorDomainModel.catanUML.moves;
 
-import model.*;
-import controller.GameMaster;
-
+import CatanSimulatorDomainModel.catanUML.model.*;
+import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
 /**
  * Represents the action of building a settlement.
  * 

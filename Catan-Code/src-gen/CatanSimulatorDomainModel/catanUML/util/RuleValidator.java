@@ -1,7 +1,6 @@
-package util;
+package CatanSimulatorDomainModel.catanUML.util;
 
-import model.*;
-
+import CatanSimulatorDomainModel.catanUML.model.*;
 /**
  * Validates game rules and ensures invariants are maintained.
  * 

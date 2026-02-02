@@ -1,7 +1,6 @@
-package util;
+package CatanSimulatorDomainModel.catanUML.util;
 
 import java.util.Random;
-
 /**
  * Simulates rolling two six-sided dice.
  * 

@@ -1,13 +1,13 @@
-package controller;
+package CatanSimulatorDomainModel.catanUML.controller;
 
-import model.*;
-import util.Dice;import CatanSimulatorDomainModel.catanUML.CatanSimulimport CatanSimulatorDomainModel.catanUML.ainModel.caimport CatanSimulatorDomainModel.catanUML.CatanSimulimport CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.ainModel.caimport CatanSimulatorDomainMoimport CatanSimulatorDomainModel.catanUML.import CatanSimulatorDomainModel.catanUML.util.Ruleimport CatanSimulatorDomainModel.caimporimport CatanSimulatorDomainModel.catanUML.import CatanSimulatorDomainModel.catanUML.orDomainModel.catanUML.or;
-import import CatanSimulatorimport CatanSimulatorDomainModel.catanUML.import CatanSimulatorDomainModel.catanUML.import CatanSimimport CatanSimulatorDomainModel.catanUML.omainModel.catanUML.esourceType;
-import import CatanSimulatorDomainMimport CatanSimulatorDomainModel.catanUML.import CatanSimulatorDomainModel.catanUML.il.ArrayList;
-importimport CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.til.List;
-
+import CatanSimulatorDomainModel.catanUML.model.*;
+import CatanSimulatorDomainModel.catanUML.util.Dice;
+import CatanSimulatorDomainModel.catanUML.util.RuleValidator;
+import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
+import java.util.ArrayList;
+import java.util.List;
 /**
- * Mimport CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.troller for the Catan simulation.
+ * import CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.troller for the Catan simulation.
  * 
  * Controls turn order, game loop, dice rolling, and victory checks.
  * This is the central orchestrator for the entire simulation.

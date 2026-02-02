@@ -1,9 +1,8 @@
-package moves;
+package CatanSimulatorDomainModel.catanUML.moves;
 
-import model.Player;
-import controimport CatanSimulatorDomainModel.catanUML.CatanSimulatorDimport CatanSimulatorDomainModel.catanUML.del.caimport CatanSimulatorDomainModel.catanUML.CatanSimulatorDimport CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.del.caimport CatanSimulatorDomainModel.catanUML.meMaster;
-
-/*import CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.epresents passing without taking an action.
+import CatanSimulatorDomainModel.catanUML.model.Player;
+import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
+/*import CatanSimulatorDomainModel.catanUML.epresents passing without taking an action.
  * 
  * Cost: None
  * Effect: Player takes no action this turn

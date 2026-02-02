@@ -1,4 +1,4 @@
-package model;
+package CatanSimulatorDomainModel.catanUML.model;
 
 /**
  * Abstract base class for buildings (settlements and cities).
