@@ -1,1 +1,1 @@
-# Catan-Simulator
+# Catan Simulator
