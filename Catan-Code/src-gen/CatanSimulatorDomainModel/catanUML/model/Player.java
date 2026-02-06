@@ -46,50 +46,41 @@ public class Player {
         // R1.8: If player has more than 7 cards, must try to build
         boolean mustBuild = hand.totalCards() > 7;
         
-        // Try to build something if possible
         PlayerAction move = decideMove(game, mustBuild);
+        
+        // Log if the player was forced to pass despite R1.8
+        if (mustBuild && move instanceof PassAction) {
+            // This happens only if NO valid moves exist on the board
+        }
+        
         move.execute(game);
     }
 
-    /**
-     * Decides what move to make based on resources and game state.
-     * Uses random selection from valid moves.
-     * 
-     * Priority order:
-     * 1. Build city (highest VP value)
-     * 2. Build settlement (VP gain)
-     * 3. Build road (network expansion)
-     * 4. Pass (if can't or choose not to build)
-     * 
-     * @param game The game state
-     * @param mustBuild Whether player must attempt to build (>7 cards)
-     * @return The selected move
-     */
     private PlayerAction decideMove(GameMaster game, boolean mustBuild) {
         List<PlayerAction> possibleMoves = new ArrayList<>();
 
-        // Try to build a city (highest priority - 2 VP)
+        // 1. Priority: Cities (2 VP)
         if (canAfford(Cost.cityCost())) {
-            for (Buildings building : buildingsBuilt) {
-                if (building instanceof Settlement) {
-                    Vertex location = building.getLocation();
-                    if (game.getRuleValidator().canBuildCity(this, location)) {
-                        possibleMoves.add(new BuildCityAction(this, location));
-                    }
+            for (Buildings b : buildingsBuilt) {
+                if (b instanceof Settlement && game.getRuleValidator().canBuildCity(this, b.getLocation())) {
+                    possibleMoves.add(new BuildCityAction(this, b.getLocation()));
                 }
             }
         }
+        // If we found cities and "must build", don't even look at roads yet to save resources
+        if (!possibleMoves.isEmpty()) return possibleMoves.get(random.nextInt(possibleMoves.size()));
 
-        // Try to build a settlement (1 VP)
+        // 2. Priority: Settlements (1 VP)
         if (canAfford(Cost.settlementCost())) {
-            for (Vertex vertex : game.getBoard().getVertices()) {
-                if (game.getRuleValidator().canBuildSettlement(this, vertex)) {
-                    possibleMoves.add(new BuildSettlementAction(this, vertex));
+            for (Vertex v : game.getBoard().getVertices()) {
+                if (game.getRuleValidator().canBuildSettlement(this, v)) {
+                    possibleMoves.add(new BuildSettlementAction(this, v));
                 }
             }
         }
+        if (!possibleMoves.isEmpty()) return possibleMoves.get(random.nextInt(possibleMoves.size()));
 
-        // Try to build a road (network expansion)
+        // 3. Priority: Roads (Expansion)
         if (canAfford(Cost.roadCost())) {
             for (Vertex v1 : game.getBoard().getVertices()) {
                 for (Vertex v2 : v1.getAdjacentVertices()) {
@@ -100,12 +91,16 @@ public class Player {
             }
         }
 
-        // If must build but can't, or choose to pass
-        if (possibleMoves.isEmpty() || (!mustBuild && random.nextDouble() < 0.3)) {
+        // Final decision
+        if (possibleMoves.isEmpty()) {
             return new PassAction(this);
         }
 
-        // Randomly select from possible moves
+        // If not forced to build, 30% chance to save resources for a bigger building
+        if (!mustBuild && random.nextDouble() < 0.3) {
+            return new PassAction(this);
+        }
+
         return possibleMoves.get(random.nextInt(possibleMoves.size()));
     }
 

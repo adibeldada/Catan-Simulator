@@ -81,61 +81,28 @@ public class Board {
      * Note: This is a simplified implementation. A full production version
      * would need all 54 vertices properly connected.
      */
+ // Partial fix for Board.java to allow more movement
     private void setupVertexAdjacencies() {
-        // Center hexagon vertices (0-5)
-        addVertexConnection(0, 1);
-        addVertexConnection(1, 2);
-        addVertexConnection(2, 3);
-        addVertexConnection(3, 4);
-        addVertexConnection(4, 5);
-        addVertexConnection(5, 0);
+        // This now covers a much larger portion of the 54 vertices to prevent "dead ends"
+        for (int i = 0; i <= 5; i++) {
+            addVertexConnection(i, (i + 1) % 6); // Center Ring
+            addVertexConnection(i, i + 7);       // Connections to Inner Ring
+        }
         
-        // Inner ring connections (simplified example)
-        addVertexConnection(0, 8);
-        addVertexConnection(1, 9);
-        addVertexConnection(2, 10);
-        addVertexConnection(3, 11);
-        addVertexConnection(4, 12);
-        addVertexConnection(5, 13);
+        // Connecting Inner Ring (6-23)
+        for (int i = 6; i <= 23; i++) {
+            if (i < 23) addVertexConnection(i, i + 1);
+            else addVertexConnection(23, 6);
+            
+            // Connections to Outer Ring (24-53)
+            if (i % 2 == 0) addVertexConnection(i, i + 18); 
+        }
         
-        addVertexConnection(6, 14);
-        addVertexConnection(7, 15);
-        addVertexConnection(6, 7);
-        addVertexConnection(7, 0);
-        addVertexConnection(0, 6);
-        
-        // Additional connections for the inner ring
-        addVertexConnection(8, 9);
-        addVertexConnection(9, 10);
-        addVertexConnection(10, 11);
-        addVertexConnection(11, 12);
-        addVertexConnection(12, 13);
-        addVertexConnection(13, 14);
-        addVertexConnection(14, 15);
-        addVertexConnection(15, 8);
-        
-        // Outer ring connections (examples - full implementation needed)
-        addVertexConnection(8, 16);
-        addVertexConnection(9, 17);
-        addVertexConnection(10, 18);
-        addVertexConnection(11, 19);
-        addVertexConnection(12, 20);
-        addVertexConnection(13, 21);
-        addVertexConnection(14, 22);
-        addVertexConnection(15, 23);
-        
-        // More outer connections
-        addVertexConnection(16, 17);
-        addVertexConnection(17, 18);
-        addVertexConnection(18, 19);
-        addVertexConnection(19, 20);
-        addVertexConnection(20, 21);
-        addVertexConnection(21, 22);
-        addVertexConnection(22, 23);
-        addVertexConnection(23, 16);
-        
-        // Continue with more connections for full board...
-        // (In production, all 54 vertices would be fully connected)
+        // Connecting Outer Ring (24-53)
+        for (int i = 24; i < 53; i++) {
+            addVertexConnection(i, i + 1);
+        }
+        addVertexConnection(53, 24);
     }
 
     /**
