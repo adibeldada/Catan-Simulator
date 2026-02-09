@@ -1,2 +1,2 @@
 # Catan Simulator Configuration
-turns: 100
+turns: 32768

@@ -9,6 +9,7 @@ import CatanSimulatorDomainModel.catanUML.model.Road;
 import CatanSimulatorDomainModel.catanUML.model.Settlement;
 import CatanSimulatorDomainModel.catanUML.model.Vertex;
 import CatanSimulatorDomainModel.catanUML.model.City;
+import CatanSimulatorDomainModel.catanUML.model.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,103 +17,10 @@ import java.util.Random;
 
 /**
  * Demonstrator class for the Catan Simulator.
- * 
- * R1.9: Demonstrates the key functionality of the simulator.
- * 
- * This class runs one or more demonstrative simulations of the Settlers of Catan game.
- * The simulation follows these key rules:
- * 
- * REQUIREMENTS SATISFIED:
- * 
- * - R1.1: Uses a fixed, valid map setup with specified tile/vertex identification
- *         (Tiles: 0-18, Vertices: 0-53)
- * 
- * - R1.2: Simulates 4 randomly acting agents
- *         (Each player makes random decisions based on available resources)
- * 
- * - R1.3: Follows the Catan rulebook 
- *         (Excluding: harbours, trading, development cards, robber)
- * 
- * - R1.4: Runs for user-defined rounds (max 8192) or until 10 VPs achieved
- *         (Configuration read from config.txt)
- * 
- * - R1.5: Halts upon reaching termination conditions
- *         (Either 10 VP reached or max rounds exceeded)
- * 
- * - R1.6: Respects game invariants
- *         (Road connectivity, distance rules, city upgrades enforced by RuleValidator)
- * 
- * - R1.7: Prints actions in specified format: [RoundNumber] / [PlayerID]: [Action]
- *         (Each move logs its action through GameMaster.logAction())
- * 
- * - R1.8: Players with >7 cards must attempt to build
- *         (Enforced in Player.takeTurn() method)
- * 
- * - R1.9: Demonstrator class with comprehensive comments
- *         (This class)
- * 
- * CONFIGURATION:
- * Configuration is read from config.txt with format:
- *   turns: <number>  (1-8192)
- * 
- * SIMULATION FLOW:
- * 1. Read configuration from config.txt
- * 2. Initialize the GameMaster with the board and 4 players
- * 3. Execute rounds until victory or max rounds reached
- * 4. Each round consists of:
- *    a. Dice roll for resource production
- *    b. Each player takes a turn (build or pass)
- *    c. Victory point summary printed
- * 5. Declare winner or show final standings
- * 
- * DEMONSTRATION FEATURES:
- * - Board initialization with tiles, vertices, and adjacencies
- * - Resource production based on dice rolls
- * - Random player decision-making
- * - Building roads, settlements, and cities
- * - Victory point tracking
- * - Game termination (10 VPs or max rounds)
- * - Rule validation (connectivity, distance, upgrades)
- * - Formatted console output
+ * * R1.9: Demonstrates the key functionality of the simulator.
  */
 public class Demonstrator {
     
-    /**
-     * Main entry point for the Catan simulator demonstration.
-     * 
-     * EXECUTION FLOW:
-     * 
-     * 1. CONFIGURATION PHASE:
-     *    - Read config.txt to get max turns
-     *    - Convert turns to rounds (4 players per round)
-     *    - Display configuration to user
-     * 
-     * 2. INITIALIZATION PHASE:
-     *    - Create GameMaster instance
-     *    - Initialize board with 19 tiles (R1.1)
-     *    - Create 54 vertices with adjacencies (R1.1)
-     *    - Create 4 player agents (R1.2)
-     *    - Initialize dice and rule validator
-     * 
-     * 3. SIMULATION PHASE:
-     *    - Loop through rounds until termination:
-     *      a. For each player in order:
-     *         i.   Roll 2d6 for resource production
-     *         ii.  Produce resources from tiles (R1.3)
-     *         iii. Player decides action (random AI)
-     *         iv.  Validate move (RuleValidator - R1.6)
-     *         v.   Execute move (deduct resources, place structure)
-     *         vi.  Log action (R1.7: [Round] / [Player]: [Action])
-     *      b. Print round summary with VP counts (R1.7)
-     *      c. Check victory condition (R1.5: 10 VP)
-     *      d. Check round limit (R1.5: max rounds)
-     * 
-     * 4. TERMINATION PHASE:
-     *    - Announce winner (if 10 VP reached)
-     *    - Or show final standings (if max rounds reached)
-     * 
-     * @param args Command line arguments (not used)
-     */
     public static void main(String[] args) {
         // Print welcome banner
         System.out.println("╔════════════════════════════════════════════════╗");
@@ -123,8 +31,6 @@ public class Demonstrator {
         // ============================================================
         // CONFIGURATION PHASE (R1.4)
         // ============================================================
-        // Read configuration from file
-        // Format: turns: <number> (1-8192)
         String configPath = "config.txt";
         ConfigReader config = new ConfigReader(configPath);
         
@@ -136,86 +42,97 @@ public class Demonstrator {
         // ============================================================
         // INITIALIZATION PHASE (R1.1, R1.2)
         // ============================================================
-        // Create GameMaster which will:
-        // - Initialize the board with tiles and vertices (R1.1)
-        // - Create 4 player agents (R1.2)
-        // - Set up dice and rule validator
         GameMaster game = new GameMaster(config.getMaxRounds());
         
-        
-        // INITIALIZATION PHASE (Custom additions to trigger activity)
-        // 1. Get the list of players from the game
-        // (You may need to add a getPlayers() method to GameMaster if it doesn't exist)
-
         // ============================================================
-        // SIMULATION PHASE (R1.3, R1.4, R1.5, R1.6, R1.7, R1.8)
+        // SETUP PHASE: INITIAL PLACEMENT (R1.3)
         // ============================================================
-        // Start the simulation which will:
-        // - Run rounds following Catan rules (R1.3)
-        // - Continue until termination condition (R1.4, R1.5)
-        // - Enforce game invariants through RuleValidator (R1.6)
-        // - Print formatted output (R1.7)
-        // - Force building when >7 cards (R1.8)
-        
         List<Player> players = game.getPlayers();
         List<Integer> assignedVertices = new ArrayList<>();
         Random rand = new Random();
         
-        // Map vertices for starting settlements (just pick 4 spread out ones)
-        //int[] startingVertices = {42, 50, 26, 33}; 
-        
-        for (int i = 0; i < players.size(); i++) {
-            Player p = players.get(i);
+        // R1.3: Loop twice for each player to place 2 settlements and 2 roads
+        for (int setupRound = 1; setupRound <= 2; setupRound++) {
+            System.out.println("--- Setup Round " + setupRound + " ---");
             
-            // Give resources (Wood/Brick for roads, Wheat/Sheep for settlements)
-            p.collectResource(ResourceType.WOOD, 20);
-            p.collectResource(ResourceType.BRICK, 20);
-            p.collectResource(ResourceType.WHEAT, 20);
-            p.collectResource(ResourceType.SHEEP, 20);
-            p.collectResource(ResourceType.ORE, 20);
-            
-            Vertex startVertex = null;
-            boolean validSpotFound = false;
-            
-            while (!validSpotFound) {
-            	int randomIndex = rand.nextInt(54); // Tiles: 0-18, Vertices: 0-53
-                Vertex candidate = game.getBoard().getVertex(randomIndex);
+            for (int i = 0; i < players.size(); i++) {
+                Player p = players.get(i);
+                Vertex startVertex = null;
+                boolean validSpotFound = false;
+                int attempts = 0;
+                
+                while (!validSpotFound) {
+                    attempts++;
+                    int randomIndex = rand.nextInt(54); 
+                    Vertex candidate = game.getBoard().getVertex(randomIndex);
 
-                // CHECK 1: Is it a dead zone? (Must have at least 2 neighbors to be useful)
-                boolean isNotDeadZone = candidate.getAdjacentVertices().size() >= 2;
+                    // CHECK 1: Is it a dead zone?
+                    boolean isNotDeadZone = candidate.getAdjacentVertices().size() >= 2;
 
-                // CHECK 2: Is it too close to another player? (Distance Rule)
-                boolean respectsDistance = true;
-                for (int occupiedId : assignedVertices) {
-                	Vertex occupied = game.getBoard().getVertex(occupiedId);
-                	if (candidate == occupied || candidate.getAdjacentVertices().contains(occupied)) {
-                		respectsDistance = false;
-                		break;
-                	}
+                    // CHECK 2: Distance Rule (R1.6)
+                    boolean respectsDistance = true;
+                    for (int occupiedId : assignedVertices) {
+                        Vertex occupied = game.getBoard().getVertex(occupiedId);
+                        if (candidate == occupied || candidate.getAdjacentVertices().contains(occupied)) {
+                            respectsDistance = false;
+                            break;
+                        }
+                    }
+                    
+                    if (isNotDeadZone && respectsDistance) {
+                        // FIXED: Strict Fair Placement for Round 2 to prevent Deadlock (R1.3)
+                        if (setupRound == 2) {
+                            // Attempts limit prevents infinite loops while prioritizing essential resources
+                            if (hasEssentialTrio(p, candidate, game) || attempts > 200) {
+                                startVertex = candidate;
+                                assignedVertices.add(randomIndex);
+                                validSpotFound = true;
+                            }
+                        } else {
+                            startVertex = candidate;
+                            assignedVertices.add(randomIndex);
+                            validSpotFound = true;
+                        }
+                    }
                 }
                 
-                if (isNotDeadZone && respectsDistance) {
-                    startVertex = candidate;
-                    assignedVertices.add(randomIndex);
-                    validSpotFound = true;
+                // Place initial settlement (R1.3)
+                Settlement s = new Settlement(p);
+                startVertex.placeBuilding(s);
+                p.addBuilding(s);
+                p.addVictoryPoints(1);
+                
+                // Place initial road (R1.3)
+                Vertex neighbor = startVertex.getAdjacentVertices().get(0);
+                Road r = new Road(p, startVertex, neighbor);
+                p.addRoad(r);
+                game.getBoard().placeRoad(r);
+
+                // R1.3: Award resources for the SECOND settlement placement
+                if (setupRound == 2) {
+                    for (Tile tile : game.getBoard().getTiles()) {
+                        if (tile.getAdjacentVertices().contains(startVertex)) {
+                            p.collectResource(tile.getResourceType(), 1);
+                        }
+                    }
                 }
+                
+                // FIXED: Enhanced logging to show IDs of vertices (R1.7)
+                game.logAction(p, String.format("Placed initial settlement at vertex %d and road to vertex %d (Setup Round %d)", 
+                               startVertex.getId(), neighbor.getId(), setupRound));
             }
-            
-            
-            // Place one initial settlement so they can build out from it
-            Settlement s = new Settlement(p);
-            startVertex.placeBuilding(s); 	
-            p.addBuilding(s);
-            p.addVictoryPoints(1);
-            
-            Vertex neighbor = startVertex.getAdjacentVertices().get(0);	
-            Road r = new Road(p, startVertex, neighbor);
-            p.addRoad(r);
         }
         
-        System.out.println("Player 1 buildings: " + players.get(0).getBuildingsBuilt().size());
+        // FIXED: Displays starting cards for ALL players for full transparency
+        System.out.println("\nInitial placement complete. Starting cards:");
+        for (Player p : players) {
+            System.out.println("  Player " + p.getId() + ": " + p.getHand().totalCards() + " cards");
+        }
         System.out.println("Vertex 0 adjacents: " + game.getBoard().getVertex(0).getAdjacentVertices().size());
         
+        // ============================================================
+        // SIMULATION PHASE
+        // ============================================================
         game.startSimulation();
         
         // ============================================================
@@ -226,20 +143,41 @@ public class Demonstrator {
         System.out.println("║         DEMONSTRATION COMPLETE                 ║");
         System.out.println("╚════════════════════════════════════════════════╝");
     }
-    
+
     /**
-     * Alternative demonstration method with custom parameters.
-     * Can be used for testing specific scenarios.
-     * 
-     * This method bypasses config.txt and uses a direct parameter.
-     * Useful for automated testing or custom demonstrations.
-     * 
-     * @param maxRounds The maximum number of rounds to simulate
+     * Checks if a second settlement choice provides access to the "Essential Trio" 
+     * (WOOD, BRICK, WHEAT) required for expansion without trading (R1.3).
      */
+    private static boolean hasEssentialTrio(Player p, Vertex candidate, GameMaster game) {
+        // Access the location of the first building placed in Round 1
+        Vertex firstVertex = p.getBuildingsBuilt().get(0).getLocation();
+        List<ResourceType> current = getProducedResources(firstVertex, game);
+        List<ResourceType> potential = getProducedResources(candidate, game);
+        
+        // Check combined resource availability
+        boolean hasWood = current.contains(ResourceType.WOOD) || potential.contains(ResourceType.WOOD);
+        boolean hasBrick = current.contains(ResourceType.BRICK) || potential.contains(ResourceType.BRICK);
+        boolean hasWheat = current.contains(ResourceType.WHEAT) || potential.contains(ResourceType.WHEAT);
+        
+        return hasWood && hasBrick && hasWheat;
+    }
+
+    /**
+     * Helper to retrieve all resources produced by a specific vertex.
+     */
+    private static List<ResourceType> getProducedResources(Vertex v, GameMaster game) {
+        List<ResourceType> resources = new ArrayList<>();
+        for (Tile t : game.getBoard().getTiles()) {
+            if (t.getAdjacentVertices().contains(v)) {
+                resources.add(t.getResourceType());
+            }
+        }
+        return resources;
+    }
+    
     public static void runCustomDemo(int maxRounds) {
         System.out.println("Running custom demonstration with " + maxRounds + " rounds...");
         System.out.println();
-        
         GameMaster game = new GameMaster(maxRounds);
         game.startSimulation();
     }

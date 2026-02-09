@@ -57,7 +57,7 @@ public class ConfigReader {
                         try {
                             int turns = Integer.parseInt(parts[1].trim());
                             // R1.4: Clamp to valid range [1-8192]
-                            maxTurns = Math.max(1, Math.min(turns, 8192));
+                            maxTurns = Math.max(1, Math.min(turns, 32768));
                         } catch (NumberFormatException e) {
                             System.err.println("Invalid turns value in config. Using default: 100");
                         }

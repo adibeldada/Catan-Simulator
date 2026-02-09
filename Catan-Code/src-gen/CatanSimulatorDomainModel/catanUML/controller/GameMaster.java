@@ -6,19 +6,10 @@ import CatanSimulatorDomainModel.catanUML.util.RuleValidator;
 import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
- * import CatanSimulatorDomainModel.caimport CatanSimulatorDomainModel.catanUML.troller for the Catan simulation.
- * 
- * Controls turn order, game loop, dice rolling, and victory checks.
- * This is where the entire simulation is ran.
- * 
- * Responsibilities:
- * - Initialize board and players (R1.1, R1.2)
- * - Run game rounds and turns (R1.4)
- * - Roll dice and produce resources (R1.3)
- * - Check victory conditions (R1.5)
- * - Log actions (R1.7)
- * - Enforce rules through RuleValidator (R1.6)
+ * GameMaster for the Catan simulation.
+ * * Controls turn order, game loop, dice rolling, and victory checks.
  */
 public class GameMaster {
     private Board board;
@@ -29,11 +20,6 @@ public class GameMaster {
     private int maxRounds;
     private static final int MAX_VICTORY_POINTS = 10;
 
-    /**
-     * Constructs a GameMaster for a simulation.
-     * 
-     * @param maxRounds Maximum number of rounds (R1.4: max 8192)
-     */
     public GameMaster(int maxRounds) {
         this.board = new Board();
         this.players = new ArrayList<>();
@@ -42,25 +28,13 @@ public class GameMaster {
         this.currentRound = 0;
         this.maxRounds = Math.min(maxRounds, 8192); // R1.4: Max 8192 rounds
         
-        // Initialize board (R1.1)
         board.initializeDefaultMap();
         
-        // Create 4 players (R1.2)
         for (int i = 1; i <= 4; i++) {
             players.add(new Player(i));
         }
     }
 
-    /**
-     * Starts and runs the simulation.
-     * 
-     * R1.4, R1.5: Runs until max rounds or 10 VPs achieved.
-     * 
-     * Main game loop:
-     * 1. Run a round (all players take turns)
-     * 2. Check victory condition
-     * 3. Repeat until termination condition met
-     */
     public void startSimulation() {
         System.out.println("=== Starting Catan Simulation ===");
         System.out.println("Max Rounds: " + maxRounds);
@@ -71,7 +45,6 @@ public class GameMaster {
             currentRound++;
             runRound();
 
-            // Check victory condition (R1.4, R1.5)
             Player winner = checkVictory();
             if (winner != null) {
                 System.out.println();
@@ -89,9 +62,6 @@ public class GameMaster {
         printFinalStandings();
     }
 
-    /**
-     * Runs a single round (all players take one turn).
-     */
     public void runRound() {
         System.out.println("--- Round " + currentRound + " ---");
         
@@ -103,48 +73,31 @@ public class GameMaster {
     }
 
     /**
-     * Runs a single player's turn.
-     * 
-     * Turn sequence:
-     * 1. Roll dice
-     * 2. Produce resources (if not 7)
-     * 3. Player takes action (build or pass)
-     * 
-     * R1.7: Prints actions in specified format.
+     * Updated to display the dice roll for each player's turn.
      */
     public void runTurn(Player player) {
-        // Roll dice
         int roll = dice.roll();
         
-        // Produce resources (skip if roll is 7 as per requirements)
+        // Print the dice roll to the console
+        System.out.println("[Dice Roll]: " + roll);
+        
         if (roll != 7) {
             produceResources(roll);
         }
 
-        // Player takes their action
         player.takeTurn(this);
     }
 
-    /**
-     * Produces resources based on dice roll.
-     * 
-     * For each tile that produces on this roll:
-     * - Find adjacent vertices with buildings
-     * - Award resources to building owners
-     * - Settlements get 1 resource, cities get 2
-     */
     private void produceResources(int roll) {
         for (Tile tile : board.getTiles()) {
             if (tile.producesOnRoll(roll)) {
                 ResourceType resource = tile.getResourceType();
                 
-                // Award resources to players with buildings on adjacent vertices
                 for (Vertex vertex : tile.getAdjacentVertices()) {
                     if (vertex.isOccupied()) {
                         Buildings building = vertex.getBuilding();
                         Player owner = building.getOwner();
                         
-                        // Settlements produce 1, cities produce 2
                         int amount = (building instanceof City) ? 2 : 1;
                         owner.collectResource(resource, amount);
                     }
@@ -153,13 +106,6 @@ public class GameMaster {
         }
     }
 
-    /**
-     * Checks if any player has won.
-     * 
-     * R1.4: Victory at 10 VPs.
-     * 
-     * @return The winning player, or null if no winner yet
-     */
     public Player checkVictory() {
         for (Player player : players) {
             if (player.getVictoryPoints() >= MAX_VICTORY_POINTS) {
@@ -170,24 +116,20 @@ public class GameMaster {
     }
 
     /**
-     * Prints a summary at the end of each round.
-     * 
-     * R1.7: Print victory points at end of each round.
+     * Updated to show detailed resource counts for each player.
      */
     public void printRoundSummary() {
-        System.out.println("Victory Points:");
+        System.out.println("Victory Points & Resource Breakdown:");
         for (Player player : players) {
-            System.out.printf("  Player %d: %d VP (Cards: %d)%n", 
+            // Uses player.getHand().toString() to show the Wood/Brick/Wheat/Sheep/Ore breakdown
+            System.out.printf("  Player %d: %d VP | Hand: %s%n", 
                             player.getId(), 
                             player.getVictoryPoints(),
-                            player.getHand().totalCards());
+                            player.getHand().toString());
         }
         System.out.println();
     }
 
-    /**
-     * Prints final standings at end of simulation.
-     */
     private void printFinalStandings() {
         System.out.println("Final Standings:");
         players.sort((p1, p2) -> Integer.compare(p2.getVictoryPoints(), p1.getVictoryPoints()));
@@ -199,14 +141,6 @@ public class GameMaster {
         }
     }
 
-    /**
-     * Prints an action to the console in the specified format.
-     * 
-     * R1.7: Format: [RoundNumber] / [PlayerID]: [Action]
-     * 
-     * @param player The player taking the action
-     * @param action Description of the action
-     */
     public void logAction(Player player, String action) {
         System.out.printf("[%d] / [Player %d]: %s%n", currentRound, player.getId(), action);
     }
