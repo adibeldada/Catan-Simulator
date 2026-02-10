@@ -1,7 +1,7 @@
 # Settlers of Catan - Simulator & Demonstrator
 **McMaster University | SFWRENG 2AA4 - Assignment 1**
 
-Contributers: Adib El Dada (eldada1) | Youssef Elshafei (MacID) | Youssef Khafagy (MacID) | Riken Allen (MacID)
+**Contributers:** Adib El Dada (eldada1) | Youssef Elshafei (MacID) | Youssef Khafagy (MacID) | Riken Allen (MacID)
 
 ## Project Overview
 This project is a Java-based discrete event simulator for the board game *Settlers of Catan*. It was developed by translating a conceptual UML domain model into a functional software system. The simulator handles complex hex-grid geometry, resource production, and automated player logic.
