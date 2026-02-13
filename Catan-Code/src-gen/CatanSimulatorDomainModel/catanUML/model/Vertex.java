@@ -2,6 +2,7 @@ package CatanSimulatorDomainModel.catanUML.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Represents a vertex on the board where buildings can be placed.
  * 
@@ -12,7 +13,6 @@ import java.util.List;
  */
 public class Vertex {
     private int id;
-    private Player owner;
     private Buildings building;
     private List<Vertex> adjacentVertices;
 
@@ -23,7 +23,6 @@ public class Vertex {
      */
     public Vertex(int id) {
         this.id = id;
-        this.owner = null;
         this.building = null;
         this.adjacentVertices = new ArrayList<>();
     }
@@ -66,7 +65,6 @@ public class Vertex {
      */
     public void placeBuilding(Buildings building) {
         this.building = building;
-        this.owner = building.getOwner();
     }
 
     /**
@@ -80,12 +78,36 @@ public class Vertex {
         }
     }
 
-    // Getters and setters
-    public int getId() { return id; }
-    public Player getOwner() { return owner; }
-    public Buildings getBuilding() { return building; }
-    public List<Vertex> getAdjacentVertices() { return adjacentVertices; }
+    // Getters
+    public int getId() { 
+        return id; 
+    }
     
-    public void setOwner(Player owner) { this.owner = owner; }
-    public void setBuilding(Buildings building) { this.building = building; }
+    /**
+     * Gets the owner of this vertex (the owner of the building placed here).
+     * Delegates to the building's owner.
+     * 
+     * @return The player who owns the building here, or null if unoccupied
+     */
+    public Player getOwner() { 
+        return building != null ? building.getOwner() : null;
+    }
+    
+    public Buildings getBuilding() { 
+        return building; 
+    }
+    
+    public List<Vertex> getAdjacentVertices() { 
+        return adjacentVertices; 
+    }
+    
+    /**
+     * Sets the building at this vertex.
+     * Used when upgrading settlements to cities.
+     * 
+     * @param building The building to set
+     */
+    public void setBuilding(Buildings building) { 
+        this.building = building; 
+    }
 }
