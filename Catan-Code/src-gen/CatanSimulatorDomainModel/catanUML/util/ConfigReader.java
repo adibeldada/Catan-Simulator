@@ -88,3 +88,4 @@ public class ConfigReader {
         return maxTurns / 4;
     }
 }
+
