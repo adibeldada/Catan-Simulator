@@ -10,8 +10,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
+    
     <sonar.organization>adibeldada</sonar.organization>
-    <sonar.projectKey>catan-simulator-assignment1</sonar.projectKey>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.projectKey>adibeldada_Catan-Simulator</sonar.projectKey>
     <sonar.sources>src-gen</sonar.sources>
     <sonar.java.binaries>bin</sonar.java.binaries>
   </properties>
