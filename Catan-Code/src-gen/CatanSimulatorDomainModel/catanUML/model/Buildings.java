@@ -10,6 +10,7 @@ public abstract class Buildings {
     protected Player owner;
     protected Vertex location;
 
+    
     /**
      * Constructs a Building owned by the specified player.
      * 
@@ -26,7 +27,6 @@ public abstract class Buildings {
      * @return Number of victory points
      */
     public abstract int getVictoryPoints();
-
     /**
      * Places this building on a vertex.
      * Updates both the building's location and the vertex's building reference.
@@ -37,7 +37,6 @@ public abstract class Buildings {
         this.location = vertex;
         vertex.placeBuilding(this);
     }
-
     // Getters
     public Player getOwner() { return owner; }
     public Vertex getLocation() { return location; }
