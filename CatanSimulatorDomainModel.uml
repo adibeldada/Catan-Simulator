@@ -124,7 +124,7 @@
         <ownedAttribute xmi:type="uml:Property" xmi:id="_V4KwwAYCEfGYqOLCHE5Fdg" name="MAX_VICTORY_POINTS" visibility="private" isStatic="true">
           <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
         </ownedAttribute>
-        <ownedAttribute xmi:type="uml:Property" xmi:id="_ksKJQAkSEfG24-KIthCP_g" name="player" type="_G1_hYP4HEfCOd8UCBhMXvw" aggregation="shared" association="_kr98AAkSEfG24-KIthCP_g">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_ksKJQAkSEfG24-KIthCP_g" name="player" type="_G1_hYP4HEfCOd8UCBhMXvw" aggregation="composite" association="_kr98AAkSEfG24-KIthCP_g">
           <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6tmAIAkSEfG24-KIthCP_g" name="LiteralInteger1" value="1"/>
           <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6tmnMAkSEfG24-KIthCP_g" name="LiteralUnlimitedNatural1" value="4"/>
         </ownedAttribute>
@@ -938,7 +938,7 @@
         <ownedEnd xmi:type="uml:Property" xmi:id="_s510AQkgEfG24-KIthCP_g" name="board" type="_5ku0wP4IEfCOd8UCBhMXvw" association="_s50l4AkgEfG24-KIthCP_g"/>
         <ownedEnd xmi:type="uml:Property" xmi:id="_s510AgkgEfG24-KIthCP_g" name="rulevalidator" type="_PXR7EP4JEfCOd8UCBhMXvw" association="_s50l4AkgEfG24-KIthCP_g"/>
       </packagedElement>
-      <packagedElement xmi:type="uml:Dependency" xmi:id="_It_F0AkgEfG24-KIthCP_g" client="_G1_hYP4HEfCOd8UCBhMXvw" supplier="_IJB2kP4HEfCOd8UCBhMXvw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_It_F0AkgEfG24-KIthCP_g" client="_JcRUYPvIEfC2iLJ2NvxHLA" supplier="_IJB2kP4HEfCOd8UCBhMXvw"/>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_Wl4pwAkgEfG24-KIthCP_g" client="_eWWicP4JEfCOd8UCBhMXvw" supplier="_qwEToP8mEfCAfM7SqUCuhg"/>
       <packagedElement xmi:type="uml:Class" xmi:id="_yf7dUAkhEfG24-KIthCP_g" name="Demonstrator">
         <ownedOperation xmi:type="uml:Operation" xmi:id="_7BeAkAkhEfG24-KIthCP_g" name="main">
@@ -995,7 +995,7 @@
           </ownedOperation>
         </nestedClassifier>
       </packagedElement>
-      <packagedElement xmi:type="uml:Dependency" xmi:id="_LGBM0AkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_IJB2kP4HEfCOd8UCBhMXvw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_LGBM0AkjEfG24-KIthCP_g" client="_JcRUYPvIEfC2iLJ2NvxHLA" supplier="_IJB2kP4HEfCOd8UCBhMXvw"/>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_LqkrYAkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_-gm44P4IEfCOd8UCBhMXvw"/>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_M66R4AkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_G1_hYP4HEfCOd8UCBhMXvw"/>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_PJvg8AkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_og2AgP4JEfCOd8UCBhMXvw"/>
