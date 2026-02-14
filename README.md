@@ -4,7 +4,7 @@
 **Contributers:** Adib El Dada (eldada1) | Youssef Elshafei (elshafey) | Youssef Khafagy (khafagyy) | Riken Allen (allenr16)
 
 ## Project Overview
-This project is a Java-based discrete event simulator for the board game *Settlers of Catan*. It was developed by translating a conceptual UML domain model into a functional software system. The simulator handles complex hex-grid geometry, resource production, and automated player logic...
+This project is a Java-based discrete event simulator for the board game *Settlers of Catan*. It was developed by translating a conceptual UML domain model into a functional software system. The simulator handles complex hex-grid geometry, resource production, and automated player logic.
 
 
 ## Key Engineering Features (Rulebook Compliance)
@@ -46,3 +46,5 @@ The simulation duration is controlled by `config.txt` located in the **project r
 * **Command Pattern:** Used for `PlayerAction` hierarchy to ensure modular execution of roads, settlements, and cities.
 * **Domain Model:** The code is 1:1 mapped to the Papyrus UML Class Diagram.
 * **Fair-Start Heuristic:** Includes a custom placement algorithm to ensure all players start with access to Wood, Brick, and Wheat to prevent no-trade deadlocks.
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adibeldada_Catan-Simulator&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=adibeldada_Catan-Simulator)
