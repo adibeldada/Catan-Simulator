@@ -6,6 +6,7 @@ package CatanSimulatorDomainModel.catanUML.enums;
  * Resources are produced by tiles when their number is rolled.
  * DESERT tiles do not produce resources.
  */
+
 public enum ResourceType {
     WOOD,
     BRICK,

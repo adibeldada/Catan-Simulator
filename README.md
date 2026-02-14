@@ -6,6 +6,7 @@
 ## Project Overview
 This project is a Java-based discrete event simulator for the board game *Settlers of Catan*. It was developed by translating a conceptual UML domain model into a functional software system. The simulator handles complex hex-grid geometry, resource production, and automated player logic.
 
+
 ## Key Engineering Features (Rulebook Compliance)
 This implementation satisfies all mandatory requirements specified in the Assignment 1 Rulebook:
 
