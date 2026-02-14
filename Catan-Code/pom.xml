@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>ca.mcmaster.sfwreng2aa4</groupId>
+  <artifactId>catan-simulator</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <sonar.organization>adibeldada</sonar.organization>
+    <sonar.projectKey>catan-simulator-assignment1</sonar.projectKey>
+    <sonar.sources>src-gen</sonar.sources>
+    <sonar.java.binaries>bin</sonar.java.binaries>
+  </properties>
+
+  <build>
+    <sourceDirectory>src-gen</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.9.1.2184</version>
+      </plugin>
+    </plugins>
+  </build>
+</project>
