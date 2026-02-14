@@ -17,10 +17,37 @@ import java.util.Random;
 
 /**
  * Demonstrator class for the Catan Simulator.
- * * R1.9: Demonstrates the key functionality of the simulator.
+ *
+ * R1.9 Requirement:
+ * This class contains a single static main method that executes
+ * one full demonstrative simulation of the system.
+ *
+ * The demonstration includes:
+ *  - Configuration loading
+ *  - Game initialization
+ *  - Initial settlement and road placement
+ *  - Resource allocation
+ *  - Execution of the main simulation loop
+ *  - Proper termination output
+ *
+ * The purpose of this class is to clearly showcase the key
+ * functionality of the simulator in a controlled and readable way.
  */
+
 public class Demonstrator {
-    
+    /**
+     * Entry point of the simulator demonstration.
+     *
+     * This method walks through all major simulator phases:
+     *  1. Configuration Phase
+     *  2. Initialization Phase
+     *  3. Setup Phase (Initial placements)
+     *  4. Simulation Phase
+     *  5. Termination Phase
+     *
+     * The output logs allow the observer to trace the behavior
+     * of the system step-by-step.
+     */
     public static void main(String[] args) {
         // Print welcome banner
         System.out.println("╔════════════════════════════════════════════════╗");
@@ -29,8 +56,11 @@ public class Demonstrator {
         System.out.println();
         
         // ============================================================
-        // CONFIGURATION PHASE (R1.4)
+        // 1. CONFIGURATION PHASE
         // ============================================================
+        // Loads simulation settings (max turns, max rounds)
+        // from an external configuration file.
+        
         String configPath = "config.txt";
         ConfigReader config = new ConfigReader(configPath);
         
@@ -40,13 +70,29 @@ public class Demonstrator {
         System.out.println();
         
         // ============================================================
-        // INITIALIZATION PHASE (R1.1, R1.2)
+        // 2. INITIALIZATION PHASE
         // ============================================================
+        // Creates the GameMaster, which initializes:
+        //  - The board
+        //  - Players
+        //  - Internal game state
         GameMaster game = new GameMaster(config.getMaxRounds());
         
         // ============================================================
-        // SETUP PHASE: INITIAL PLACEMENT (R1.3)
+        // 3. SETUP PHASE (Initial Placement)
         // ============================================================
+        // Each player places:
+        //  - 2 settlements
+        //  - 2 roads
+        //
+        // Rules enforced:
+        //  - Distance rule (no adjacent settlements)
+        //  - No dead-zone placement
+        //  - Second settlement prioritizes essential resources
+        //
+        // After second settlement:
+        //  - Players collect starting resources
+        
         List<Player> players = game.getPlayers();
         List<Integer> assignedVertices = new ArrayList<>();
         Random rand = new Random();
@@ -69,7 +115,8 @@ public class Demonstrator {
                     // CHECK 1: Is it a dead zone?
                     boolean isNotDeadZone = candidate.getAdjacentVertices().size() >= 2;
 
-                    // CHECK 2: Distance Rule (R1.6)
+                 // Enforces R1.6 invariant: settlements must be at least
+                 // one vertex apart (distance ≥ 2 between players)
                     boolean respectsDistance = true;
                     for (int occupiedId : assignedVertices) {
                         Vertex occupied = game.getBoard().getVertex(occupiedId);
@@ -80,7 +127,8 @@ public class Demonstrator {
                     }
                     
                     if (isNotDeadZone && respectsDistance) {
-                        // FIXED: Strict Fair Placement for Round 2 to prevent Deadlock (R1.3)
+                    	// For the second settlement, we prioritize essential expansion resources
+                    	// while limiting attempts to prevent infinite loops.
                         if (setupRound == 2) {
                             // Attempts limit prevents infinite loops while prioritizing essential resources
                             if (hasEssentialTrio(p, candidate, game) || attempts > 200) {
@@ -131,13 +179,24 @@ public class Demonstrator {
         System.out.println("Vertex 0 adjacents: " + game.getBoard().getVertex(0).getAdjacentVertices().size());
         
         // ============================================================
-        // SIMULATION PHASE
+        // 4. SIMULATION PHASE
         // ============================================================
+        // Starts the main simulation loop.
+        // The GameMaster controls:
+        //  - Turn rotation
+        //  - Dice rolls
+        //  - Resource distribution
+        //  - Building logic
+        //  - Victory conditions
         game.startSimulation();
         
         // ============================================================
-        // TERMINATION PHASE
+        // 5. TERMINATION PHASE
         // ============================================================
+        // Prints completion banner.
+        // The simulation ends when:
+        //  - Maximum rounds are reached
+        //  - Or a player meets victory conditions
         System.out.println();
         System.out.println("╔════════════════════════════════════════════════╗");
         System.out.println("║         DEMONSTRATION COMPLETE                 ║");
@@ -145,8 +204,14 @@ public class Demonstrator {
     }
 
     /**
-     * Checks if a second settlement choice provides access to the "Essential Trio" 
-     * (WOOD, BRICK, WHEAT) required for expansion without trading (R1.3).
+     * Determines whether placing the second settlement at the
+     * candidate vertex gives the player access to the
+     * essential expansion resources:
+     *  - WOOD
+     *  - BRICK
+     *  - WHEAT
+     *
+     * This improves early-game viability without requiring trading.
      */
     private static boolean hasEssentialTrio(Player p, Vertex candidate, GameMaster game) {
         // Access the location of the first building placed in Round 1
@@ -163,7 +228,10 @@ public class Demonstrator {
     }
 
     /**
-     * Helper to retrieve all resources produced by a specific vertex.
+     * Returns all resource types produced by tiles
+     * adjacent to the given vertex.
+     *
+     * Used to evaluate strategic settlement placement.
      */
     private static List<ResourceType> getProducedResources(Vertex v, GameMaster game) {
         List<ResourceType> resources = new ArrayList<>();
@@ -175,6 +243,10 @@ public class Demonstrator {
         return resources;
     }
     
+    /**
+     * Alternative entry point used for testing custom round limits.
+     * Allows running the simulation without reading from config file.
+     */
     public static void runCustomDemo(int maxRounds) {
         System.out.println("Running custom demonstration with " + maxRounds + " rounds...");
         System.out.println();
