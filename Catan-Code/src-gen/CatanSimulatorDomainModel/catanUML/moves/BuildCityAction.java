@@ -11,6 +11,7 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * 
  * R1.6: Cities must replace existing settlements.
  */
+@SuppressWarnings("java:S120")
 public class BuildCityAction extends PlayerAction {
     private Vertex location;
 

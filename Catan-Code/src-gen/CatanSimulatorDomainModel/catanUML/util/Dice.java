@@ -6,6 +6,7 @@ import java.util.Random;
  * 
  * Used by GameMaster to determine resource production each turn.
  */
+@SuppressWarnings("java:S120")
 public class Dice {
     private int die1;
     private int die2;

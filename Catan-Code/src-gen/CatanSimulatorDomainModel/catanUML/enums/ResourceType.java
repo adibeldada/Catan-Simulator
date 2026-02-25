@@ -7,6 +7,7 @@ package CatanSimulatorDomainModel.catanUML.enums;
  * DESERT tiles do not produce resources.
  */
 
+@SuppressWarnings("java:S120")
 public enum ResourceType {
     WOOD,
     BRICK,

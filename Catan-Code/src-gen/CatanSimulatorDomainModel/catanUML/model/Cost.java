@@ -8,6 +8,7 @@ package CatanSimulatorDomainModel.catanUML.model;
  * - Settlement: 1 wood, 1 brick, 1 wheat, 1 sheep
  * - City: 2 wheat, 3 ore
  */
+@SuppressWarnings("java:S120")
 public class Cost {
     private int wood;
     private int brick;

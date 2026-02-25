@@ -11,6 +11,7 @@ import java.util.Random;
  * Represents a player in the game.
  * Players manage resources, make decisions, and track their buildings and roads.
  */
+@SuppressWarnings("java:S120")
 public class Player {
 
     private int id;

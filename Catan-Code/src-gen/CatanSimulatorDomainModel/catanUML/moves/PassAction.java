@@ -12,6 +12,7 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * - Player chooses not to build (random decision)
  * - No valid moves are available
  */
+@SuppressWarnings("java:S120")
 public class PassAction extends PlayerAction {
 
     /**

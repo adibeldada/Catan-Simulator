@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 /**
  * Demonstrator class for the Catan Simulator.
  */
+@SuppressWarnings("java:S120")
 public class Demonstrator {
     // Initialize the Logger
     private static final Logger LOGGER = Logger.getLogger(Demonstrator.class.getName());

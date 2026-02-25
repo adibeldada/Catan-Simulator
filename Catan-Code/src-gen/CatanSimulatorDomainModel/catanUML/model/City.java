@@ -8,6 +8,7 @@ package CatanSimulatorDomainModel.catanUML.model;
  * Victory Points: 2
  * Cities produce twice as many resources as settlements.
  */
+@SuppressWarnings("java:S120")
 public class City extends Buildings {
     
     /**

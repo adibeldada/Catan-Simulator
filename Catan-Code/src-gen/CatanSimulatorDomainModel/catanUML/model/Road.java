@@ -9,6 +9,7 @@ package CatanSimulatorDomainModel.catanUML.model;
  * 
  * Roads must be connected to existing roads or settlements (R1.6).
  */
+@SuppressWarnings("java:S120")
 public class Road {
     private Player owner;
     private Vertex start;

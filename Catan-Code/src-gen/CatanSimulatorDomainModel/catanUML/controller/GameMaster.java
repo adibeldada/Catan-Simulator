@@ -18,6 +18,7 @@ import java.util.logging.Logger;
  * GameMaster for the Catan simulation.
  * Controls turn order, game loop, dice rolling, and victory checks.
  */
+@SuppressWarnings("java:S120")
 public class GameMaster {
     // Initialize the Logger
     private static final Logger LOGGER = Logger.getLogger(GameMaster.class.getName());

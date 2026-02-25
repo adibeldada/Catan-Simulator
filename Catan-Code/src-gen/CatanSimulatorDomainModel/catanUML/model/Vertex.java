@@ -11,6 +11,7 @@ import java.util.List;
  * Vertices can hold one building (Settlement or City).
  * Adjacent vertices are stored to enforce the distance rule.
  */
+@SuppressWarnings("java:S120")
 public class Vertex {
     private int id;
     private Buildings building;

@@ -6,6 +6,7 @@ package CatanSimulatorDomainModel.catanUML.model;
  * Buildings are placed on vertices and provide victory points.
  * This class enforces the common interface for all building types.
  */
+@SuppressWarnings("java:S120")
 public abstract class Buildings {
     protected Player owner;
     protected Vertex location;

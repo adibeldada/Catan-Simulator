@@ -11,6 +11,7 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * The execute() method performs the action and updates game state.
  * The describe() method provides a human-readable description for logging.
  */
+@SuppressWarnings("java:S120")
 public abstract class PlayerAction {
     protected Player player;
 

@@ -10,6 +10,7 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * 
  * The road is added to both the board and the player's collection.
  */
+@SuppressWarnings("java:S120")
 public class BuildRoadAction extends PlayerAction {
     private Vertex start;
     private Vertex end;

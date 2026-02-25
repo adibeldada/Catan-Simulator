@@ -14,6 +14,7 @@ import java.util.logging.Logger;
  * - Empty lines
  * - turns: <number> (the number of turns to simulate)
  */
+@SuppressWarnings("java:S120")
 public class ConfigReader {
     // Initialize the Logger to replace System.err
     private static final Logger LOGGER = Logger.getLogger(ConfigReader.class.getName());

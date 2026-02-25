@@ -10,6 +10,7 @@ import java.util.List;
  * - Tiles: 0 (center), 1-6 (inner ring), 7-18 (outer ring)
  * - Vertices: 0-53 (following the same ring pattern)
  */
+@SuppressWarnings("java:S120")
 public class Board {
     private List<Tile> tiles;
     private List<Vertex> vertices;

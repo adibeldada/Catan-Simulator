@@ -11,6 +11,7 @@ import CatanSimulatorDomainModel.catanUML.model.*;
  * 
  * Used by GameMaster before executing any moves.
  */
+@SuppressWarnings("java:S120")
 public class RuleValidator {
     private Board board;
 

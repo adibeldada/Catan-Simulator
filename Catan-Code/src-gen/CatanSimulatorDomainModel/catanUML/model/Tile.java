@@ -12,6 +12,7 @@ import java.util.List;
  * 
  * Tiles are identified by ID: 0 (center), 1-6 (inner ring), 7-18 (outer ring).
  */
+@SuppressWarnings("java:S120")
 public class Tile {
     private int id;
     private ResourceType resourceType;
