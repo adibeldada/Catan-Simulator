@@ -1,23 +1,22 @@
 package classes.util;
 
 import classes.model.*;
+
 /**
  * Validates game rules and ensures invariants are maintained.
- * 
- * R1.6: Enforces key game invariants including:
+ * * R1.6: Enforces key game invariants including:
  * - Roads must be connected to existing roads or settlements
  * - Cities must replace existing settlements
  * - Distance between settlements must be at least 2 vertices
- * 
- * Used by GameMaster before executing any moves.
+ * * Used by GameMaster before executing any moves.
  */
 public class RuleValidator {
+
     private Board board;
 
     /**
      * Constructs a RuleValidator for the given board.
-     * 
-     * @param board The game board to validate against
+     * * @param board The game board to validate against
      */
     public RuleValidator(Board board) {
         this.board = board;
@@ -25,19 +24,7 @@ public class RuleValidator {
 
     /**
      * Checks if a player can build a road between two vertices.
-     * 
-     * R1.6: Roads must be connected to existing roads or settlements.
-     * 
-     * Validation rules:
-     * 1. Vertices must be adjacent
-     * 2. Road must not already exist
-     * 3. Must connect to player's existing structure (road or building)
-     * 4. Exception: First road doesn't need connection
-     * 
-     * @param player The player attempting to build
-     * @param start The starting vertex
-     * @param end The ending vertex
-     * @return true if the road can be built
+     * * R1.6: Roads must be connected to existing roads or settlements.
      */
     public boolean canBuildRoad(Player player, Vertex start, Vertex end) {
         // Check if vertices are adjacent
@@ -81,17 +68,6 @@ public class RuleValidator {
 
     /**
      * Checks if a player can build a settlement at a vertex.
-     * 
-     * R1.6: Must respect distance rule (2 vertices away from other settlements).
-     * 
-     * Validation rules:
-     * 1. Vertex must be unoccupied
-     * 2. Adjacent vertices must be empty (distance rule)
-     * 3. Must connect to player's road (unless first settlement)
-     * 
-     * @param player The player attempting to build
-     * @param location The vertex where the settlement would be placed
-     * @return true if the settlement can be built
      */
     public boolean canBuildSettlement(Player player, Vertex location) {
         // Check if vertex can accommodate a building
@@ -99,7 +75,7 @@ public class RuleValidator {
             return false;
         }
 
-        // Check distance rule (implemented in Vertex.canBuild())
+        // Check distance rule
         if (!respectsDistanceRule(location)) {
             return false;
         }
@@ -123,43 +99,27 @@ public class RuleValidator {
 
     /**
      * Checks if a player can build a city at a vertex.
-     * 
-     * R1.6: Must replace an existing settlement.
-     * 
-     * Validation rules:
-     * 1. A settlement must exist at this location
-     * 2. The settlement must belong to the player
-     * 
-     * @param player The player attempting to build
-     * @param location The vertex where the city would be placed
-     * @return true if the city can be built
+     * * R1.6: Must replace an existing settlement.
      */
     public boolean canBuildCity(Player player, Vertex location) {
-        // Must have a settlement at this location
-    	if (location == null) {
+        if (location == null) {
             return false;
         }
-    	
+
         Buildings building = location.getBuilding();
-        if (building == null || !(building instanceof Settlement)) {
+        
+        // instanceof handles null checks automatically
+        if (!(building instanceof Settlement)) {
             return false;
         }
 
         // Settlement must belong to the player
-        if (building.getOwner() != player) {
-            return false;
-        }
-
-        return true;
+        // Simplified if-then-else into a single return statement
+        return building.getOwner() == player;
     }
 
     /**
      * Checks if the distance rule is respected at a location.
-     * 
-     * R1.6: Adjacent vertices must be empty.
-     * 
-     * @param location The vertex to check
-     * @return true if distance rule is respected
      */
     public boolean respectsDistanceRule(Vertex location) {
         for (Vertex adjacent : location.getAdjacentVertices()) {
@@ -171,10 +131,7 @@ public class RuleValidator {
     }
 
     /**
-     * Sets the board for this.
-     * Used if the board changes during the game.
-     * 
-     * @param board The new board to validate against
+     * Sets the board for this validator.
      */
     public void setBoard(Board board) {
         this.board = board;
