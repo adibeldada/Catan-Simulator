@@ -3,45 +3,15 @@ package classes.controller;
 import classes.model.*;
 import classes.util.Dice;
 import classes.util.RuleValidator;
+import classes.util.LoggerUtil; // Added import
 import classes.enums.ResourceType;
 
-import java.io.FileOutputStream;
-import java.io.FileDescriptor;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 public class GameMaster {
     private static final Logger LOGGER = Logger.getLogger(GameMaster.class.getName());
-
-    // Fix: Named static inner class instead of double-brace initialization
-    private static class WhiteTextHandler extends ConsoleHandler {
-        WhiteTextHandler() {
-            super();
-            setOutputStream(new FileOutputStream(FileDescriptor.out));
-        }
-    }
-
-    static {
-        Logger rootLogger = Logger.getLogger("");
-        for (java.util.logging.Handler handler : rootLogger.getHandlers()) {
-            rootLogger.removeHandler(handler);
-        }
-
-        ConsoleHandler whiteHandler = new WhiteTextHandler();
-
-        whiteHandler.setFormatter(new Formatter() {
-            @Override
-            public String format(LogRecord logRecord) {
-                return logRecord.getMessage() + System.lineSeparator();
-            }
-        });
-
-        rootLogger.addHandler(whiteHandler);
-    }
 
     private Board board;
     private List<Player> players;
@@ -52,6 +22,9 @@ public class GameMaster {
     private static final int MAX_VICTORY_POINTS = 10;
 
     public GameMaster(int maxRounds) {
+        // Initialize logging configuration using the utility class
+        LoggerUtil.setupLogging(); 
+
         this.board = new Board();
         this.players = new ArrayList<>();
         this.dice = new Dice();

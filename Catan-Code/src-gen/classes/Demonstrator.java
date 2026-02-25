@@ -2,6 +2,7 @@ package classes;
 
 import classes.controller.GameMaster;
 import classes.util.ConfigReader;
+import classes.util.LoggerUtil; // Added import
 import classes.model.Player;
 import classes.enums.ResourceType;
 import classes.model.Road;
@@ -9,15 +10,10 @@ import classes.model.Settlement;
 import classes.model.Vertex;
 import classes.model.Tile;
 
-import java.io.FileOutputStream;
-import java.io.FileDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
@@ -26,34 +22,10 @@ import java.util.logging.Logger;
 public class Demonstrator {
     private static final Logger LOGGER = Logger.getLogger(Demonstrator.class.getName());
 
-    // Fix: Define a named static inner class instead of using double-brace initialization
-    private static class WhiteTextHandler extends ConsoleHandler {
-        WhiteTextHandler() {
-            super();
-            setOutputStream(new FileOutputStream(FileDescriptor.out));
-        }
-    }
-
-    static {
-        Logger rootLogger = Logger.getLogger("");
-        for (java.util.logging.Handler handler : rootLogger.getHandlers()) {
-            rootLogger.removeHandler(handler);
-        }
-
-        // Use the new class here
-        ConsoleHandler whiteHandler = new WhiteTextHandler();
-
-        whiteHandler.setFormatter(new Formatter() {
-            @Override
-            public String format(LogRecord logRecord) {
-                return logRecord.getMessage() + System.lineSeparator();
-            }
-        });
-
-        rootLogger.addHandler(whiteHandler);
-    }
-
     public static void main(String[] args) {
+        // Initialize logging configuration using the utility class
+        LoggerUtil.setupLogging(); 
+        
         printWelcomeBanner();
         ConfigReader config = new ConfigReader("config.txt");
         printConfiguration(config);
@@ -202,6 +174,8 @@ public class Demonstrator {
             LOGGER.info(() -> String.format("Running custom demonstration with %d rounds...", maxRounds));
             LOGGER.info("");
         }
+        // Initialize logging here as well for custom entries
+        LoggerUtil.setupLogging();
         GameMaster game = new GameMaster(maxRounds);
         game.startSimulation();
     }
