@@ -19,7 +19,7 @@ public abstract class PlayerAction {
      * 
      * @param player The player making this move
      */
-    public PlayerAction(Player player) {
+    protected PlayerAction(Player player) {
         this.player = player;
     }
 
