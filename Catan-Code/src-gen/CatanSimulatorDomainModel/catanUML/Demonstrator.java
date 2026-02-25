@@ -12,12 +12,42 @@ import CatanSimulatorDomainModel.catanUML.model.Tile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  * Demonstrator class for the Catan Simulator.
  */
 public class Demonstrator {
-	
+    // Initialize the Logger
+    private static final Logger LOGGER = Logger.getLogger(Demonstrator.class.getName());
+
+    static {
+        // Configure logger to output "white" text to Standard Out and remove metadata clutter
+        Logger rootLogger = Logger.getLogger("");
+        for (java.util.logging.Handler handler : rootLogger.getHandlers()) {
+            rootLogger.removeHandler(handler);
+        }
+
+        ConsoleHandler whiteHandler = new ConsoleHandler() {
+            {
+                setOutputStream(System.out); // Redirects from System.err to System.out
+            }
+        };
+
+        // Custom formatter to show ONLY the message (no timestamps or class names)
+        whiteHandler.setFormatter(new Formatter() {
+            @Override
+            public String format(LogRecord record) {
+                return record.getMessage() + System.lineSeparator();
+            }
+        });
+
+        rootLogger.addHandler(whiteHandler);
+    }
+
     public static void main(String[] args) {
         printWelcomeBanner();
         
@@ -37,24 +67,21 @@ public class Demonstrator {
         // 5. TERMINATION PHASE
         printTerminationBanner();
     }
-    
-    @SuppressWarnings("java:S106")
+
     private static void printWelcomeBanner() {
-        System.out.println("╔════════════════════════════════════════════════╗");
-        System.out.println("║   SETTLERS OF CATAN - SIMULATOR DEMONSTRATOR   ║");
-        System.out.println("╚════════════════════════════════════════════════╝");
-        System.out.println();
+        LOGGER.info("╔════════════════════════════════════════════════╗");
+        LOGGER.info("║   SETTLERS OF CATAN - SIMULATOR DEMONSTRATOR   ║");
+        LOGGER.info("╚════════════════════════════════════════════════╝");
+        LOGGER.info("");
     }
-    
-    @SuppressWarnings("java:S106")
+
     private static void printConfiguration(ConfigReader config) {
-        System.out.println("Configuration loaded:");
-        System.out.println("  Max turns: " + config.getMaxTurns());
-        System.out.println("  Max rounds: " + config.getMaxRounds());
-        System.out.println();
+        LOGGER.info("Configuration loaded:");
+        LOGGER.info("  Max turns: " + config.getMaxTurns());
+        LOGGER.info("  Max rounds: " + config.getMaxRounds());
+        LOGGER.info("");
     }
-    
-    @SuppressWarnings("java:S106")
+
     private static void performSetupPhase(GameMaster game) {
         List<Player> players = game.getPlayers();
         List<Integer> assignedVertices = new ArrayList<>();
@@ -62,7 +89,7 @@ public class Demonstrator {
         Random rand = new Random();
         
         for (int setupRound = 1; setupRound <= 2; setupRound++) {
-            System.out.println("--- Setup Round " + setupRound + " ---");
+            LOGGER.info("--- Setup Round " + setupRound + " ---");
             for (Player p : players) {
                 placeInitialPieces(p, setupRound, game, assignedVertices, rand);
             }
@@ -102,12 +129,11 @@ public class Demonstrator {
             int randomIndex = rand.nextInt(54); 
             Vertex candidate = game.getBoard().getVertex(randomIndex);
 
-            if (isValidPlacement(candidate, assigned, game)) {
-                // If round 1, or round 2 with resources/timeout, accept the spot
-                if (round == 1 || hasEssentialTrio(p, candidate, game) || attempts > 200) {
-                    assigned.add(randomIndex);
-                    return candidate;
-                }
+            // Merged if statements to reduce nesting and satisfy SonarQube S1066
+            if (isValidPlacement(candidate, assigned, game) && 
+               (round == 1 || hasEssentialTrio(p, candidate, game) || attempts > 200)) {
+                assigned.add(randomIndex);
+                return candidate;
             }
         }
     }
@@ -132,14 +158,13 @@ public class Demonstrator {
             }
         }
     }
-    
-    @SuppressWarnings("java:S106")
+
     private static void printStartingResources(List<Player> players, GameMaster game) {
-        System.out.println("\nInitial placement complete. Starting cards:");
+        LOGGER.info("\nInitial placement complete. Starting cards:");
         for (Player p : players) {
-            System.out.println("  Player " + p.getId() + ": " + p.getHand().totalCards() + " cards");
+            LOGGER.info("  Player " + p.getId() + ": " + p.getHand().totalCards() + " cards");
         }
-        System.out.println("Vertex 0 adjacents: " + game.getBoard().getVertex(0).getAdjacentVertices().size());
+        LOGGER.info("Vertex 0 adjacents: " + game.getBoard().getVertex(0).getAdjacentVertices().size());
     }
 
     private static boolean hasEssentialTrio(Player p, Vertex candidate, GameMaster game) {
@@ -163,20 +188,16 @@ public class Demonstrator {
         }
         return resources;
     }
-    
-    
-    @SuppressWarnings("java:S106")
+
     private static void printTerminationBanner() {
-        System.out.println();
-        System.out.println("╔════════════════════════════════════════════════╗");
-        System.out.println("║         DEMONSTRATION COMPLETE                 ║");
-        System.out.println("╚════════════════════════════════════════════════╝");
+        LOGGER.info("");
+        LOGGER.info("╔════════════════════════════════════════════════╗");
+        LOGGER.info("║         DEMONSTRATION COMPLETE                 ║");
+        LOGGER.info("╚════════════════════════════════════════════════╝");
     }
-    
-    @SuppressWarnings("java:S106")
+
     public static void runCustomDemo(int maxRounds) {
-        System.out.println("Running custom demonstration with " + maxRounds + " rounds...");
-        System.out.println();
+        LOGGER.info(String.format("Running custom demonstration with %d rounds...%n", maxRounds));
         GameMaster game = new GameMaster(maxRounds);
         game.startSimulation();
     }

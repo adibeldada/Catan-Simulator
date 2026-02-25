@@ -6,12 +6,43 @@ import CatanSimulatorDomainModel.catanUML.util.RuleValidator;
 import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  * GameMaster for the Catan simulation.
- * * Controls turn order, game loop, dice rolling, and victory checks.
+ * Controls turn order, game loop, dice rolling, and victory checks.
  */
 public class GameMaster {
+    // Initialize the Logger
+    private static final Logger LOGGER = Logger.getLogger(GameMaster.class.getName());
+
+    static {
+        // Configure logger to output "white" text to Standard Out and remove metadata clutter
+        Logger rootLogger = Logger.getLogger("");
+        for (java.util.logging.Handler handler : rootLogger.getHandlers()) {
+            rootLogger.removeHandler(handler);
+        }
+
+        ConsoleHandler whiteHandler = new ConsoleHandler() {
+            {
+                setOutputStream(System.out); // Redirects from System.err to System.out
+            }
+        };
+
+        // Custom formatter to show ONLY the message (no timestamps or class names)
+        whiteHandler.setFormatter(new Formatter() {
+            @Override
+            public String format(LogRecord record) {
+                return record.getMessage() + System.lineSeparator();
+            }
+        });
+
+        rootLogger.addHandler(whiteHandler);
+    }
+
     private Board board;
     private List<Player> players;
     private Dice dice;
@@ -35,12 +66,11 @@ public class GameMaster {
         }
     }
 
-    @SuppressWarnings("java:S106")
     public void startSimulation() {
-        System.out.println("=== Starting Catan Simulation ===");
-        System.out.println("Max Rounds: " + maxRounds);
-        System.out.println("Players: " + players.size());
-        System.out.println();
+        LOGGER.info("=== Starting Catan Simulation ===");
+        LOGGER.info(String.format("Max Rounds: %d", maxRounds));
+        LOGGER.info(String.format("Players: %d", players.size()));
+        LOGGER.info("");
 
         while (currentRound < maxRounds) {
             currentRound++;
@@ -48,24 +78,23 @@ public class GameMaster {
 
             Player winner = checkVictory();
             if (winner != null) {
-                System.out.println();
-                System.out.println("=== GAME OVER ===");
-                System.out.println("Winner: Player " + winner.getId() + 
-                                 " with " + winner.getVictoryPoints() + " victory points!");
-                System.out.println("Total rounds played: " + currentRound);
+                LOGGER.info("");
+                LOGGER.info("=== GAME OVER ===");
+                LOGGER.info(String.format("Winner: Player %d with %d victory points!", 
+                                           winner.getId(), winner.getVictoryPoints()));
+                LOGGER.info(String.format("Total rounds played: %d", currentRound));
                 return;
             }
         }
 
-        System.out.println();
-        System.out.println("=== SIMULATION ENDED ===");
-        System.out.println("Maximum rounds reached: " + maxRounds);
+        LOGGER.info("");
+        LOGGER.info("=== SIMULATION ENDED ===");
+        LOGGER.info(String.format("Maximum rounds reached: %d", maxRounds));
         printFinalStandings();
     }
 
-    @SuppressWarnings("java:S106")
     public void runRound() {
-        System.out.println("--- Round " + currentRound + " ---");
+        LOGGER.info(String.format("--- Round %d ---", currentRound));
         
         for (Player player : players) {
             runTurn(player);
@@ -77,12 +106,11 @@ public class GameMaster {
     /**
      * Updated to display the dice roll for each player's turn.
      */
-    @SuppressWarnings("java:S106")
     public void runTurn(Player player) {
         int roll = dice.roll();
         
-        // Print the dice roll to the console
-        System.out.println("[Dice Roll]: " + roll);
+        // Print the dice roll to the console via Logger
+        LOGGER.info(String.format("[Dice Roll]: %d", roll));
         
         if (roll != 7) {
             produceResources(roll);
@@ -121,34 +149,31 @@ public class GameMaster {
     /**
      * Updated to show detailed resource counts for each player.
      */
-    @SuppressWarnings("java:S106")
     public void printRoundSummary() {
-        System.out.println("Victory Points & Resource Breakdown:");
+        LOGGER.info("Victory Points & Resource Breakdown:");
         for (Player player : players) {
             // Uses player.getHand().toString() to show the Wood/Brick/Wheat/Sheep/Ore breakdown
-            System.out.printf("  Player %d: %d VP | Hand: %s%n", 
-                            player.getId(), 
-                            player.getVictoryPoints(),
-                            player.getHand().toString());
+            LOGGER.info(String.format("  Player %d: %d VP | Hand: %s", 
+                                       player.getId(), 
+                                       player.getVictoryPoints(),
+                                       player.getHand().toString()));
         }
-        System.out.println();
+        LOGGER.info("");
     }
 
-    @SuppressWarnings("java:S106")
     private void printFinalStandings() {
-        System.out.println("Final Standings:");
+        LOGGER.info("Final Standings:");
         players.sort((p1, p2) -> Integer.compare(p2.getVictoryPoints(), p1.getVictoryPoints()));
         
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
-            System.out.printf("%d. Player %d: %d VP%n", 
-                            i + 1, player.getId(), player.getVictoryPoints());
+            LOGGER.info(String.format("%d. Player %d: %d VP", 
+                                       i + 1, player.getId(), player.getVictoryPoints()));
         }
     }
 
-    @SuppressWarnings("java:S106")
     public void logAction(Player player, String action) {
-        System.out.printf("[%d] / [Player %d]: %s%n", currentRound, player.getId(), action);
+        LOGGER.info(String.format("[%d] / [Player %d]: %s", currentRound, player.getId(), action));
     }
 
     // Getters
