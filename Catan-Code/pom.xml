@@ -16,6 +16,8 @@
     <sonar.projectKey>adibeldada_Catan-Simulator</sonar.projectKey>
     <sonar.sources>src-gen</sonar.sources>
     <sonar.java.binaries>target/classes</sonar.java.binaries>
+    
+    <sonar.exclusions>**/Catan-GenCode/**</sonar.exclusions>
   </properties>
 
   <build>
