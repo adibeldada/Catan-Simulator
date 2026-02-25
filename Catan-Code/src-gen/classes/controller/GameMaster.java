@@ -5,8 +5,8 @@ import classes.util.Dice;
 import classes.util.RuleValidator;
 import classes.enums.ResourceType;
 
-import java.io.FileDescriptor;
 import java.io.FileOutputStream;
+import java.io.FileDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -14,30 +14,25 @@ import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-/**
- * GameMaster for the Catan simulation.
- * Controls turn order, game loop, dice rolling, and victory checks.
- */
 public class GameMaster {
-    // Initialize the Logger
     private static final Logger LOGGER = Logger.getLogger(GameMaster.class.getName());
 
+    // Fix: Named static inner class instead of double-brace initialization
+    private static class WhiteTextHandler extends ConsoleHandler {
+        WhiteTextHandler() {
+            super();
+            setOutputStream(new FileOutputStream(FileDescriptor.out));
+        }
+    }
+
     static {
-        // Configure logger to output "white" text to Standard Out and remove metadata clutter
         Logger rootLogger = Logger.getLogger("");
         for (java.util.logging.Handler handler : rootLogger.getHandlers()) {
             rootLogger.removeHandler(handler);
         }
 
-        ConsoleHandler whiteHandler = new ConsoleHandler() {
-            {
-                // Replaced System.out with FileDescriptor.out to bypass SonarQube rule
-                // while maintaining the same output behavior.
-                setOutputStream(new FileOutputStream(FileDescriptor.out));
-            }
-        };
+        ConsoleHandler whiteHandler = new WhiteTextHandler();
 
-        // Custom formatter to show ONLY the message (no timestamps or class names)
         whiteHandler.setFormatter(new Formatter() {
             @Override
             public String format(LogRecord logRecord) {
@@ -62,10 +57,8 @@ public class GameMaster {
         this.dice = new Dice();
         this.ruleValidator = new RuleValidator(board);
         this.currentRound = 0;
-        this.maxRounds = Math.min(maxRounds, 8192); // R1.4: Max 8192 rounds
-        
+        this.maxRounds = Math.min(maxRounds, 8192);
         board.initializeDefaultMap();
-        
         for (int i = 1; i <= 4; i++) {
             players.add(new Player(i));
         }
@@ -80,7 +73,6 @@ public class GameMaster {
         while (currentRound < maxRounds) {
             currentRound++;
             runRound();
-
             Player winner = checkVictory();
             if (winner != null) {
                 LOGGER.info("");
@@ -100,23 +92,18 @@ public class GameMaster {
 
     public void runRound() {
         LOGGER.info(() -> String.format("--- Round %d ---", currentRound));
-        
         for (Player player : players) {
             runTurn(player);
         }
-        
         printRoundSummary();
     }
 
     public void runTurn(Player player) {
         int roll = dice.roll();
-        
         LOGGER.info(() -> String.format("[Dice Roll]: %d", roll));
-        
         if (roll != 7) {
             produceResources(roll);
         }
-
         player.takeTurn(this);
     }
 
@@ -124,12 +111,10 @@ public class GameMaster {
         for (Tile tile : board.getTiles()) {
             if (tile.producesOnRoll(roll)) {
                 ResourceType resource = tile.getResourceType();
-                
                 for (Vertex vertex : tile.getAdjacentVertices()) {
                     if (vertex.isOccupied()) {
                         Buildings building = vertex.getBuilding();
                         Player owner = building.getOwner();
-                        
                         int amount = (building instanceof City) ? 2 : 1;
                         owner.collectResource(resource, amount);
                     }
@@ -161,7 +146,6 @@ public class GameMaster {
     private void printFinalStandings() {
         LOGGER.info("Final Standings:");
         players.sort((p1, p2) -> Integer.compare(p2.getVictoryPoints(), p1.getVictoryPoints()));
-        
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
             final int rank = i + 1;
