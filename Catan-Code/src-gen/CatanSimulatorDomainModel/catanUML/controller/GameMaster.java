@@ -4,6 +4,7 @@ import CatanSimulatorDomainModel.catanUML.model.*;
 import CatanSimulatorDomainModel.catanUML.util.Dice;
 import CatanSimulatorDomainModel.catanUML.util.RuleValidator;
 import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -33,10 +34,11 @@ public class GameMaster {
         };
 
         // Custom formatter to show ONLY the message (no timestamps or class names)
+        // Renamed 'record' to 'logRecord' to avoid restricted identifier issues
         whiteHandler.setFormatter(new Formatter() {
             @Override
-            public String format(LogRecord record) {
-                return record.getMessage() + System.lineSeparator();
+            public String format(LogRecord logRecord) {
+                return logRecord.getMessage() + System.lineSeparator();
             }
         });
 
@@ -68,8 +70,9 @@ public class GameMaster {
 
     public void startSimulation() {
         LOGGER.info("=== Starting Catan Simulation ===");
-        LOGGER.info(String.format("Max Rounds: %d", maxRounds));
-        LOGGER.info(String.format("Players: %d", players.size()));
+        // Wrapped in Supplier to satisfy "Invoke method(s) only conditionally"
+        LOGGER.info(() -> String.format("Max Rounds: %d", maxRounds));
+        LOGGER.info(() -> String.format("Players: %d", players.size()));
         LOGGER.info("");
 
         while (currentRound < maxRounds) {
@@ -80,21 +83,21 @@ public class GameMaster {
             if (winner != null) {
                 LOGGER.info("");
                 LOGGER.info("=== GAME OVER ===");
-                LOGGER.info(String.format("Winner: Player %d with %d victory points!", 
+                LOGGER.info(() -> String.format("Winner: Player %d with %d victory points!", 
                                            winner.getId(), winner.getVictoryPoints()));
-                LOGGER.info(String.format("Total rounds played: %d", currentRound));
+                LOGGER.info(() -> String.format("Total rounds played: %d", currentRound));
                 return;
             }
         }
 
         LOGGER.info("");
         LOGGER.info("=== SIMULATION ENDED ===");
-        LOGGER.info(String.format("Maximum rounds reached: %d", maxRounds));
+        LOGGER.info(() -> String.format("Maximum rounds reached: %d", maxRounds));
         printFinalStandings();
     }
 
     public void runRound() {
-        LOGGER.info(String.format("--- Round %d ---", currentRound));
+        LOGGER.info(() -> String.format("--- Round %d ---", currentRound));
         
         for (Player player : players) {
             runTurn(player);
@@ -110,7 +113,7 @@ public class GameMaster {
         int roll = dice.roll();
         
         // Print the dice roll to the console via Logger
-        LOGGER.info(String.format("[Dice Roll]: %d", roll));
+        LOGGER.info(() -> String.format("[Dice Roll]: %d", roll));
         
         if (roll != 7) {
             produceResources(roll);
@@ -152,8 +155,7 @@ public class GameMaster {
     public void printRoundSummary() {
         LOGGER.info("Victory Points & Resource Breakdown:");
         for (Player player : players) {
-            // Uses player.getHand().toString() to show the Wood/Brick/Wheat/Sheep/Ore breakdown
-            LOGGER.info(String.format("  Player %d: %d VP | Hand: %s", 
+            LOGGER.info(() -> String.format("  Player %d: %d VP | Hand: %s", 
                                        player.getId(), 
                                        player.getVictoryPoints(),
                                        player.getHand().toString()));
@@ -167,13 +169,14 @@ public class GameMaster {
         
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
-            LOGGER.info(String.format("%d. Player %d: %d VP", 
-                                       i + 1, player.getId(), player.getVictoryPoints()));
+            final int rank = i + 1;
+            LOGGER.info(() -> String.format("%d. Player %d: %d VP", 
+                                       rank, player.getId(), player.getVictoryPoints()));
         }
     }
 
     public void logAction(Player player, String action) {
-        LOGGER.info(String.format("[%d] / [Player %d]: %s", currentRound, player.getId(), action));
+        LOGGER.info(() -> String.format("[%d] / [Player %d]: %s", currentRound, player.getId(), action));
     }
 
     // Getters
