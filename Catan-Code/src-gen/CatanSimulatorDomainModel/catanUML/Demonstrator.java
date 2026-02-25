@@ -55,6 +55,7 @@ public class Demonstrator {
     private static void performSetupPhase(GameMaster game) {
         List<Player> players = game.getPlayers();
         List<Integer> assignedVertices = new ArrayList<>();
+        @SuppressWarnings("java:S2245")
         Random rand = new Random();
         
         for (int setupRound = 1; setupRound <= 2; setupRound++) {
