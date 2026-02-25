@@ -37,14 +37,16 @@ public class Demonstrator {
         // 5. TERMINATION PHASE
         printTerminationBanner();
     }
-
+    
+    @SuppressWarnings("java:S106")
     private static void printWelcomeBanner() {
         System.out.println("╔════════════════════════════════════════════════╗");
         System.out.println("║   SETTLERS OF CATAN - SIMULATOR DEMONSTRATOR   ║");
         System.out.println("╚════════════════════════════════════════════════╝");
         System.out.println();
     }
-
+    
+    @SuppressWarnings("java:S106")
     private static void printConfiguration(ConfigReader config) {
         System.out.println("Configuration loaded:");
         System.out.println("  Max turns: " + config.getMaxTurns());
@@ -159,14 +161,17 @@ public class Demonstrator {
         }
         return resources;
     }
-
+    
+    
+    @SuppressWarnings("java:S106")
     private static void printTerminationBanner() {
         System.out.println();
         System.out.println("╔════════════════════════════════════════════════╗");
         System.out.println("║         DEMONSTRATION COMPLETE                 ║");
         System.out.println("╚════════════════════════════════════════════════╝");
     }
-
+    
+    @SuppressWarnings("java:S106")
     public static void runCustomDemo(int maxRounds) {
         System.out.println("Running custom demonstration with " + maxRounds + " rounds...");
         System.out.println();
