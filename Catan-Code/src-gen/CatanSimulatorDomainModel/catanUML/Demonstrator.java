@@ -17,7 +17,7 @@ import java.util.Random;
  * Demonstrator class for the Catan Simulator.
  */
 public class Demonstrator {
-
+	
     public static void main(String[] args) {
         printWelcomeBanner();
         
@@ -53,7 +53,8 @@ public class Demonstrator {
         System.out.println("  Max rounds: " + config.getMaxRounds());
         System.out.println();
     }
-
+    
+    @SuppressWarnings("java:S106")
     private static void performSetupPhase(GameMaster game) {
         List<Player> players = game.getPlayers();
         List<Integer> assignedVertices = new ArrayList<>();
@@ -131,7 +132,8 @@ public class Demonstrator {
             }
         }
     }
-
+    
+    @SuppressWarnings("java:S106")
     private static void printStartingResources(List<Player> players, GameMaster game) {
         System.out.println("\nInitial placement complete. Starting cards:");
         for (Player p : players) {
