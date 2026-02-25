@@ -35,6 +35,7 @@ public class GameMaster {
         }
     }
 
+    @SuppressWarnings("java:S106")
     public void startSimulation() {
         System.out.println("=== Starting Catan Simulation ===");
         System.out.println("Max Rounds: " + maxRounds);
@@ -62,6 +63,7 @@ public class GameMaster {
         printFinalStandings();
     }
 
+    @SuppressWarnings("java:S106")
     public void runRound() {
         System.out.println("--- Round " + currentRound + " ---");
         
@@ -75,6 +77,7 @@ public class GameMaster {
     /**
      * Updated to display the dice roll for each player's turn.
      */
+    @SuppressWarnings("java:S106")
     public void runTurn(Player player) {
         int roll = dice.roll();
         
@@ -118,6 +121,7 @@ public class GameMaster {
     /**
      * Updated to show detailed resource counts for each player.
      */
+    @SuppressWarnings("java:S106")
     public void printRoundSummary() {
         System.out.println("Victory Points & Resource Breakdown:");
         for (Player player : players) {
@@ -130,6 +134,7 @@ public class GameMaster {
         System.out.println();
     }
 
+    @SuppressWarnings("java:S106")
     private void printFinalStandings() {
         System.out.println("Final Standings:");
         players.sort((p1, p2) -> Integer.compare(p2.getVictoryPoints(), p1.getVictoryPoints()));
@@ -141,6 +146,7 @@ public class GameMaster {
         }
     }
 
+    @SuppressWarnings("java:S106")
     public void logAction(Player player, String action) {
         System.out.printf("[%d] / [Player %d]: %s%n", currentRound, player.getId(), action);
     }
