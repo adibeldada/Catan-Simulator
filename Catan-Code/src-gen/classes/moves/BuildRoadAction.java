@@ -1,16 +1,15 @@
-package CatanSimulatorDomainModel.catanUML.moves;
+package classes.moves;
 
-import CatanSimulatorDomainModel.catanUML.model.*;
-import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
+import classes.model.*;
+import classes.controller.GameMaster;
 
-/*import CatanSimulatorDomainModel.catanUML.represents the action of building a road.
+/*import classes.represents the action of building a road.
  * 
  * Cost: 1 wood, 1 brick
  * Effect: Creates a road connecting two vertices
  * 
  * The road is added to both the board and the player's collection.
  */
-@SuppressWarnings("java:S120")
 public class BuildRoadAction extends PlayerAction {
     private Vertex start;
     private Vertex end;

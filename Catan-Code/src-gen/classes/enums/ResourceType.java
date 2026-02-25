@@ -1,4 +1,4 @@
-package CatanSimulatorDomainModel.catanUML.enums;
+package classes.enums;
 
 /**
  * Enum representing the different types of resources in Settlers of Catan.
@@ -7,7 +7,6 @@ package CatanSimulatorDomainModel.catanUML.enums;
  * DESERT tiles do not produce resources.
  */
 
-@SuppressWarnings("java:S120")
 public enum ResourceType {
     WOOD,
     BRICK,

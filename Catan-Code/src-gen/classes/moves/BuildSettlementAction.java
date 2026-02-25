@@ -1,7 +1,7 @@
-package CatanSimulatorDomainModel.catanUML.moves;
+package classes.moves;
 
-import CatanSimulatorDomainModel.catanUML.model.*;
-import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
+import classes.model.*;
+import classes.controller.GameMaster;
 /**
  * Represents the action of building a settlement.
  * 
@@ -11,7 +11,6 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * 
  * The settlement is added to both the vertex and the player's collection.
  */
-@SuppressWarnings("java:S120")
 public class BuildSettlementAction extends PlayerAction {
     private Vertex location;
 

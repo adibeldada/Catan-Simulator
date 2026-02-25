@@ -1,7 +1,7 @@
-package CatanSimulatorDomainModel.catanUML.moves;
+package classes.moves;
 
-import CatanSimulatorDomainModel.catanUML.model.Player;
-import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
+import classes.model.Player;
+import classes.controller.GameMaster;
 /**
  * Abstract base class for player moves/actions.
  * 
@@ -11,7 +11,6 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * The execute() method performs the action and updates game state.
  * The describe() method provides a human-readable description for logging.
  */
-@SuppressWarnings("java:S120")
 public abstract class PlayerAction {
     protected Player player;
 

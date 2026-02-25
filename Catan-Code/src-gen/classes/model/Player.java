@@ -1,8 +1,8 @@
-package CatanSimulatorDomainModel.catanUML.model;
+package classes.model;
 
-import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
-import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
-import CatanSimulatorDomainModel.catanUML.moves.*;
+import classes.enums.ResourceType;
+import classes.controller.GameMaster;
+import classes.moves.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,7 +11,6 @@ import java.util.Random;
  * Represents a player in the game.
  * Players manage resources, make decisions, and track their buildings and roads.
  */
-@SuppressWarnings("java:S120")
 public class Player {
 
     private int id;

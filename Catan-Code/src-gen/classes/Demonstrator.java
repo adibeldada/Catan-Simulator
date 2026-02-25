@@ -1,13 +1,13 @@
-package CatanSimulatorDomainModel.catanUML;
+package classes;
 
-import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
-import CatanSimulatorDomainModel.catanUML.util.ConfigReader;
-import CatanSimulatorDomainModel.catanUML.model.Player;
-import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
-import CatanSimulatorDomainModel.catanUML.model.Road;
-import CatanSimulatorDomainModel.catanUML.model.Settlement;
-import CatanSimulatorDomainModel.catanUML.model.Vertex;
-import CatanSimulatorDomainModel.catanUML.model.Tile;
+import classes.controller.GameMaster;
+import classes.util.ConfigReader;
+import classes.model.Player;
+import classes.enums.ResourceType;
+import classes.model.Road;
+import classes.model.Settlement;
+import classes.model.Vertex;
+import classes.model.Tile;
 
 import java.io.FileOutputStream;
 import java.io.FileDescriptor;
@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 /**
  * Demonstrator class for the Catan Simulator.
  */
-@SuppressWarnings("java:S120")
 public class Demonstrator {
     // Initialize the Logger
     private static final Logger LOGGER = Logger.getLogger(Demonstrator.class.getName());

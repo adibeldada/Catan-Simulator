@@ -1,9 +1,9 @@
-package CatanSimulatorDomainModel.catanUML.controller;
+package classes.controller;
 
-import CatanSimulatorDomainModel.catanUML.model.*;
-import CatanSimulatorDomainModel.catanUML.util.Dice;
-import CatanSimulatorDomainModel.catanUML.util.RuleValidator;
-import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
+import classes.model.*;
+import classes.util.Dice;
+import classes.util.RuleValidator;
+import classes.enums.ResourceType;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -18,7 +18,6 @@ import java.util.logging.Logger;
  * GameMaster for the Catan simulation.
  * Controls turn order, game loop, dice rolling, and victory checks.
  */
-@SuppressWarnings("java:S120")
 public class GameMaster {
     // Initialize the Logger
     private static final Logger LOGGER = Logger.getLogger(GameMaster.class.getName());

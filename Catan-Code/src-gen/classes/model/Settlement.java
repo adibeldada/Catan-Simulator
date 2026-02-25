@@ -1,4 +1,4 @@
-package CatanSimulatorDomainModel.catanUML.model;
+package classes.model;
 
 /**
  * Represents a settlement building.
@@ -8,7 +8,6 @@ package CatanSimulatorDomainModel.catanUML.model;
  * Victory Points: 1
  * Can be upgraded to a City.
  */
-@SuppressWarnings("java:S120")
 public class Settlement extends Buildings {
     
     /**

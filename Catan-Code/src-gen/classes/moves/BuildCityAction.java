@@ -1,7 +1,7 @@
-package CatanSimulatorDomainModel.catanUML.moves;
+package classes.moves;
 
-import CatanSimulatorDomainModel.catanUML.model.*;
-import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
+import classes.model.*;
+import classes.controller.GameMaster;
 /**
  * Represents the action of building a city (upgrading a settlement).
  * 
@@ -11,7 +11,6 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * 
  * R1.6: Cities must replace existing settlements.
  */
-@SuppressWarnings("java:S120")
 public class BuildCityAction extends PlayerAction {
     private Vertex location;
 

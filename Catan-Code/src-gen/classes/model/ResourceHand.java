@@ -1,6 +1,6 @@
-package CatanSimulatorDomainModel.catanUML.model;
+package classes.model;
 
-import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
+import classes.enums.ResourceType;
 
 /**
  * Tracks the resources held by a player.
@@ -8,7 +8,6 @@ import CatanSimulatorDomainModel.catanUML.enums.ResourceType;
  * Manages addition, removal, and querying of resource cards.
  * Used by Player class to manage their hand of resources.
  */
-@SuppressWarnings("java:S120")
 public class ResourceHand {
     private int wood;
     private int brick;

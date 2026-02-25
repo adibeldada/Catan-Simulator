@@ -1,6 +1,6 @@
-package CatanSimulatorDomainModel.catanUML.util;
+package classes.util;
 
-import CatanSimulatorDomainModel.catanUML.model.*;
+import classes.model.*;
 /**
  * Validates game rules and ensures invariants are maintained.
  * 
@@ -11,7 +11,6 @@ import CatanSimulatorDomainModel.catanUML.model.*;
  * 
  * Used by GameMaster before executing any moves.
  */
-@SuppressWarnings("java:S120")
 public class RuleValidator {
     private Board board;
 

@@ -1,8 +1,8 @@
-package CatanSimulatorDomainModel.catanUML.moves;
+package classes.moves;
 
-import CatanSimulatorDomainModel.catanUML.model.Player;
-import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
-/*import CatanSimulatorDomainModel.catanUML.epresents passing without taking an action.
+import classes.model.Player;
+import classes.controller.GameMaster;
+/*import classes.epresents passing without taking an action.
  * 
  * Cost: None
  * Effect: Player takes no action this turn
@@ -12,7 +12,6 @@ import CatanSimulatorDomainModel.catanUML.controller.GameMaster;
  * - Player chooses not to build (random decision)
  * - No valid moves are available
  */
-@SuppressWarnings("java:S120")
 public class PassAction extends PlayerAction {
 
     /**
