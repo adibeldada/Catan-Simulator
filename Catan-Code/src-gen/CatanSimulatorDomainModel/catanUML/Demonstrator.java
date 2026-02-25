@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Formatter;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
@@ -25,7 +26,7 @@ public class Demonstrator {
     private static final Logger LOGGER = Logger.getLogger(Demonstrator.class.getName());
 
     static {
-        // Configure logger to output "white" text to Standard Out and remove metadata clutter
+        // Configure logger to output to Standard Out (white text) and remove metadata clutter
         Logger rootLogger = Logger.getLogger("");
         for (java.util.logging.Handler handler : rootLogger.getHandlers()) {
             rootLogger.removeHandler(handler);
@@ -33,15 +34,15 @@ public class Demonstrator {
 
         ConsoleHandler whiteHandler = new ConsoleHandler() {
             {
-                setOutputStream(System.out); // Redirects from System.err to System.out
+                setOutputStream(System.out); // Redirects output to Standard Out
             }
         };
 
-        // Custom formatter to show ONLY the message (no timestamps or class names)
+        // Custom formatter to show ONLY the message (no timestamps or metadata)
         whiteHandler.setFormatter(new Formatter() {
             @Override
-            public String format(LogRecord record) {
-                return record.getMessage() + System.lineSeparator();
+            public String format(LogRecord logRecord) { // Renamed from 'record' to fix restricted identifier issue
+                return logRecord.getMessage() + System.lineSeparator();
             }
         });
 
@@ -76,10 +77,12 @@ public class Demonstrator {
     }
 
     private static void printConfiguration(ConfigReader config) {
-        LOGGER.info("Configuration loaded:");
-        LOGGER.info("  Max turns: " + config.getMaxTurns());
-        LOGGER.info("  Max rounds: " + config.getMaxRounds());
-        LOGGER.info("");
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("Configuration loaded:");
+            LOGGER.log(Level.INFO, "  Max turns: {0}", config.getMaxTurns());
+            LOGGER.log(Level.INFO, "  Max rounds: {0}", config.getMaxRounds());
+            LOGGER.info("");
+        }
     }
 
     private static void performSetupPhase(GameMaster game) {
@@ -89,7 +92,9 @@ public class Demonstrator {
         Random rand = new Random();
         
         for (int setupRound = 1; setupRound <= 2; setupRound++) {
-            LOGGER.info("--- Setup Round " + setupRound + " ---");
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO, "--- Setup Round {0} ---", setupRound);
+            }
             for (Player p : players) {
                 placeInitialPieces(p, setupRound, game, assignedVertices, rand);
             }
@@ -118,8 +123,11 @@ public class Demonstrator {
             awardStartingResources(p, startVertex, game);
         }
         
-        game.logAction(p, String.format("Placed initial settlement at vertex %d and road to vertex %d (Setup Round %d)", 
-                       startVertex.getId(), neighbor.getId(), round));
+        // Conditional invocation with built-in formatting for the action log
+        if (LOGGER.isLoggable(Level.INFO)) {
+            game.logAction(p, String.format("Placed initial settlement at vertex %d and road to vertex %d (Setup Round %d)", 
+                           startVertex.getId(), neighbor.getId(), round));
+        }
     }
 
     private static Vertex findValidVertex(Player p, int round, GameMaster game, List<Integer> assigned, Random rand) {
@@ -129,9 +137,9 @@ public class Demonstrator {
             int randomIndex = rand.nextInt(54); 
             Vertex candidate = game.getBoard().getVertex(randomIndex);
 
-            // Merged if statements to reduce nesting and satisfy SonarQube S1066
+            // Merged if-statement to reduce nesting and satisfy SonarQube
             if (isValidPlacement(candidate, assigned, game) && 
-               (round == 1 || hasEssentialTrio(p, candidate, game) || attempts > 200)) {
+                (round == 1 || hasEssentialTrio(p, candidate, game) || attempts > 200)) {
                 assigned.add(randomIndex);
                 return candidate;
             }
@@ -140,7 +148,9 @@ public class Demonstrator {
 
     private static boolean isValidPlacement(Vertex candidate, List<Integer> assigned, GameMaster game) {
         // R1.6 Invariant & Dead-zone check
-        if (candidate.getAdjacentVertices().size() < 2) return false;
+        if (candidate.getAdjacentVertices().size() < 2) {
+            return false;
+        }
 
         for (int occupiedId : assigned) {
             Vertex occupied = game.getBoard().getVertex(occupiedId);
@@ -160,11 +170,16 @@ public class Demonstrator {
     }
 
     private static void printStartingResources(List<Player> players, GameMaster game) {
-        LOGGER.info("\nInitial placement complete. Starting cards:");
+        LOGGER.info("");
+        LOGGER.info("Initial placement complete. Starting cards:");
         for (Player p : players) {
-            LOGGER.info("  Player " + p.getId() + ": " + p.getHand().totalCards() + " cards");
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO, "  Player {0}: {1} cards", new Object[]{p.getId(), p.getHand().totalCards()});
+            }
         }
-        LOGGER.info("Vertex 0 adjacents: " + game.getBoard().getVertex(0).getAdjacentVertices().size());
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO, "Vertex 0 adjacents: {0}", game.getBoard().getVertex(0).getAdjacentVertices().size());
+        }
     }
 
     private static boolean hasEssentialTrio(Player p, Vertex candidate, GameMaster game) {
@@ -197,7 +212,10 @@ public class Demonstrator {
     }
 
     public static void runCustomDemo(int maxRounds) {
-        LOGGER.info(String.format("Running custom demonstration with %d rounds...%n", maxRounds));
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO, "Running custom demonstration with {0} rounds...", maxRounds);
+            LOGGER.info("");
+        }
         GameMaster game = new GameMaster(maxRounds);
         game.startSimulation();
     }
