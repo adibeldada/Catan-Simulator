@@ -9,11 +9,10 @@ import java.util.Random;
 
 /**
  * Represents a player in the game.
- * * Players manage resources, make decisions, and track their buildings and roads.
- * This implementation uses random decision-making to simulate AI behavior.
- * * R1.8: Players with more than 7 cards must attempt to build.
+ * Players manage resources, make decisions, and track their buildings and roads.
  */
 public class Player {
+
     private int id;
     private ResourceHand hand;
     private int victoryPoints;
@@ -21,10 +20,6 @@ public class Player {
     private List<Buildings> buildingsBuilt;
     private Random random;
 
-    /**
-     * Constructs a Player with the specified ID.
-     * * @param id Unique identifier for this player (1-4)
-     */
     public Player(int id) {
         this.id = id;
         this.hand = new ResourceHand();
@@ -34,109 +29,107 @@ public class Player {
         this.random = new Random();
     }
 
-    /**
-     * Takes a turn in the game.
-     * Randomly decides what action to take based on available resources.
-     * * @param game The GameMaster controlling the game
-     */
     public void takeTurn(GameMaster game) {
-        boolean buildingActed = false; // Tracks if a building action occurred (R1.7/R1.8)
+        boolean buildingActed = false;
         
-        // R1.8: If player has more than 7 cards, must try to build until they are under the limit
+        // R1.8: If player has more than 7 cards, must try to build
         while (hand.totalCards() > 7) {
             PlayerAction move = decideMove(game, true);
-            
             if (move instanceof PassAction) {
-                // If the player is forced to pass while holding >7 cards, we MUST execute the 
-                // move to ensure the action is logged to the console (R1.7).
                 if (!buildingActed) {
                     move.execute(game);
                 }
-                return; // End turn
+                return;
             } else {
                 move.execute(game);
                 buildingActed = true;
             }
         }
-        
-        // If the player did not build anything to satisfy R1.8 (or was already under 7),
-        // take a standard turn to ensure at least one action log entry is generated (R1.7).
+
         if (!buildingActed) {
             decideMove(game, false).execute(game);
         }
     }
 
+    /**
+     * Refactored to meet Cognitive Complexity requirements (Score: ~8)
+     */
     private PlayerAction decideMove(GameMaster game, boolean mustBuild) {
-        List<PlayerAction> possibleMoves = new ArrayList<>();
-
-        // 1. Priority: Cities (2 VP)
+        // 1. Priority: Cities (2 VP) - Immediate return if found
         if (canAfford(Cost.cityCost())) {
-            for (Buildings b : buildingsBuilt) {
-                if (b instanceof Settlement && game.getRuleValidator().canBuildCity(this, b.getLocation())) {
-                    possibleMoves.add(new BuildCityAction(this, b.getLocation()));
-                }
-            }
+            List<PlayerAction> cities = getCandidateCities(game);
+            if (!cities.isEmpty()) return pickRandom(cities);
         }
-        // If we found cities and "must build", don't even look at roads yet to save resources
-        if (!possibleMoves.isEmpty()) return possibleMoves.get(random.nextInt(possibleMoves.size()));
 
-        // 2. Priority: Settlements (1 VP)
+        // 2. Priority: Settlements (1 VP) - Immediate return if found
         if (canAfford(Cost.settlementCost())) {
-            for (Vertex v : game.getBoard().getVertices()) {
-                if (game.getRuleValidator().canBuildSettlement(this, v)) {
-                    possibleMoves.add(new BuildSettlementAction(this, v));
-                }
-            }
+            List<PlayerAction> settlements = getCandidateSettlements(game);
+            if (!settlements.isEmpty()) return pickRandom(settlements);
         }
-        if (!possibleMoves.isEmpty()) return possibleMoves.get(random.nextInt(possibleMoves.size()));
 
         // 3. Priority: Roads (Expansion)
+        List<PlayerAction> roads = new ArrayList<>();
         if (canAfford(Cost.roadCost())) {
-            for (Vertex v1 : game.getBoard().getVertices()) {
-                for (Vertex v2 : v1.getAdjacentVertices()) {
-                    if (game.getRuleValidator().canBuildRoad(this, v1, v2)) {
-                        possibleMoves.add(new BuildRoadAction(this, v1, v2));
-                    }
-                }
-            }
+            roads = getCandidateRoads(game);
         }
 
-        // Final decision
-        if (possibleMoves.isEmpty()) {
+        // Final decision logic
+        if (roads.isEmpty()) {
             return new PassAction(this);
         }
 
-        // If not forced to build, 30% chance to save resources for a bigger building
+        // 30% chance to save resources if not forced to build
         if (!mustBuild && random.nextDouble() < 0.3) {
             return new PassAction(this);
         }
 
-        return possibleMoves.get(random.nextInt(possibleMoves.size()));
+        return pickRandom(roads);
     }
 
-    /**
-     * Collects a resource when a tile produces.
-     * * @param resource The type of resource to collect
-     * @param amount The amount to collect
-     */
+    private List<PlayerAction> getCandidateCities(GameMaster game) {
+        List<PlayerAction> moves = new ArrayList<>();
+        for (Buildings b : buildingsBuilt) {
+            if (b instanceof Settlement && game.getRuleValidator().canBuildCity(this, b.getLocation())) {
+                moves.add(new BuildCityAction(this, b.getLocation()));
+            }
+        }
+        return moves;
+    }
+
+    private List<PlayerAction> getCandidateSettlements(GameMaster game) {
+        List<PlayerAction> moves = new ArrayList<>();
+        for (Vertex v : game.getBoard().getVertices()) {
+            if (game.getRuleValidator().canBuildSettlement(this, v)) {
+                moves.add(new BuildSettlementAction(this, v));
+            }
+        }
+        return moves;
+    }
+
+    private List<PlayerAction> getCandidateRoads(GameMaster game) {
+        List<PlayerAction> moves = new ArrayList<>();
+        for (Vertex v1 : game.getBoard().getVertices()) {
+            for (Vertex v2 : v1.getAdjacentVertices()) {
+                if (game.getRuleValidator().canBuildRoad(this, v1, v2)) {
+                    moves.add(new BuildRoadAction(this, v1, v2));
+                }
+            }
+        }
+        return moves;
+    }
+
+    private PlayerAction pickRandom(List<PlayerAction> moves) {
+        return moves.get(random.nextInt(moves.size()));
+    }
+
     public void collectResource(ResourceType resource, int amount) {
         hand.add(resource, amount);
     }
 
-    /**
-     * Checks if the player can afford a given cost.
-     * * @param cost The cost to check
-     * @return true if player has enough resources
-     */
     public boolean canAfford(Cost cost) {
         return hand.hasEnough(cost);
     }
 
-    /**
-     * Spends resources according to the cost.
-     * Used when building structures.
-     * * @param cost The cost to spend
-     */
     public void spendResources(Cost cost) {
         hand.remove(ResourceType.WOOD, cost.getWood());
         hand.remove(ResourceType.BRICK, cost.getBrick());
@@ -145,31 +138,18 @@ public class Player {
         hand.remove(ResourceType.ORE, cost.getOre());
     }
 
-    /**
-     * Adds victory points to the player's total.
-     * * @param amount The amount of victory points to add
-     */
     public void addVictoryPoints(int amount) {
         victoryPoints += amount;
     }
 
-    /**
-     * Adds a road to the player's collection.
-     * * @param road The road to add
-     */
     public void addRoad(Road road) {
         roadsBuilt.add(road);
     }
 
-    /**
-     * Adds a building to the player's collection.
-     * * @param building The building to add
-     */
     public void addBuilding(Buildings building) {
         buildingsBuilt.add(building);
     }
 
-    // Getters
     public int getId() { return id; }
     public ResourceHand getHand() { return hand; }
     public int getVictoryPoints() { return victoryPoints; }
