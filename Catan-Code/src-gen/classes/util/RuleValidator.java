@@ -4,11 +4,12 @@ import classes.model.*;
 
 /**
  * Validates game rules and ensures invariants are maintained.
- * * R1.6: Enforces key game invariants including:
+ * R1.6: Enforces key game invariants including:
  * - Roads must be connected to existing roads or settlements
  * - Cities must replace existing settlements
  * - Distance between settlements must be at least 2 vertices
- * * Used by GameMaster before executing any moves.
+ * - Players must have sufficient resources for actions
+ * Used by GameMaster and Players before executing any moves.
  */
 public class RuleValidator {
 
@@ -16,7 +17,7 @@ public class RuleValidator {
 
     /**
      * Constructs a RuleValidator for the given board.
-     * * @param board The game board to validate against
+     * @param board The game board to validate against
      */
     public RuleValidator(Board board) {
         this.board = board;
@@ -24,9 +25,15 @@ public class RuleValidator {
 
     /**
      * Checks if a player can build a road between two vertices.
-     * * R1.6: Roads must be connected to existing roads or settlements.
+     * R1.6: Roads must be connected to existing roads or settlements.
+     * Added resource check: 1 Wood, 1 Brick.
      */
     public boolean canBuildRoad(Player player, Vertex start, Vertex end) {
+        // NEW: Check if player has resources
+        if (!player.canAfford(Cost.roadCost())) {
+            return false;
+        }
+
         // Check if vertices are adjacent
         if (!start.getAdjacentVertices().contains(end)) {
             return false;
@@ -58,7 +65,7 @@ public class RuleValidator {
             }
         }
 
-        // First road doesn't need to be connected
+        // First road doesn't need to be connected (Setup Phase)
         if (player.getRoadsBuilt().isEmpty() && player.getBuildingsBuilt().isEmpty()) {
             connected = true;
         }
@@ -68,8 +75,14 @@ public class RuleValidator {
 
     /**
      * Checks if a player can build a settlement at a vertex.
+     * Added resource check: 1 Wood, 1 Brick, 1 Wheat, 1 Sheep.
      */
     public boolean canBuildSettlement(Player player, Vertex location) {
+        // NEW: Check if player has resources
+        if (!player.canAfford(Cost.settlementCost())) {
+            return false;
+        }
+
         // Check if vertex can accommodate a building
         if (!location.canBuild(player)) {
             return false;
@@ -99,22 +112,27 @@ public class RuleValidator {
 
     /**
      * Checks if a player can build a city at a vertex.
-     * * R1.6: Must replace an existing settlement.
+     * R1.6: Must replace an existing settlement.
+     * Added resource check: 2 Wheat, 3 Ore.
      */
     public boolean canBuildCity(Player player, Vertex location) {
+        // NEW: Check if player has resources
+        if (!player.canAfford(Cost.cityCost())) {
+            return false;
+        }
+
         if (location == null) {
             return false;
         }
 
-        Buildings building = location.getBuilding();
+        Buildings building = location.getBuilding(); //
         
-        // instanceof handles null checks automatically
+        // Check if location has a settlement
         if (!(building instanceof Settlement)) {
             return false;
         }
 
         // Settlement must belong to the player
-        // Simplified if-then-else into a single return statement
         return building.getOwner() == player;
     }
 
@@ -122,8 +140,8 @@ public class RuleValidator {
      * Checks if the distance rule is respected at a location.
      */
     public boolean respectsDistanceRule(Vertex location) {
-        for (Vertex adjacent : location.getAdjacentVertices()) {
-            if (adjacent.isOccupied()) {
+        for (Vertex adjacent : location.getAdjacentVertices()) { //
+            if (adjacent.isOccupied()) { //
                 return false;
             }
         }

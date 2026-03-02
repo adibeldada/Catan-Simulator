@@ -11,14 +11,14 @@ import java.util.Random;
  * Represents a player in the game.
  * Players manage resources, make decisions, and track their buildings and roads.
  */
-public class Player {
+public abstract class Player {
 
-    private int id;
-    private ResourceHand hand;
-    private int victoryPoints;
-    private List<Road> roadsBuilt;
-    private List<Buildings> buildingsBuilt;
-    private Random random;
+    protected int id;
+    protected ResourceHand hand;
+    protected int victoryPoints;
+    protected List<Road> roadsBuilt;
+    protected List<Buildings> buildingsBuilt;
+    protected Random random;
 
     public Player(int id) {
         this.id = id;
@@ -29,64 +29,11 @@ public class Player {
         this.random = new Random();
     }
 
-    public void takeTurn(GameMaster game) {
-        boolean buildingActed = false;
-        
-        // R1.8: If player has more than 7 cards, must try to build
-        while (hand.totalCards() > 7) {
-            PlayerAction move = decideMove(game, true);
-            if (move instanceof PassAction) {
-                if (!buildingActed) {
-                    move.execute(game);
-                }
-                return;
-            } else {
-                move.execute(game);
-                buildingActed = true;
-            }
-        }
+    public abstract void takeTurn(GameMaster game);
 
-        if (!buildingActed) {
-            decideMove(game, false).execute(game);
-        }
-    }
+    protected abstract PlayerAction decideMove(GameMaster game, boolean mustBuild);
 
-    /**
-     * Refactored to meet Cognitive Complexity requirements (Score: ~8)
-     */
-    private PlayerAction decideMove(GameMaster game, boolean mustBuild) {
-        // 1. Priority: Cities (2 VP) - Immediate return if found
-        if (canAfford(Cost.cityCost())) {
-            List<PlayerAction> cities = getCandidateCities(game);
-            if (!cities.isEmpty()) return pickRandom(cities);
-        }
-
-        // 2. Priority: Settlements (1 VP) - Immediate return if found
-        if (canAfford(Cost.settlementCost())) {
-            List<PlayerAction> settlements = getCandidateSettlements(game);
-            if (!settlements.isEmpty()) return pickRandom(settlements);
-        }
-
-        // 3. Priority: Roads (Expansion)
-        List<PlayerAction> roads = new ArrayList<>();
-        if (canAfford(Cost.roadCost())) {
-            roads = getCandidateRoads(game);
-        }
-
-        // Final decision logic
-        if (roads.isEmpty()) {
-            return new PassAction(this);
-        }
-
-        // 30% chance to save resources if not forced to build
-        if (!mustBuild && random.nextDouble() < 0.3) {
-            return new PassAction(this);
-        }
-
-        return pickRandom(roads);
-    }
-
-    private List<PlayerAction> getCandidateCities(GameMaster game) {
+    protected List<PlayerAction> getCandidateCities(GameMaster game) {
         List<PlayerAction> moves = new ArrayList<>();
         for (Buildings b : buildingsBuilt) {
             if (b instanceof Settlement && game.getRuleValidator().canBuildCity(this, b.getLocation())) {
@@ -96,7 +43,7 @@ public class Player {
         return moves;
     }
 
-    private List<PlayerAction> getCandidateSettlements(GameMaster game) {
+    protected List<PlayerAction> getCandidateSettlements(GameMaster game) {
         List<PlayerAction> moves = new ArrayList<>();
         for (Vertex v : game.getBoard().getVertices()) {
             if (game.getRuleValidator().canBuildSettlement(this, v)) {
@@ -106,7 +53,7 @@ public class Player {
         return moves;
     }
 
-    private List<PlayerAction> getCandidateRoads(GameMaster game) {
+    protected List<PlayerAction> getCandidateRoads(GameMaster game) {
         List<PlayerAction> moves = new ArrayList<>();
         for (Vertex v1 : game.getBoard().getVertices()) {
             for (Vertex v2 : v1.getAdjacentVertices()) {
@@ -118,7 +65,7 @@ public class Player {
         return moves;
     }
 
-    private PlayerAction pickRandom(List<PlayerAction> moves) {
+    protected PlayerAction pickRandom(List<PlayerAction> moves) {
         return moves.get(random.nextInt(moves.size()));
     }
 
