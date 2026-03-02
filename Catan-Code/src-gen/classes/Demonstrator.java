@@ -70,17 +70,68 @@ public class Demonstrator {
     }
 
     private static void placeInitialPieces(Player p, int round, GameMaster game, List<Integer> assigned, Random rand) {
-        Vertex startVertex = findValidVertex(p, round, game, assigned, rand);
+        Vertex startVertex = null;
+        Vertex neighbor = null;
+
+        // Check if the player is a HumanPlayer to allow manual placement
+        if (p instanceof classes.model.HumanPlayer) {
+            java.util.Scanner scanner = new java.util.Scanner(System.in);
+            
+            // 1. Manually place Settlement
+            while (true) {
+                System.out.printf("[Setup Round %d] Player %d, enter Vertex ID for settlement: ", round, p.getId());
+                try {
+                    String input = scanner.nextLine();
+                    int vertexId = Integer.parseInt(input);
+                    startVertex = game.getBoard().getVertex(vertexId);
+                    
+                    // Validate using existing distance and adjacency logic
+                    if (startVertex != null && isValidPlacement(startVertex, assigned, game)) {
+                        assigned.add(vertexId);
+                        break;
+                    }
+                    System.out.println("Invalid placement. Vertex must be unoccupied and follow the distance rule.");
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a numeric Vertex ID.");
+                }
+            }
+
+            // 2. Manually place Road
+            while (true) {
+                System.out.printf("[Setup Round %d] Player %d, enter adjacent Vertex ID for road from node %d: ", 
+                                  round, p.getId(), startVertex.getId());
+                try {
+                    String input = scanner.nextLine();
+                    int neighborId = Integer.parseInt(input);
+                    neighbor = game.getBoard().getVertex(neighborId);
+                    
+                    // Ensure the road connects to the settlement
+                    if (neighbor != null && startVertex.getAdjacentVertices().contains(neighbor)) {
+                        break;
+                    }
+                    System.out.println("Invalid road. Vertex must be adjacent to your settlement.");
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a numeric Vertex ID.");
+                }
+            }
+        } else {
+            // Automated logic for AI players
+            startVertex = findValidVertex(p, round, game, assigned, rand);
+            assigned.add(startVertex.getId());
+            neighbor = startVertex.getAdjacentVertices().get(0);
+        }
+
+        // Execute the placement on the board and update player state
         Settlement s = new Settlement(p);
         startVertex.placeBuilding(s);
         p.addBuilding(s);
         p.addVictoryPoints(1);
         
-        Vertex neighbor = startVertex.getAdjacentVertices().get(0);
         Road r = new Road(p, startVertex, neighbor);
         p.addRoad(r);
         game.getBoard().placeRoad(r);
 
+        // Award resources only in the second setup round
         if (round == 2) {
             awardStartingResources(p, startVertex, game);
         }
@@ -148,8 +199,9 @@ public class Demonstrator {
         boolean hasWood = current.contains(ResourceType.WOOD) || potential.contains(ResourceType.WOOD);
         boolean hasBrick = current.contains(ResourceType.BRICK) || potential.contains(ResourceType.BRICK);
         boolean hasWheat = current.contains(ResourceType.WHEAT) || potential.contains(ResourceType.WHEAT);
+        boolean hasOre = current.contains(ResourceType.ORE) || potential.contains(ResourceType.ORE);
         
-        return hasWood && hasBrick && hasWheat;
+        return hasWood && hasBrick && hasWheat && hasOre;
     }
 
     private static List<ResourceType> getProducedResources(Vertex v, GameMaster game) {

@@ -6,9 +6,12 @@ import java.util.List;
 
 /**
  * Represents the game board with tiles, vertices, and roads.
- * * The board uses a specific identification system (R1.1):
- * - Tiles: 0 (center), 1-6 (inner ring), 7-18 (outer ring)
- * - Vertices: 0-53 (following the same ring pattern)
+ * The board uses the specific 5-row layout and spiral numbering provided:
+ * - Row 1 (Top): 13, 14, 15
+ * - Row 2: 12, 4, 5, 16
+ * - Row 3: 11, 3, 0, 6, 17
+ * - Row 4: 10, 2, 1, 18
+ * - Row 5: 9, 8, 7
  */
 public class Board {
     private List<Tile> tiles;
@@ -22,63 +25,99 @@ public class Board {
     }
 
     public void initializeDefaultMap() {
+        // Initialize 54 vertices (0-53)
         for (int i = 0; i < 54; i++) {
             vertices.add(new Vertex(i));
         }
 
-        setupVertexAdjacencies();
+        // Create 19 tiles with specific IDs, resources, and tokens as described
+        // Row 1 (Top)
+        tiles.add(new Tile(13, ResourceType.BRICK, 9));
+        tiles.add(new Tile(14, ResourceType.BRICK, 8));
+        tiles.add(new Tile(15, ResourceType.WHEAT, 4));
 
-        // Create tiles with resources and number tokens
-        tiles.add(new Tile(0, ResourceType.WHEAT, 6)); // Center
+        // Row 2
+        tiles.add(new Tile(12, ResourceType.WOOD, 5));
+        tiles.add(new Tile(4, ResourceType.SHEEP, 11));
+        tiles.add(new Tile(5, ResourceType.SHEEP, 5));
+        tiles.add(new Tile(16, ResourceType.DESERT, 0)); // Desert has no number
 
-        // Inner ring (1-6)
-        tiles.add(new Tile(1, ResourceType.ORE, 5));
-        tiles.add(new Tile(2, ResourceType.SHEEP, 10));
-        tiles.add(new Tile(3, ResourceType.BRICK, 8));
-        tiles.add(new Tile(4, ResourceType.WOOD, 3));
-        tiles.add(new Tile(5, ResourceType.WHEAT, 4));
-        tiles.add(new Tile(6, ResourceType.SHEEP, 9));
+        // Row 3 (Middle)
+        tiles.add(new Tile(11, ResourceType.WHEAT, 9));
+        tiles.add(new Tile(3, ResourceType.ORE, 3));
+        tiles.add(new Tile(0, ResourceType.WOOD, 10)); // Center tile
+        tiles.add(new Tile(6, ResourceType.SHEEP, 12));
+        tiles.add(new Tile(17, ResourceType.WOOD, 17)); // Requested token 17
 
-        // Outer ring (7-18)
-        tiles.add(new Tile(7, ResourceType.WOOD, 11));
-        tiles.add(new Tile(8, ResourceType.BRICK, 4));
-        tiles.add(new Tile(9, ResourceType.SHEEP, 9));
-        tiles.add(new Tile(10, ResourceType.WHEAT, 12));
-        tiles.add(new Tile(11, ResourceType.ORE, 6));
-        tiles.add(new Tile(12, ResourceType.DESERT, 0));
-        tiles.add(new Tile(13, ResourceType.WOOD, 5));
-        tiles.add(new Tile(14, ResourceType.BRICK, 10));
-        tiles.add(new Tile(15, ResourceType.ORE, 3));
-        tiles.add(new Tile(16, ResourceType.SHEEP, 8));
-        tiles.add(new Tile(17, ResourceType.WHEAT, 11));
-        tiles.add(new Tile(18, ResourceType.WOOD, 2));
+        // Row 4
+        tiles.add(new Tile(10, ResourceType.ORE, 6));
+        tiles.add(new Tile(2, ResourceType.BRICK, 8));
+        tiles.add(new Tile(1, ResourceType.WHEAT, 11));
+        tiles.add(new Tile(18, ResourceType.SHEEP, 10));
 
+        // Row 5 (Bottom)
+        tiles.add(new Tile(9, ResourceType.WOOD, 4));
+        tiles.add(new Tile(8, ResourceType.ORE, 6));
+        tiles.add(new Tile(7, ResourceType.WHEAT, 3));
+
+        // Establish which vertices belong to which tile
         setupTileVertexAdjacencies();
+        
+        // Connect the vertices to form the board graph
+        setupVertexAdjacenciesFromTiles();
     }
 
-    private void setupVertexAdjacencies() {
-        // Center Ring (0-5)
-        for (int i = 0; i <= 5; i++) {
-            addVertexConnection(i, (i + 1) % 6);
-            addVertexConnection(i, i + 6); // Bridge to Inner Ring
-        }
-        
-        // Inner Ring (6-23)
-        for (int i = 6; i <= 23; i++) {
-            int next = (i == 23) ? 6 : i + 1;
-            addVertexConnection(i, next);
-            
-            // Bridge to Outer Ring (Bridge every second node for standard Catan grid)
-            if (i % 2 == 0) {
-                int outerNode = 24 + (i - 6) * 3 / 2;
-                addVertexConnection(i, Math.min(outerNode, 53));
+    /**
+     * Connects vertices that share an edge on a tile sequentially.
+     */
+    private void setupVertexAdjacenciesFromTiles() {
+        for (Tile tile : tiles) {
+            List<Vertex> vList = tile.getAdjacentVertices();
+            if (vList.size() == 6) {
+                for (int i = 0; i < 6; i++) {
+                    // Connect node i to node i+1 (and 5 back to 0) to form the hexagon edges
+                    addVertexConnection(vList.get(i).getId(), vList.get((i + 1) % 6).getId());
+                }
             }
         }
+    }
+
+    private void setupTileVertexAdjacencies() {
+        // Center Tile 0
+        addTileVertices(0, new int[]{0, 1, 2, 3, 4, 5});
+
+        // Inner ring tiles (1-6)
+        addTileVertices(1, new int[]{2, 1, 6, 7, 8, 9});
+        addTileVertices(2, new int[]{3, 2, 9, 10, 11, 12});
+        addTileVertices(3, new int[]{4, 3, 12, 13, 14, 15});
+        addTileVertices(4, new int[]{5, 4, 15, 16, 17, 18});
+        addTileVertices(5, new int[]{0, 5, 16, 19, 20, 21});
+        addTileVertices(6, new int[]{1, 0, 20, 22, 23, 6});
         
-        // Outer Ring (24-53)
-        for (int i = 24; i <= 53; i++) {
-            int next = (i == 53) ? 24 : i + 1;
-            addVertexConnection(i, next);
+        // Outer ring tiles (7-18)
+        addTileVertices(7, new int[]{27, 7, 8, 24, 25, 26});
+        addTileVertices(8, new int[]{8, 9, 10, 29, 27, 28});
+        addTileVertices(9, new int[]{10, 11, 31, 32, 29, 30});
+        addTileVertices(10, new int[]{11, 12, 13, 32, 33, 34});
+        addTileVertices(11, new int[]{13, 14, 37, 34, 35, 36});
+        addTileVertices(12, new int[]{14, 15, 17, 37, 38, 39});
+        addTileVertices(13, new int[]{17, 18, 39, 40, 41, 42});
+        addTileVertices(14, new int[]{16, 18, 21, 40, 43, 44});
+        addTileVertices(15, new int[]{19, 21, 43, 45, 46, 47});
+        addTileVertices(16, new int[]{19, 20, 22, 46, 48, 49});
+        addTileVertices(17, new int[]{22, 23, 49, 50, 51, 52}); 
+        addTileVertices(18, new int[]{6, 7, 23, 24, 52, 53});
+    }
+
+    private void addTileVertices(int tileId, int[] vertexIds) {
+        Tile tile = getTile(tileId);
+        if (tile != null) {
+            for (int id : vertexIds) {
+                Vertex v = getVertex(id);
+                if (v != null) {
+                    tile.addAdjacentVertex(v); // Populates the tile's vertex list
+                }
+            }
         }
     }
 
@@ -88,44 +127,6 @@ public class Board {
             Vertex v2 = vertices.get(v2Id);
             v1.addAdjacentVertex(v2);
             v2.addAdjacentVertex(v1);
-        }
-    }
-
-    private void setupTileVertexAdjacencies() {
-        // Tile 0 (center)
-        addTileVertices(0, new int[]{0, 1, 2, 3, 4, 5});
-
-        // Inner ring (1-6)
-        addTileVertices(1, new int[]{0, 1, 6, 7, 8, 9});
-        addTileVertices(2, new int[]{1, 2, 9, 10, 11, 12});
-        addTileVertices(3, new int[]{2, 3, 12, 13, 14, 15});
-        addTileVertices(4, new int[]{3, 4, 15, 16, 17, 18});
-        addTileVertices(5, new int[]{4, 5, 18, 19, 20, 21});
-        addTileVertices(6, new int[]{5, 0, 21, 22, 23, 6});
-        
-        // Outer ring (7-18) - Fully implemented
-        addTileVertices(7, new int[]{6, 7, 8, 24, 25, 26});
-        addTileVertices(8, new int[]{8, 9, 10, 26, 27, 28});
-        addTileVertices(9, new int[]{10, 11, 12, 28, 29, 30});
-        addTileVertices(10, new int[]{12, 13, 14, 30, 31, 32});
-        addTileVertices(11, new int[]{14, 15, 16, 32, 33, 34});
-        addTileVertices(12, new int[]{16, 17, 18, 34, 35, 36});
-        addTileVertices(13, new int[]{18, 19, 20, 36, 37, 38});
-        addTileVertices(14, new int[]{20, 21, 22, 38, 39, 40});
-        addTileVertices(15, new int[]{22, 23, 6, 40, 41, 42});
-        addTileVertices(16, new int[]{24, 43, 44, 45, 25, 26}); // Edge mapping
-        addTileVertices(17, new int[]{26, 27, 28, 46, 47, 48}); 
-        addTileVertices(18, new int[]{28, 29, 30, 49, 50, 51});
-    }
-
-    private void addTileVertices(int tileId, int[] vertexIds) {
-        if (tileId < tiles.size()) {
-            Tile tile = tiles.get(tileId);
-            for (int vertexId : vertexIds) {
-                if (vertexId < vertices.size()) {
-                    tile.addAdjacentVertex(vertices.get(vertexId));
-                }
-            }
         }
     }
 
@@ -142,11 +143,6 @@ public class Board {
     }
 
     public void placeRoad(Road road) { roads.add(road); }
-
-    public void placeBuilding(Buildings building) {
-        // Handled through Vertex.placeBuilding
-    }
-
     public List<Tile> getTiles() { return tiles; }
     public List<Vertex> getVertices() { return vertices; }
     public List<Road> getRoads() { return roads; }
