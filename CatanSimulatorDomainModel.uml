@@ -500,6 +500,10 @@
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_bOG_IP4JEfCOd8UCBhMXvw" name="PlayerAction" isAbstract="true">
         <ownedAttribute xmi:type="uml:Property" xmi:id="_eSP6UP8hEfCAfM7SqUCuhg" name="player" visibility="protected" type="_G1_hYP4HEfCOd8UCBhMXvw"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_oIinUBi6EfGHYu9CXnvKKg" name="player" type="_G1_hYP4HEfCOd8UCBhMXvw" association="_oIVzABi6EfGHYu9CXnvKKg">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_oIjOYBi6EfGHYu9CXnvKKg"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_oIjOYRi6EfGHYu9CXnvKKg" value="1"/>
+        </ownedAttribute>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_p2gdIP8gEfCAfM7SqUCuhg" name="execute" visibility="public">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_p2gdIf8gEfCAfM7SqUCuhg" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
         </ownedOperation>
@@ -890,6 +894,12 @@
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_o1LswAkVEfG24-KIthCP_g" key="nature" value="UML_Nature"/>
         </eAnnotations>
         <ownedEnd xmi:type="uml:Property" xmi:id="_o1Nh8QkVEfG24-KIthCP_g" name="player" type="_G1_hYP4HEfCOd8UCBhMXvw" association="_o1ICYAkVEfG24-KIthCP_g"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_oIVzABi6EfGHYu9CXnvKKg" memberEnd="_oIinUBi6EfGHYu9CXnvKKg _oIjOYhi6EfGHYu9CXnvKKg">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_oIhZMBi6EfGHYu9CXnvKKg" source="org.eclipse.papyrus">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_oIhZMRi6EfGHYu9CXnvKKg" key="nature" value="UML_Nature"/>
+        </eAnnotations>
+        <ownedEnd xmi:type="uml:Property" xmi:id="_oIjOYhi6EfGHYu9CXnvKKg" name="playeraction" type="_bOG_IP4JEfCOd8UCBhMXvw" association="_oIVzABi6EfGHYu9CXnvKKg"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="_xKb78AkfEfG24-KIthCP_g" memberEnd="_xKdKEgkfEfG24-KIthCP_g _xKdxIAkfEfG24-KIthCP_g">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_xKdKEAkfEfG24-KIthCP_g" source="org.eclipse.papyrus">

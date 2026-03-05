@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class SettlementTest {
+public class SettlementTest {
     private Player player;
     private Settlement settlement;
     private Vertex vertex;
