@@ -59,6 +59,9 @@ public class Board {
         tiles.add(new Tile(9, ResourceType.WOOD, 4));
         tiles.add(new Tile(8, ResourceType.ORE, 6));
         tiles.add(new Tile(7, ResourceType.WHEAT, 3));
+        
+        Tile desert = getTile(16);
+        this.robber = new Robber(desert);
 
         // Establish which vertices belong to which tile
         setupTileVertexAdjacencies();
@@ -141,7 +144,10 @@ public class Board {
         if (id >= 0 && id < vertices.size()) { return vertices.get(id); }
         return null;
     }
-
+    
+    public Robber getRobber() {
+        return robber;
+    }
     public void placeRoad(Road road) { roads.add(road); }
     public List<Tile> getTiles() { return tiles; }
     public List<Vertex> getVertices() { return vertices; }
