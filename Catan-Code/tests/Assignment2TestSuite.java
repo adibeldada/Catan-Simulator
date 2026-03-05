@@ -14,6 +14,7 @@ import classes.model.CostTest;
     RuleValidatorTest.class,
     ResourceHandTest.class,
     BoardTest.class,
+    BuildingsTest.class,
     CostTest.class
 })
 public class Assignment2TestSuite {

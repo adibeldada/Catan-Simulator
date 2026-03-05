@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 // These imports match the "classes.model" structure in your src-gen folder
 import classes.model.Board;
 import classes.model.Player;
+import classes.model.AIPlayer;
 import classes.model.Vertex;
 import classes.model.Settlement;
 import classes.model.Road;
@@ -20,7 +21,7 @@ public class RuleValidatorTest {
     void setUp() {
         board = new Board();
         validator = new RuleValidator(board);
-        player = new Player(1);
+        player = new AIPlayer(1);
     }
 
     @Test
@@ -37,7 +38,7 @@ public class RuleValidatorTest {
         
         // Link vertices and occupy one
         v1.getAdjacentVertices().add(v2);
-        v2.setBuilding(new Settlement(new Player(2)));
+        v2.setBuilding(new Settlement(new AIPlayer(2)));
         
         // Should fail because neighbor v2 is occupied
         assertFalse(validator.respectsDistanceRule(v1));
