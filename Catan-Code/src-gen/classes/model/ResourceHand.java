@@ -1,6 +1,9 @@
 package classes.model;
 
 import classes.enums.ResourceType;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Tracks the resources held by a player.
@@ -114,6 +117,28 @@ public class ResourceHand {
     public int getWheat() { return wheat; }
     public int getSheep() { return sheep; }
     public int getOre() { return ore; }
+    
+    public ResourceType removeRandomCard() {
+        if (totalCards() == 0) return null;
+        
+        // List all available resource types currently in hand
+        List<ResourceType> available = new ArrayList<>();
+        if (wood > 0) available.add(ResourceType.WOOD);
+        if (brick > 0) available.add(ResourceType.BRICK);
+        if (wheat > 0) available.add(ResourceType.WHEAT);
+        if (sheep > 0) available.add(ResourceType.SHEEP);
+        if (ore > 0) available.add(ResourceType.ORE);
+        
+        ResourceType selected = available.get(new Random().nextInt(available.size()));
+        remove(selected, 1);
+        return selected;
+    }
+
+    public void discardRandomCards(int count) {
+        for (int i = 0; i < count; i++) {
+            removeRandomCard();
+        }
+    }
 
     @Override
     public String toString() {

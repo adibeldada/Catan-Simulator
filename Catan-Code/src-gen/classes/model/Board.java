@@ -17,11 +17,13 @@ public class Board {
     private List<Tile> tiles;
     private List<Vertex> vertices;
     private List<Road> roads;
+    private Robber robber;
 
     public Board() {
         this.tiles = new ArrayList<>();
         this.vertices = new ArrayList<>();
         this.roads = new ArrayList<>();
+        this.robber = new Robber(getTile(16));
     }
 
     public void initializeDefaultMap() {

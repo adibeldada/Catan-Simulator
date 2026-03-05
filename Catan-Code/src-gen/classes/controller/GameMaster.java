@@ -44,6 +44,7 @@ public class GameMaster {
             players.add(new AIPlayer(i));
         }
     }
+    
 
     /**
      * Main game loop that runs until a winner is found or max rounds are reached.
@@ -101,15 +102,46 @@ public class GameMaster {
      * Logic for rolling dice and distributing resources.
      * This is called by players during their takeTurn() method.
      */
-    public void rollAndDistribute(Player player) {
+    public void rollAndDistribute(Player roller) {
         int roll = dice.roll();
-        logAction(player, "rolled " + roll);
+        logAction(roller, "rolled " + roll);
 
-        if (roll != 7) {
-            produceResources(roll);
-        } else {
-            // R2.5: Robber logic placeholder
+        if (roll == 7) {
             LOGGER.info("A 7 was rolled! Robber activated.");
+
+            // Step 1: Discard cards (R2.5)
+            for (Player p : players) {
+                if (p.getHand().totalCards() > 7) {
+                    int cardsToLose = p.getHand().totalCards() / 2;
+                    p.getHand().discardRandomCards(cardsToLose); // Uses your new method
+                    logAction(p, "discarded cards due to robber.");
+                }
+            }
+
+            // Step 2: Move the Robber to a random tile (R2.5)
+            List<Tile> allTiles = board.getTiles();
+            Tile newTile = allTiles.get(new java.util.Random().nextInt(allTiles.size()));
+            board.getRobber().moveTo(newTile);
+            LOGGER.info("Robber moved to " + newTile.toString());
+
+            // Step 4: Steal 1 random card (R2.5)
+            List<Player> potentialVictims = new ArrayList<>();
+            for (Vertex v : newTile.getAdjacentVertices()) {
+                if (v.isOccupied() && v.getOwner() != roller) {
+                    potentialVictims.add(v.getOwner());
+                }
+            }
+
+            if (!potentialVictims.isEmpty()) {
+                Player victim = potentialVictims.get(new java.util.Random().nextInt(potentialVictims.size()));
+                ResourceType stolen = victim.getHand().removeRandomCard(); // Uses your new method
+                if (stolen != null) {
+                    roller.collectResource(stolen, 1);
+                    logAction(roller, "stole a card from Player " + victim.getId());
+                }
+            }
+        } else {
+            produceResources(roll);
         }
     }
 
@@ -132,7 +164,8 @@ public class GameMaster {
 
     private void produceResources(int roll) {
         for (Tile tile : board.getTiles()) {
-            if (tile.producesOnRoll(roll)) {
+            // R2.5: Only produce if the robber is NOT on this tile
+            if (tile.producesOnRoll(roll) && !board.getRobber().getCurrentTile().equals(tile)) {
                 ResourceType resource = tile.getResourceType();
                 for (Vertex vertex : tile.getAdjacentVertices()) {
                     if (vertex.isOccupied()) {
