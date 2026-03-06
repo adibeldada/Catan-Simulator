@@ -39,8 +39,8 @@ public class GameMaster {
         board.initializeDefaultMap();
 
         // R2.1: Initialize 1 Human and 3 AI agents
-        //players.add(new HumanPlayer(1)); 
-        for (int i = 1; i <= 4; i++) {
+        players.add(new HumanPlayer(1)); 
+        for (int i = 2; i <= 4; i++) {
             players.add(new AIPlayer(i));
         }
     }
@@ -55,15 +55,34 @@ public class GameMaster {
         LOGGER.info(() -> String.format("Players: %d", players.size()));
         LOGGER.info("");
 
+        boolean hasHumanPlayer = false;
+        for (Player player : players) {
+            if (player instanceof HumanPlayer) {
+                hasHumanPlayer = true;
+                break;
+            }
+        }
+
         while (currentRound < maxRounds) {
             currentRound++;
-            runRound();
+            LOGGER.info(() -> String.format("--- Round %d ---", currentRound));
+
+            if (hasHumanPlayer) {
+                runRound(); // interactive round with pause for human
+            } else {
+                // AI-only fast simulation
+                for (Player player : players) {
+                    runTurn(player); // no pause
+                }
+                printRoundSummary();
+            }
+
             Player winner = checkVictory();
             if (winner != null) {
                 LOGGER.info("");
                 LOGGER.info("=== GAME OVER ===");
-                LOGGER.info(() -> String.format("Winner: Player %d with %d victory points!", 
-                                           winner.getId(), winner.getVictoryPoints()));
+                LOGGER.info(() -> String.format("Winner: Player %d with %d victory points!",
+                        winner.getId(), winner.getVictoryPoints()));
                 return;
             }
         }
@@ -72,23 +91,17 @@ public class GameMaster {
         printFinalStandings();
     }
 
-    /**
-     * Iterates through all players to let them take their turns.
-     */
     public void runRound() {
-        LOGGER.info(() -> String.format("--- Round %d ---", currentRound));
+        // Only called in interactive mode (hasHumanPlayer == true)
         for (Player player : players) {
-            
-            // R2.4: Step forward functionality
-            // Waits for "go" command before proceeding to an AI agent's turn
-            //if (player instanceof AIPlayer) {
-            //    waitForGoCommand(player.getId());
-            //}
-
+            if (player instanceof AIPlayer) {
+                waitForGoCommand(player.getId());
+            }
             runTurn(player);
         }
         printRoundSummary();
     }
+
 
     /**
      * Delegates the turn logic to the player object.
