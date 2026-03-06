@@ -5,19 +5,109 @@
     <children xmi:type="notation:DecorationNode" xmi:id="_VV4SYP4HEfCOd8UCBhMXvw" type="Class_FloatingNameLabel">
       <layoutConstraint xmi:type="notation:Location" xmi:id="_VV4SYf4HEfCOd8UCBhMXvw" y="15"/>
     </children>
-    <children xmi:type="notation:BasicCompartment" xmi:id="_VV4SYv4HEfCOd8UCBhMXvw" type="Class_AttributeCompartment">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_g0meEP_sEfC4NJlAKREVVg" source="PapyrusCSSForceValue">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_g0meEf_sEfC4NJlAKREVVg" key="collapsed" value="true"/>
-      </eAnnotations>
+    <children xmi:type="notation:BasicCompartment" xmi:id="_VV4SYv4HEfCOd8UCBhMXvw" type="Class_AttributeCompartment" collapsed="true">
+      <children xmi:type="notation:Shape" xmi:id="_lot_wBmHEfGHYu9CXnvKKg" type="Property_ClassAttributeLabel">
+        <element xmi:type="uml:Property" href="CatanSimulatorDomainModel.uml#_ZvmJUP8zEfCAfM7SqUCuhg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_loum0BmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_loxDEBmHEfGHYu9CXnvKKg" type="Property_ClassAttributeLabel">
+        <element xmi:type="uml:Property" href="CatanSimulatorDomainModel.uml#_uXK0YP-uEfC-oZHXQe3q-w"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_loxDERmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_loxqIBmHEfGHYu9CXnvKKg" type="Property_ClassAttributeLabel">
+        <element xmi:type="uml:Property" href="CatanSimulatorDomainModel.uml#_NVZAEP-vEfC-oZHXQe3q-w"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_loxqIRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_loyRMBmHEfGHYu9CXnvKKg" type="Property_ClassAttributeLabel">
+        <element xmi:type="uml:Property" href="CatanSimulatorDomainModel.uml#_Ql35YP-vEfC-oZHXQe3q-w"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_loyRMRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_loy4QBmHEfGHYu9CXnvKKg" type="Property_ClassAttributeLabel">
+        <element xmi:type="uml:Property" href="CatanSimulatorDomainModel.uml#_WE4fwP-vEfC-oZHXQe3q-w"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_loy4QRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_loy4QhmHEfGHYu9CXnvKKg" type="Property_ClassAttributeLabel">
+        <element xmi:type="uml:Property" href="CatanSimulatorDomainModel.uml#_aW8sYAYGEfGYqOLCHE5Fdg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_loy4QxmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lozfUBmHEfGHYu9CXnvKKg" type="Property_ClassAttributeLabel">
+        <element xmi:type="uml:Property" href="CatanSimulatorDomainModel.uml#_jAE6kQkVEfG24-KIthCP_g"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lozfURmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo0GYBmHEfGHYu9CXnvKKg" type="Property_ClassAttributeLabel">
+        <element xmi:type="uml:Property" href="CatanSimulatorDomainModel.uml#_o1LswQkVEfG24-KIthCP_g"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo0GYRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo0GYhmHEfGHYu9CXnvKKg" type="Property_ClassAttributeLabel">
+        <element xmi:type="uml:Property" href="CatanSimulatorDomainModel.uml#_CGd_QgkgEfG24-KIthCP_g"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo0GYxmHEfGHYu9CXnvKKg"/>
+      </children>
       <styles xmi:type="notation:TitleStyle" xmi:id="_VV45cP4HEfCOd8UCBhMXvw" showTitle="true"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_VV45cf4HEfCOd8UCBhMXvw"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_VV45cv4HEfCOd8UCBhMXvw"/>
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_VV45c_4HEfCOd8UCBhMXvw"/>
     </children>
-    <children xmi:type="notation:BasicCompartment" xmi:id="_VV45dP4HEfCOd8UCBhMXvw" type="Class_OperationCompartment">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_hIFawP_sEfC4NJlAKREVVg" source="PapyrusCSSForceValue">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_hIFawf_sEfC4NJlAKREVVg" key="collapsed" value="true"/>
-      </eAnnotations>
+    <children xmi:type="notation:BasicCompartment" xmi:id="_VV45dP4HEfCOd8UCBhMXvw" type="Class_OperationCompartment" collapsed="true">
+      <children xmi:type="notation:Shape" xmi:id="_lo0tcBmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_bobA0P-vEfC-oZHXQe3q-w"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo0tcRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo1UgBmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_gtrqcP-vEfC-oZHXQe3q-w"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo1UgRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo1UghmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_sNvNQP-vEfC-oZHXQe3q-w"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo1UgxmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo17kBmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_zXNKUP-vEfC-oZHXQe3q-w"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo17kRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo2ioBmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_3mU2IP-vEfC-oZHXQe3q-w"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo2ioRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo2iohmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_8-X44P-vEfC-oZHXQe3q-w"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo2ioxmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo3JsBmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_ew-nsAYGEfGYqOLCHE5Fdg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo3JsRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo3JshmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_kafN4AYGEfGYqOLCHE5Fdg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo3JsxmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo4X0BmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_07sWYAYGEfGYqOLCHE5Fdg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo4X0RmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo4-4BmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_6Gg1cAYGEfGYqOLCHE5Fdg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo4-4RmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo5l8BmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_9KJlkAYGEfGYqOLCHE5Fdg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo5l8RmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo6NABmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_ACVToAYHEfGYqOLCHE5Fdg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo6NARmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo7bIBmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_FewgEAYHEfGYqOLCHE5Fdg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo7bIRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo8CMBmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_JrC6UAYHEfGYqOLCHE5Fdg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo8CMRmHEfGHYu9CXnvKKg"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_lo9QUBmHEfGHYu9CXnvKKg" type="Operation_ClassOperationLabel">
+        <element xmi:type="uml:Operation" href="CatanSimulatorDomainModel.uml#_NjkEAAYHEfGYqOLCHE5Fdg"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lo9QURmHEfGHYu9CXnvKKg"/>
+      </children>
       <styles xmi:type="notation:TitleStyle" xmi:id="_VV45df4HEfCOd8UCBhMXvw" showTitle="true"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_VV45dv4HEfCOd8UCBhMXvw"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_VV45d_4HEfCOd8UCBhMXvw"/>

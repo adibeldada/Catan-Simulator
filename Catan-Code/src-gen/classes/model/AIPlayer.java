@@ -20,6 +20,8 @@ public class AIPlayer extends Player {
 	
 	@Override
 	public void takeTurn(GameMaster game) {
+		game.rollAndDistribute(this);
+		
         boolean buildingActed = false;
         
         // R1.8: If player has more than 7 cards, must try to build

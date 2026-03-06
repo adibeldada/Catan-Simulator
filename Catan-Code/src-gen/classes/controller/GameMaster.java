@@ -39,8 +39,8 @@ public class GameMaster {
         board.initializeDefaultMap();
 
         // R2.1: Initialize 1 Human and 3 AI agents
-        players.add(new HumanPlayer(1)); 
-        for (int i = 2; i <= 4; i++) {
+        //players.add(new HumanPlayer(1)); 
+        for (int i = 1; i <= 4; i++) {
             players.add(new AIPlayer(i));
         }
     }
@@ -81,9 +81,9 @@ public class GameMaster {
             
             // R2.4: Step forward functionality
             // Waits for "go" command before proceeding to an AI agent's turn
-            if (player instanceof AIPlayer) {
-                waitForGoCommand(player.getId());
-            }
+            //if (player instanceof AIPlayer) {
+            //    waitForGoCommand(player.getId());
+            //}
 
             runTurn(player);
         }
