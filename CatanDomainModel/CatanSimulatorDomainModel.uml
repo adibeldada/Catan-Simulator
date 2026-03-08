@@ -1060,6 +1060,9 @@
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_wcCHgRsrEfGmVqx7S1jwyQ" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
         </ownedOperation>
       </packagedElement>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_AwLO8BstEfGmVqx7S1jwyQ" client="_GCMtwBsjEfGmVqx7S1jwyQ" supplier="_IJB2kP4HEfCOd8UCBhMXvw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_KQsi8BstEfGmVqx7S1jwyQ" client="_JcRUYPvIEfC2iLJ2NvxHLA" supplier="_bOG_IP4JEfCOd8UCBhMXvw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_4bGk8BstEfGmVqx7S1jwyQ" client="_ZJwbMBsoEfGmVqx7S1jwyQ" supplier="_IJB2kP4HEfCOd8UCBhMXvw"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_GawBkBssEfGmVqx7S1jwyQ" memberEnd="_Ga0TABssEfGmVqx7S1jwyQ _Ga1hIhssEfGmVqx7S1jwyQ">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GazE4BssEfGmVqx7S1jwyQ" source="org.eclipse.papyrus">
