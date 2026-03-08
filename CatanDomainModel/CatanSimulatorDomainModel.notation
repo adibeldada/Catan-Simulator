@@ -1223,7 +1223,7 @@
     </children>
     <children xmi:type="notation:DecorationNode" xmi:id="_36_gOAkTEfG24-KIthCP_g" type="Association_SourceRoleLabel">
       <styles xmi:type="notation:BooleanValueStyle" xmi:id="_481-wAkTEfG24-KIthCP_g" name="IS_UPDATED_POSITION" booleanValue="true"/>
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_36_gOQkTEfG24-KIthCP_g" x="-39" y="-13"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_36_gOQkTEfG24-KIthCP_g" x="-33" y="-61"/>
     </children>
     <children xmi:type="notation:DecorationNode" xmi:id="_37AHQAkTEfG24-KIthCP_g" type="Association_SourceMultiplicityLabel">
       <styles xmi:type="notation:BooleanValueStyle" xmi:id="_49dp0AkTEfG24-KIthCP_g" name="IS_UPDATED_POSITION" booleanValue="true"/>
@@ -1231,7 +1231,7 @@
     </children>
     <children xmi:type="notation:DecorationNode" xmi:id="_37AHQgkTEfG24-KIthCP_g" type="Association_TargetMultiplicityLabel">
       <styles xmi:type="notation:BooleanValueStyle" xmi:id="_49zoEAkTEfG24-KIthCP_g" name="IS_UPDATED_POSITION" booleanValue="true"/>
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_37AHQwkTEfG24-KIthCP_g" x="-35" y="-33"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_37AHQwkTEfG24-KIthCP_g" x="-13" y="-25"/>
     </children>
     <styles xmi:type="notation:FontStyle" xmi:id="_36_gMAkTEfG24-KIthCP_g"/>
     <element xmi:type="uml:Association" href="CatanSimulatorDomainModel.uml#_36X1IAkTEfG24-KIthCP_g"/>
