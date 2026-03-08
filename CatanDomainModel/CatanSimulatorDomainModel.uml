@@ -860,16 +860,6 @@
         <ownedEnd xmi:type="uml:Property" xmi:id="_36aRYQkTEfG24-KIthCP_g" name="resourcetype" type="_aX46YP8dEfCAfM7SqUCuhg" association="_36X1IAkTEfG24-KIthCP_g"/>
         <ownedEnd xmi:type="uml:Property" xmi:id="_36d7wAkTEfG24-KIthCP_g" name="tile" type="_7uBcgP4IEfCOd8UCBhMXvw" association="_36X1IAkTEfG24-KIthCP_g"/>
       </packagedElement>
-      <packagedElement xmi:type="uml:Association" xmi:id="_Oqk2gAkUEfG24-KIthCP_g" memberEnd="_OqnSwgkUEfG24-KIthCP_g _Oqog4AkUEfG24-KIthCP_g">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_OqnSwAkUEfG24-KIthCP_g" source="org.eclipse.papyrus">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OqnSwQkUEfG24-KIthCP_g" key="nature" value="UML_Nature"/>
-        </eAnnotations>
-        <ownedEnd xmi:type="uml:Property" xmi:id="_OqnSwgkUEfG24-KIthCP_g" name="vertex" type="_-gm44P4IEfCOd8UCBhMXvw" association="_Oqk2gAkUEfG24-KIthCP_g">
-          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_huNisAkYEfG24-KIthCP_g" name="LiteralInteger1" value="2"/>
-          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_huOJwAkYEfG24-KIthCP_g" name="LiteralUnlimitedNatural1" value="3"/>
-        </ownedEnd>
-        <ownedEnd xmi:type="uml:Property" xmi:id="_Oqog4AkUEfG24-KIthCP_g" name="vertex" type="_-gm44P4IEfCOd8UCBhMXvw" association="_Oqk2gAkUEfG24-KIthCP_g"/>
-      </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="_itLpMAkUEfG24-KIthCP_g" memberEnd="_itOsgAkUEfG24-KIthCP_g _itP6ogkUEfG24-KIthCP_g">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_itOFcAkUEfG24-KIthCP_g" source="org.eclipse.papyrus">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_itOFcQkUEfG24-KIthCP_g" key="nature" value="UML_Nature"/>
@@ -939,7 +929,7 @@
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cSV2QQkgEfG24-KIthCP_g" key="nature" value="UML_Nature"/>
         </eAnnotations>
         <ownedEnd xmi:type="uml:Property" xmi:id="_cSV2QgkgEfG24-KIthCP_g" name="resourcetype" type="_aX46YP8dEfCAfM7SqUCuhg" association="_cSUoIAkgEfG24-KIthCP_g"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="_cSWdUAkgEfG24-KIthCP_g" name="cost" type="_o1ICYAkVEfG24-KIthCP_g" association="_cSUoIAkgEfG24-KIthCP_g"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="_cSWdUAkgEfG24-KIthCP_g" name="cost" type="_qwEToP8mEfCAfM7SqUCuhg" association="_cSUoIAkgEfG24-KIthCP_g"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="_s50l4AkgEfG24-KIthCP_g" memberEnd="_s510AQkgEfG24-KIthCP_g _s510AgkgEfG24-KIthCP_g">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_s51M8AkgEfG24-KIthCP_g" source="org.eclipse.papyrus">
@@ -948,7 +938,6 @@
         <ownedEnd xmi:type="uml:Property" xmi:id="_s510AQkgEfG24-KIthCP_g" name="board" type="_5ku0wP4IEfCOd8UCBhMXvw" association="_s50l4AkgEfG24-KIthCP_g"/>
         <ownedEnd xmi:type="uml:Property" xmi:id="_s510AgkgEfG24-KIthCP_g" name="rulevalidator" type="_PXR7EP4JEfCOd8UCBhMXvw" association="_s50l4AkgEfG24-KIthCP_g"/>
       </packagedElement>
-      <packagedElement xmi:type="uml:Dependency" xmi:id="_It_F0AkgEfG24-KIthCP_g" client="_JcRUYPvIEfC2iLJ2NvxHLA" supplier="_IJB2kP4HEfCOd8UCBhMXvw"/>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_Wl4pwAkgEfG24-KIthCP_g" client="_eWWicP4JEfCOd8UCBhMXvw" supplier="_qwEToP8mEfCAfM7SqUCuhg"/>
       <packagedElement xmi:type="uml:Class" xmi:id="_yf7dUAkhEfG24-KIthCP_g" name="Demonstrator">
         <ownedOperation xmi:type="uml:Operation" xmi:id="_7BeAkAkhEfG24-KIthCP_g" name="main">
@@ -1006,12 +995,12 @@
         </nestedClassifier>
       </packagedElement>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_LGBM0AkjEfG24-KIthCP_g" client="_JcRUYPvIEfC2iLJ2NvxHLA" supplier="_IJB2kP4HEfCOd8UCBhMXvw"/>
-      <packagedElement xmi:type="uml:Dependency" xmi:id="_LqkrYAkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_-gm44P4IEfCOd8UCBhMXvw"/>
-      <packagedElement xmi:type="uml:Dependency" xmi:id="_M66R4AkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_G1_hYP4HEfCOd8UCBhMXvw"/>
-      <packagedElement xmi:type="uml:Dependency" xmi:id="_PJvg8AkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_og2AgP4JEfCOd8UCBhMXvw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_LqkrYAkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_JcRUYPvIEfC2iLJ2NvxHLA"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_M66R4AkjEfG24-KIthCP_g" client="_JcRUYPvIEfC2iLJ2NvxHLA" supplier="_G1_hYP4HEfCOd8UCBhMXvw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_PJvg8AkjEfG24-KIthCP_g" client="_JcRUYPvIEfC2iLJ2NvxHLA" supplier="_og2AgP4JEfCOd8UCBhMXvw"/>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_SBOEYAkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_W1mGwP4JEfCOd8UCBhMXvw"/>
-      <packagedElement xmi:type="uml:Dependency" xmi:id="_UtrqoAkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_7uBcgP4IEfCOd8UCBhMXvw"/>
-      <packagedElement xmi:type="uml:Dependency" xmi:id="_W6ybYAkjEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_aX46YP8dEfCAfM7SqUCuhg"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_UtrqoAkjEfG24-KIthCP_g" client="_JcRUYPvIEfC2iLJ2NvxHLA" supplier="_7uBcgP4IEfCOd8UCBhMXvw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_W6ybYAkjEfG24-KIthCP_g" client="_JcRUYPvIEfC2iLJ2NvxHLA" supplier="_aX46YP8dEfCAfM7SqUCuhg"/>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_XkqCUAkkEfG24-KIthCP_g" client="_yf7dUAkhEfG24-KIthCP_g" supplier="_iT4akAkjEfG24-KIthCP_g"/>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_S4gAUP_QEfCPDcBx7W850w">
