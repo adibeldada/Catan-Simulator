@@ -14,6 +14,19 @@ import java.util.List;
  * - Row 5: 9, 8, 7
  */
 public class Board {
+	
+	public static final int[][] VERTEX_ADJACENCY = {
+	        {1,5,20}, {0,6,2}, {1,9,3}, {2,12,4}, {3,15,5}, {4,16,0},
+	        {1,7,23}, {6,8,24}, {7,27,9}, {8,10,2}, {9,11,29}, {10,12,32},
+	        {11,13,3}, {12,14,34}, {13,15,37}, {14,17,4}, {5,18,21}, {15,18,39},
+	        {17,16,40}, {46,20,21}, {19,22,0}, {19,43,16}, {20,23,49}, {22,6,52},
+	        {7,25,53}, {24,26}, {25,27}, {26,8,28}, {27,29}, {28,10,30},
+	        {29,31}, {30,32}, {31,11,33}, {32,34}, {33,13,35}, {34,36},
+	        {35,37}, {36,14,38}, {37,39}, {38,17,41}, {44,18,42}, {39,42},
+	        {41,40}, {21,44,45}, {43,40}, {43,47}, {47,48,19}, {45,46},
+	        {46,49}, {48,50,22}, {49,51}, {50,52}, {51,23,53}, {52,24}
+	    };
+	
     private List<Tile> tiles;
     private List<Vertex> vertices;
     private List<Road> roads;
@@ -23,7 +36,6 @@ public class Board {
         this.tiles = new ArrayList<>();
         this.vertices = new ArrayList<>();
         this.roads = new ArrayList<>();
-        this.robber = new Robber(getTile(16));
     }
 
     public void initializeDefaultMap() {
@@ -62,27 +74,22 @@ public class Board {
         tiles.add(new Tile(8, ResourceType.ORE, 6));
         tiles.add(new Tile(7, ResourceType.WHEAT, 3));
         
+        
+     // Establish which vertices belong to which tile
+        setupTileVertexAdjacencies();
+        connectVerticesFromManualList();
+        
         Tile desert = getTile(16);
         this.robber = new Robber(desert);
 
-        // Establish which vertices belong to which tile
-        setupTileVertexAdjacencies();
-        
-        // Connect the vertices to form the board graph
-        setupVertexAdjacenciesFromTiles();
-    }
+      }
 
-    /**
-     * Connects vertices that share an edge on a tile sequentially.
-     */
-    private void setupVertexAdjacenciesFromTiles() {
-        for (Tile tile : tiles) {
-            List<Vertex> vList = tile.getAdjacentVertices();
-            if (vList.size() == 6) {
-                for (int i = 0; i < 6; i++) {
-                    // Connect node i to node i+1 (and 5 back to 0) to form the hexagon edges
-                    addVertexConnection(vList.get(i).getId(), vList.get((i + 1) % 6).getId());
-                }
+    private void connectVerticesFromManualList() {
+        // i is the ID of the vertex we are looking at
+        for (int i = 0; i < VERTEX_ADJACENCY.length; i++) {
+            // neighbors are the numbers you typed in the { }
+            for (int neighborId : VERTEX_ADJACENCY[i]) {
+                addVertexConnection(i, neighborId);
             }
         }
     }
@@ -127,9 +134,9 @@ public class Board {
     }
 
     private void addVertexConnection(int v1Id, int v2Id) {
-        if (v1Id < vertices.size() && v2Id < vertices.size()) {
-            Vertex v1 = vertices.get(v1Id);
-            Vertex v2 = vertices.get(v2Id);
+        Vertex v1 = vertices.get(v1Id);
+        Vertex v2 = vertices.get(v2Id);
+        if (!v1.getAdjacentVertices().contains(v2)) {
             v1.addAdjacentVertex(v2);
             v2.addAdjacentVertex(v1);
         }

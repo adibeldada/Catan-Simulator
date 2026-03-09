@@ -4,6 +4,7 @@ import classes.model.*;
 import classes.util.Dice;
 import classes.util.RuleValidator;
 import classes.util.LoggerUtil;
+import classes.util.JsonStateExporter;
 import classes.enums.ResourceType;
 
 import java.util.ArrayList;
@@ -109,6 +110,8 @@ public class GameMaster {
     public void runTurn(Player player) {
         // The player class now decides when to call rollAndDistribute()
         player.takeTurn(this);
+        
+        JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
     }
 
     /**

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import classes.util.JsonStateExporter;
 
 /**
  * Demonstrator class for the Catan Simulator.
@@ -64,8 +65,10 @@ public class Demonstrator {
             }
             for (Player p : players) {
                 placeInitialPieces(p, round, game, assignedVertices, rand);
+                JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
             }
         }
+        JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
         printStartingResources(players, game);
     }
 
