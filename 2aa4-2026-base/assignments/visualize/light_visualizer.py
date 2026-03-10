@@ -12,13 +12,11 @@ from catanatron.models.board import Board, STATIC_GRAPH
 from catanatron.models.player import Color, Player
 from catanatron.models.enums import WOOD, BRICK, SHEEP, WHEAT, ORE, SETTLEMENT, CITY
 from catanatron.game import Game
-from catanatron.state import State
 from catanatron.gym.envs.pygame_renderer import PygameRenderer
 from PIL import Image
 import sys
 import os
 import time
-
 
 class CatanBoardVisualizer:
 
@@ -96,38 +94,43 @@ class CatanBoardVisualizer:
         return CatanMap.from_tiles(tiles)
 
     def _apply_state_to_board(self, board: Board):
-        """Apply buildings and roads, bypassing all validation."""
+        """Apply buildings, roads, and the robber, bypassing all validation."""
 
-        # --- Buildings first ---
+        # --- 1. Apply Buildings ---
         for building_data in self.state_data.get("buildings", []):
             node_id = building_data["node"]
             color = self._parse_color(building_data["owner"])
-            building_type = building_data["type"]
+            building_type = CITY if building_data["type"] == "CITY" else SETTLEMENT
 
-            try:
-                if building_type == "CITY":
-                    board.buildings[node_id] = (color, CITY)
-                else:
-                    board.buildings[node_id] = (color, SETTLEMENT)
+            board.buildings[node_id] = (color, building_type)
+            board.connected_components[color].append({node_id})
 
-                # Register in connected components so roads can attach
-                board.connected_components[color].append({node_id})
-
-                # Enforce distance rule on remaining buildable spots
-                board.board_buildable_ids.discard(node_id)
-                for neighbor in STATIC_GRAPH.neighbors(node_id):
-                    board.board_buildable_ids.discard(neighbor)
-            except Exception:
-                pass  # skip any problematic building silently
-
-        # --- Roads second ---
+        # --- 2. Apply Roads ---
         for road_data in self.state_data.get("roads", []):
-            edge = (road_data["a"], road_data["b"])
+            u, v = road_data["a"], road_data["b"]
             color = self._parse_color(road_data["owner"])
-            try:
-                board.build_road(color, edge)
-            except Exception:
-                pass  # skip invalid roads silently
+            
+            board.roads[(u, v)] = color
+            board.roads[(v, u)] = color
+            
+            linked = False
+            for component in board.connected_components[color]:
+                if u in component or v in component:
+                    component.add(u)
+                    component.add(v)
+                    linked = True
+                    break
+            if not linked:
+                board.connected_components[color].append({u, v})
+
+        # --- 3. Apply Robber Position ---
+        robber_tile_id = self.state_data.get("robber")
+        if robber_tile_id is not None:
+            # Match the Tile ID from Java to the coordinate on the Catanatron map
+            for coord, tile in board.map.land_tiles.items():
+                if tile.id == robber_tile_id:
+                    board.robber_coordinate = coord
+                    break
 
     def build_game(self) -> Game:
         catan_map = self._create_map_from_json()
@@ -155,8 +158,7 @@ class CatanBoardVisualizer:
             self,
             output_dir: Optional[str] = None,
             render_scale: float = 1.0,
-            show: bool = False,
-    ) -> np.ndarray:
+    ) -> str:
         if self.game is None:
             self.build_game()
 
@@ -186,14 +188,13 @@ def visualize_board_from_json(
     visualizer = CatanBoardVisualizer()
     visualizer.load_map_json(map_json_path)
     visualizer.load_state_json(state_json_path)
+    # This call matches the method name defined above
     visualizer.render(output_dir=output_dir, render_scale=render_scale)
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage:")
-        print("  python light_visualizer.py base_map.json state.json")
-        print("  python light_visualizer.py base_map.json --watch")
+        print("Usage: python light_visualizer.py base_map.json [state.json | --watch]")
         sys.exit(1)
 
     base_map_path = sys.argv[1]

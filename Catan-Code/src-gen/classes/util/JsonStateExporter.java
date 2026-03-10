@@ -56,6 +56,8 @@ public class JsonStateExporter {
         ObjectNode root = mapper.createObjectNode();
         ArrayNode buildingsNode = root.putArray("buildings");
         ArrayNode roadsNode = root.putArray("roads");
+        
+        root.put("robber", board.getRobber().getCurrentTile().getId());
 
         // Buildings first so the visualizer processes them before roads
         for (Vertex v : board.getVertices()) {
