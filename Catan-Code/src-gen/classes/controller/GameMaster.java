@@ -126,35 +126,47 @@ public class GameMaster {
             LOGGER.info("A 7 was rolled! Robber activated.");
 
             // Step 1: Discard cards (R2.5)
+         // Inside GameMaster.rollAndDistribute (roll == 7 block)
             for (Player p : players) {
                 if (p.getHand().totalCards() > 7) {
-                    int cardsToLose = p.getHand().totalCards() / 2;
-                    p.getHand().discardRandomCards(cardsToLose); // Uses your new method
+                    if (p instanceof HumanPlayer) {
+                        ((HumanPlayer) p).discardHalf(); // Interactive selection
+                    } else {
+                        p.getHand().discardRandomCards(p.getHand().totalCards() / 2); // AI random
+                    }
                     logAction(p, "discarded cards due to robber.");
                 }
             }
 
-            // Step 2: Move the Robber to a random tile (R2.5)
-            List<Tile> allTiles = board.getTiles();
-            Tile newTile = allTiles.get(new java.util.Random().nextInt(allTiles.size()));
+            // Step 2: Move the Robber to a DIFFERENT random tile (R2.5 + Rulebook 4a)
+            List<Tile> potentialTiles = new ArrayList<>(board.getTiles());
+            Tile currentTile = board.getRobber().getCurrentTile();
+            potentialTiles.remove(currentTile); // Prevents staying on the same hex
+
+            Tile newTile = potentialTiles.get(new java.util.Random().nextInt(potentialTiles.size()));
             board.getRobber().moveTo(newTile);
             LOGGER.info("Robber moved to " + newTile.toString());
 
-            // Step 4: Steal 1 random card (R2.5)
-            List<Player> potentialVictims = new ArrayList<>();
+            // Step 3: Steal 1 random card from a randomly chosen QUALIFYING player (R2.5)
+            // Use a Set to ensure we only pick from UNIQUE players adjacent to the tile
+            java.util.Set<Player> qualifyingPlayers = new java.util.HashSet<>();
             for (Vertex v : newTile.getAdjacentVertices()) {
                 if (v.isOccupied() && v.getOwner() != roller) {
-                    potentialVictims.add(v.getOwner());
+                    qualifyingPlayers.add(v.getOwner());
                 }
             }
 
-            if (!potentialVictims.isEmpty()) {
-                Player victim = potentialVictims.get(new java.util.Random().nextInt(potentialVictims.size()));
-                ResourceType stolen = victim.getHand().removeRandomCard(); // Uses your new method
+            if (!qualifyingPlayers.isEmpty()) {
+                List<Player> victimList = new ArrayList<>(qualifyingPlayers);
+                Player victim = victimList.get(new java.util.Random().nextInt(victimList.size()));
+                
+                ResourceType stolen = victim.getHand().removeRandomCard();
                 if (stolen != null) {
                     roller.collectResource(stolen, 1);
                     logAction(roller, "stole a card from Player " + victim.getId());
                 }
+            } else {
+                LOGGER.info("No qualifying players to steal from on " + newTile.toString());
             }
         } else {
             produceResources(roll);

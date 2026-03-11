@@ -7,8 +7,7 @@ import java.util.Random;
 
 /**
  * Tracks the resources held by a player.
- * 
- * Manages addition, removal, and querying of resource cards.
+ * * Manages addition, removal, and querying of resource cards.
  * Used by Player class to manage their hand of resources.
  */
 public class ResourceHand {
@@ -18,9 +17,6 @@ public class ResourceHand {
     private int sheep;
     private int ore;
 
-    /**
-     * Constructs an empty resource hand.
-     */
     public ResourceHand() {
         this.wood = 0;
         this.brick = 0;
@@ -30,79 +26,48 @@ public class ResourceHand {
     }
 
     /**
-     * Adds a specified amount of a resource to the hand.
-     * 
-     * @param resource The type of resource to add
-     * @param amount The amount to add
+     * Adds a specified method to return the count of a specific resource type.
      */
+    public int getCount(ResourceType resource) {
+        return switch (resource) {
+            case WOOD -> wood;
+            case BRICK -> brick;
+            case WHEAT -> wheat;
+            case SHEEP -> sheep;
+            case ORE -> ore;
+            default -> 0;
+        };
+    }
+
     public void add(ResourceType resource, int amount) {
         switch (resource) {
-            case WOOD:
-                wood += amount;
-                break;
-            case BRICK:
-                brick += amount;
-                break;
-            case WHEAT:
-                wheat += amount;
-                break;
-            case SHEEP:
-                sheep += amount;
-                break;
-            case ORE:
-                ore += amount;
-                break;
-            case DESERT:
-                // Desert doesn't produce resources
-                break;
+            case WOOD: wood += amount; break;
+            case BRICK: brick += amount; break;
+            case WHEAT: wheat += amount; break;
+            case SHEEP: sheep += amount; break;
+            case ORE: ore += amount; break;
+            case DESERT: break;
         }
     }
 
     /**
-     * Removes a specified amount of a resource from the hand.
-     * Will not go below zero.
-     * 
-     * @param resource The type of resource to remove
-     * @param amount The amount to remove
+     * EXISTING METHOD: Note the name is 'remove', not 'removeResource'.
      */
     public void remove(ResourceType resource, int amount) {
         switch (resource) {
-            case WOOD:
-                wood = Math.max(0, wood - amount);
-                break;
-            case BRICK:
-                brick = Math.max(0, brick - amount);
-                break;
-            case WHEAT:
-                wheat = Math.max(0, wheat - amount);
-                break;
-            case SHEEP:
-                sheep = Math.max(0, sheep - amount);
-                break;
-            case ORE:
-                ore = Math.max(0, ore - amount);
-                break;
-            case DESERT:
-                // Desert doesn't produce resources
-                break;
+            case WOOD: wood = Math.max(0, wood - amount); break;
+            case BRICK: brick = Math.max(0, brick - amount); break;
+            case WHEAT: wheat = Math.max(0, wheat - amount); break;
+            case SHEEP: sheep = Math.max(0, sheep - amount); break;
+            case ORE: ore = Math.max(0, ore - amount); break;
+            case DESERT: break;
         }
     }
 
-    /**
-     * Returns the total number of resource cards in the hand.
-     * 
-     * @return Sum of all resources
-     */
     public int totalCards() {
         return wood + brick + wheat + sheep + ore;
     }
 
-    /**
-     * Checks if the hand has enough resources to cover the given cost.
-     * 
-     * @param cost The cost to check against
-     * @return true if the hand has at least the required amount of each resource
-     */
     public boolean hasEnough(Cost cost) {
         return wood >= cost.getWood() &&
                brick >= cost.getBrick() &&
@@ -111,7 +76,6 @@ public class ResourceHand {
                ore >= cost.getOre();
     }
 
-    // Getters
     public int getWood() { return wood; }
     public int getBrick() { return brick; }
     public int getWheat() { return wheat; }
@@ -120,8 +84,6 @@ public class ResourceHand {
     
     public ResourceType removeRandomCard() {
         if (totalCards() == 0) return null;
-        
-        // List all available resource types currently in hand
         List<ResourceType> available = new ArrayList<>();
         if (wood > 0) available.add(ResourceType.WOOD);
         if (brick > 0) available.add(ResourceType.BRICK);

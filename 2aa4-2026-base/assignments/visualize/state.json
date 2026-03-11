@@ -1,0 +1,77 @@
+{
+  "buildings" : [ {
+    "node" : 2,
+    "owner" : "RED",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 4,
+    "owner" : "RED",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 25,
+    "owner" : "ORANGE",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 29,
+    "owner" : "ORANGE",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 33,
+    "owner" : "BLUE",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 35,
+    "owner" : "WHITE",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 44,
+    "owner" : "BLUE",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 48,
+    "owner" : "WHITE",
+    "type" : "SETTLEMENT"
+  } ],
+  "roads" : [ {
+    "a" : 2,
+    "b" : 6,
+    "owner" : "RED"
+  }, {
+    "a" : 33,
+    "b" : 32,
+    "owner" : "BLUE"
+  }, {
+    "a" : 35,
+    "b" : 15,
+    "owner" : "WHITE"
+  }, {
+    "a" : 29,
+    "b" : 10,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 4,
+    "b" : 5,
+    "owner" : "RED"
+  }, {
+    "a" : 44,
+    "b" : 19,
+    "owner" : "BLUE"
+  }, {
+    "a" : 48,
+    "b" : 47,
+    "owner" : "WHITE"
+  }, {
+    "a" : 25,
+    "b" : 24,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 5,
+    "b" : 0,
+    "owner" : "RED"
+  }, {
+    "a" : 24,
+    "b" : 53,
+    "owner" : "ORANGE"
+  } ],
+  "robber" : 4
+}

@@ -1,5 +1,6 @@
 package classes.model;
 import classes.controller.GameMaster;
+import classes.enums.ResourceType;
 import classes.moves.*;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -109,10 +110,30 @@ public class HumanPlayer extends Player {
        return null;
    }
    public void discardHalf() {
-       // Implementation for R2.5: Manual card discarding during a 7-roll
        int toDiscard = getHand().totalCards() / 2;
-       System.out.println("You must lose " + toDiscard + " cards!");
-       // Logic for user to select cards would go here
+       System.out.println("ROBBER ALERT! You must discard " + toDiscard + " cards.");
+       System.out.println("Your current hand: " + getHand().toString());
+       
+       for (int i = 0; i < toDiscard; i++) {
+           System.out.print("Enter resource type to discard (" + (i + 1) + "/" + toDiscard + "): ");
+           String resStr = scanner.nextLine().toUpperCase().trim();
+           try {
+               ResourceType res = ResourceType.valueOf(resStr);
+               
+               // Using the new getCount helper to verify availability
+               if (getHand().getCount(res) > 0) {
+                   // Using the existing 'remove' method correctly
+                   getHand().remove(res, 1); 
+                   System.out.println("Discarded 1 " + res + ". Hand: " + getHand().toString());
+               } else {
+                   System.out.println("Error: You don't have any " + res + ". Try again.");
+                   i--;
+               }
+           } catch (IllegalArgumentException e) {
+               System.out.println("Error: Invalid resource name. Enter WOOD, BRICK, SHEEP, WHEAT, or ORE.");
+               i--; 
+           }
+       }
    }
 }
 
