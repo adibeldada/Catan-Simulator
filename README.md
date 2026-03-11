@@ -25,7 +25,7 @@ This project extends the Assignment 1 Java-based Catan simulator with human play
 
 ### Visualization Integration (R2.2 – R2.3)
 - The simulator writes the live game state to an external **JSON file** after each turn.
-- This JSON feeds the visualizer provided by the instructor team:
+- This JSON feeds the visualizer provided:
   > https://github.com/ssm-lab/2aa4-2026-base/tree/main/assignments/visualize
 - The visualizer is a Python script. Run it manually or use live visualization mode (see the visualizer's README for setup).
 
