@@ -10,6 +10,7 @@ import classes.model.CostTest;
 import classes.model.BuildingsTest;    
 import classes.model.CityTest;        
 import classes.model.SettlementTest;
+import classes.util.CommandParserTest;
 
 @Suite
 @SelectClasses({
@@ -20,7 +21,8 @@ import classes.model.SettlementTest;
     CostTest.class,
     BuildingsTest.class,
     CityTest.class,
-    SettlementTest.class
+    SettlementTest.class,
+    CommandParserTest.class
 })
 public class Assignment2TestSuite {
     // Leave empty

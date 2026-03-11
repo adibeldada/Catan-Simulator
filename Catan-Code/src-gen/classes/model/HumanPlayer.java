@@ -3,8 +3,6 @@ import classes.controller.GameMaster;
 import classes.enums.ResourceType;
 import classes.moves.*;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 /**
 * Represents a human-controlled player.
 * Uses console input to execute moves and enforces turn-based rules.
@@ -12,13 +10,6 @@ import java.util.regex.Pattern;
 public class HumanPlayer extends Player {
    private final Scanner scanner;
    private boolean hasRolled; // Prevents taking actions or ending turn before rolling (R2.4)
-   // Regex Constants for command parsing (R3.3)
-   private static final String REGEX_ROLL = "(?i)^roll$";
-   private static final String REGEX_GO = "(?i)^go$";
-   private static final String REGEX_LIST = "(?i)^list$";
-   private static final String REGEX_BUILD_SETTLEMENT = "(?i)^build\\s+settlement\\s+(\\d+)$";
-   private static final String REGEX_BUILD_CITY = "(?i)^build\\s+city\\s+(\\d+)$";
-   private static final String REGEX_BUILD_ROAD = "(?i)^build\\s+road\\s+(\\d+),\\s*(\\d+)$";
    public HumanPlayer(int id) {
        super(id);
        this.scanner = new Scanner(System.in);
@@ -42,71 +33,69 @@ public class HumanPlayer extends Player {
    @Override
    protected PlayerAction decideMove(GameMaster game, boolean mustBuild) {
        System.out.print("> ");
-       String input = scanner.nextLine().trim();
-       // 1. Handle List (Can be done anytime)
-       if (input.matches(REGEX_LIST)) {
-           System.out.println("Your hand: " + getHand().toString());
-           return null; // Return null to stay in the turn loop
+       String input = scanner.nextLine();
+       
+       // Ask the parser to break down the string
+       String[] cmd = classes.util.CommandParser.parse(input);
+
+       if (cmd == null) {
+           System.out.println("Unknown command format.");
+           return null;
        }
-       // 2. Handle Roll
-       if (input.matches(REGEX_ROLL)) {
+
+       String action = cmd[0];
+
+       // 1. Logic-only handling (No regex here!)
+       if (action.equals("LIST")) {
+           System.out.println("Your hand: " + getHand().toString());
+           return null;
+       }
+
+       if (action.equals("ROLL")) {
            if (hasRolled) {
-               System.out.println("Error: You have already rolled this turn.");
+               System.out.println("Error: Already rolled.");
            } else {
                game.rollAndDistribute(this);
                hasRolled = true;
            }
            return null;
        }
-       // 3. Handle Go (End Turn) - Enforce Roll Requirement
-       if (input.matches(REGEX_GO)) {
-           if (!hasRolled) {
-               System.out.println("Error: You must 'roll' before ending your turn.");
-               return null;
-           }
-           return new PassAction(this); // Signal turn completion
-       }
-       // 4. Enforce roll requirement for all subsequent building actions
-       if (!hasRolled) {
-           System.out.println("Error: You must 'roll' before taking building actions.");
+
+       // Check roll requirement for game actions
+       if (!hasRolled && !action.equals("GO")) {
+           System.out.println("Error: Must 'roll' first.");
            return null;
        }
-       // 5. Build Settlement
-       Matcher setMatch = Pattern.compile(REGEX_BUILD_SETTLEMENT).matcher(input);
-       if (setMatch.matches()) {
-           int vertexId = Integer.parseInt(setMatch.group(1));
-           Vertex v = game.getBoard().getVertex(vertexId);
-           if (game.getRuleValidator().canBuildSettlement(this, v)) {
-               return new BuildSettlementAction(this, v);
-           }
-           System.out.println("Invalid Move: Check resources, occupancy, or the distance rule.");
-           return null;
+
+       // 2. Map the parsed arguments to Game Actions
+       switch (action) {
+           case "GO":
+               if (!hasRolled) return null;
+               return new PassAction(this);
+
+           case "SETTLE":
+               Vertex vSet = game.getBoard().getVertex(Integer.parseInt(cmd[1]));
+               if (game.getRuleValidator().canBuildSettlement(this, vSet)) {
+                   return new BuildSettlementAction(this, vSet);
+               }
+               break;
+
+           case "ROAD":
+               Vertex v1 = game.getBoard().getVertex(Integer.parseInt(cmd[1]));
+               Vertex v2 = game.getBoard().getVertex(Integer.parseInt(cmd[2]));
+               if (game.getRuleValidator().canBuildRoad(this, v1, v2)) {
+                   return new BuildRoadAction(this, v1, v2);
+               }
+               break;
+
+           case "CITY":
+               Vertex vCity = game.getBoard().getVertex(Integer.parseInt(cmd[1]));
+               if (game.getRuleValidator().canBuildCity(this, vCity)) {
+                   return new BuildCityAction(this, vCity);
+               }
+               break;
        }
-       // 6. Build Road
-       Matcher roadMatch = Pattern.compile(REGEX_BUILD_ROAD).matcher(input);
-       if (roadMatch.matches()) {
-           int id1 = Integer.parseInt(roadMatch.group(1));
-           int id2 = Integer.parseInt(roadMatch.group(2));
-           Vertex v1 = game.getBoard().getVertex(id1);
-           Vertex v2 = game.getBoard().getVertex(id2);
-           if (game.getRuleValidator().canBuildRoad(this, v1, v2)) {
-               return new BuildRoadAction(this, v1, v2);
-           }
-           System.out.println("Invalid Move: Cannot build road here (check cost or connectivity).");
-           return null;
-       }
-       // 7. Build City
-       Matcher cityMatch = Pattern.compile(REGEX_BUILD_CITY).matcher(input);
-       if (cityMatch.matches()) {
-           int cityVertexId = Integer.parseInt(cityMatch.group(1));
-           Vertex v = game.getBoard().getVertex(cityVertexId);
-           if (game.getRuleValidator().canBuildCity(this, v)) {
-               return new BuildCityAction(this, v);
-           }
-           System.out.println("Invalid Move: You must upgrade a settlement you own.");
-           return null;
-       }
-       System.out.println("Unknown command or invalid format. Example: 'build road 46, 47'");
+
        return null;
    }
    public void discardHalf() {
