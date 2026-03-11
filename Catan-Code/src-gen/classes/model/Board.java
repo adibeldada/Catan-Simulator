@@ -61,7 +61,7 @@ public class Board {
         tiles.add(new Tile(3, ResourceType.ORE, 3));
         tiles.add(new Tile(0, ResourceType.WOOD, 10)); // Center tile
         tiles.add(new Tile(6, ResourceType.SHEEP, 12));
-        tiles.add(new Tile(17, ResourceType.WOOD, 17)); // Requested token 17
+        tiles.add(new Tile(17, ResourceType.WOOD, 2)); 
 
         // Row 4
         tiles.add(new Tile(10, ResourceType.ORE, 6));

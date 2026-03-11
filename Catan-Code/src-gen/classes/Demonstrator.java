@@ -140,10 +140,9 @@ public class Demonstrator {
 
     private static void executePlacement(Player p, Vertex startVertex, Vertex neighbor, GameMaster game) {
         Settlement s = new Settlement(p);
-        startVertex.placeBuilding(s);
+        s.placeOn(startVertex);
         p.addBuilding(s);
         p.addVictoryPoints(1);
-
         Road r = new Road(p, startVertex, neighbor);
         p.addRoad(r);
         game.getBoard().placeRoad(r);

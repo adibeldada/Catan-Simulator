@@ -44,7 +44,7 @@ public class HumanPlayer extends Player {
         String input = scanner.nextLine();
         String[] cmd = classes.util.CommandParser.parse(input);
 
-        if (cmd == null) {
+        if (cmd == null || cmd.length == 0) {
             LOGGER.warning("Unknown command format.");
             return null;
         }

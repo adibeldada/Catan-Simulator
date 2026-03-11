@@ -22,6 +22,7 @@ public class GameMaster {
     private int currentRound;
     private int maxRounds;
     private static final int MAX_VICTORY_POINTS = 10;
+    private final Scanner scanner = new Scanner(System.in);
 
     public GameMaster(int maxRounds) {
         LoggerUtil.setupLogging(); 
@@ -33,9 +34,9 @@ public class GameMaster {
         this.maxRounds = Math.min(maxRounds, 8192);
         
         board.initializeDefaultMap();
-        players.add(new HumanPlayer(1)); 
+        //players.add(new HumanPlayer(1)); 
 
-        for (int i = 2; i <= 4; i++) {
+        for (int i = 1; i <= 4; i++) {
             players.add(new AIPlayer(i));
         }
     }
@@ -174,10 +175,8 @@ public class GameMaster {
     private void waitForGoCommand(int nextPlayerId) {
         LOGGER.info(() -> String.format("%n[PAUSED] Ready for AI Player %d.", nextPlayerId));
         LOGGER.info("Type 'go' to proceed to the next agent's turn:");
-
-        Scanner sc = new Scanner(System.in);
         while (true) {
-            String input = sc.nextLine().trim();
+            String input = scanner.nextLine().trim();
             if (input.equalsIgnoreCase("go")) {
                 break;
             }

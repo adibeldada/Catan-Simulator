@@ -39,25 +39,16 @@ public class BuildCityAction extends PlayerAction {
      */
     @Override
     public void execute(GameMaster game) {
-        // Deduct resources
         player.spendResources(Cost.cityCost());
-
-        // Get the old settlement
         Buildings oldBuilding = location.getBuilding();
         
-        // Create and place city
         City city = new City(player);
-        location.setBuilding(city);
         city.placeOn(location);
-
-        // Remove old settlement from player's buildings and add city
+        
         player.getBuildingsBuilt().remove(oldBuilding);
         player.addBuilding(city);
-
-        // Award additional victory point (city gives 2, settlement gave 1)
         player.addVictoryPoints(1);
         
-        // Log the action (R1.7)
         game.logAction(player, describe());
     }
 
