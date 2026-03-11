@@ -1,4 +1,4 @@
-# Settlers of Catan - Human Gameplay & Evolution
+# Settlers of Catan 
 **McMaster University | SFWRENG 2AA4 - Assignment 2**
 **Contributors:** Adib El Dada (eldada1) | Youssef Elshafei (elshafey) | Youssef Khafagy (khafagyy) | Riken Allen (allenr16)
 
