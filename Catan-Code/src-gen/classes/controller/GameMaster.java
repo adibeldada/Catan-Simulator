@@ -6,10 +6,7 @@ import classes.util.RuleValidator;
 import classes.util.LoggerUtil;
 import classes.util.JsonStateExporter;
 import classes.enums.ResourceType;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -18,7 +15,6 @@ import java.util.logging.Logger;
  */
 public class GameMaster {
     private static final Logger LOGGER = Logger.getLogger(GameMaster.class.getName());
-
     private Board board;
     private List<Player> players;
     private Dice dice;
@@ -29,7 +25,6 @@ public class GameMaster {
 
     public GameMaster(int maxRounds) {
         LoggerUtil.setupLogging(); 
-
         this.board = new Board();
         this.players = new ArrayList<>();
         this.dice = new Dice();
@@ -38,62 +33,39 @@ public class GameMaster {
         this.maxRounds = Math.min(maxRounds, 8192);
         
         board.initializeDefaultMap();
-
-        // R2.1: Initialize 1 Human and 3 AI agents
         players.add(new HumanPlayer(1)); 
         for (int i = 2; i <= 4; i++) {
             players.add(new AIPlayer(i));
         }
     }
     
-
-    /**
-     * Main game loop that runs until a winner is found or max rounds are reached.
-     */
     public void startSimulation() {
         LOGGER.info("=== Starting Catan Simulation ===");
-        LOGGER.info(() -> String.format("Max Rounds: %d", maxRounds));
-        LOGGER.info(() -> String.format("Players: %d", players.size()));
-        LOGGER.info("");
-
-        boolean hasHumanPlayer = false;
-        for (Player player : players) {
-            if (player instanceof HumanPlayer) {
-                hasHumanPlayer = true;
-                break;
-            }
-        }
+        boolean hasHumanPlayer = players.stream().anyMatch(p -> p instanceof HumanPlayer);
 
         while (currentRound < maxRounds) {
             currentRound++;
             LOGGER.info(() -> String.format("--- Round %d ---", currentRound));
-
+            
             if (hasHumanPlayer) {
-                runRound(); // interactive round with pause for human
+                runRound(); 
             } else {
-                // AI-only fast simulation
-                for (Player player : players) {
-                    runTurn(player); // no pause
-                }
+                players.forEach(this::runTurn);
                 printRoundSummary();
             }
 
             Player winner = checkVictory();
             if (winner != null) {
-                LOGGER.info("");
                 LOGGER.info("=== GAME OVER ===");
-                LOGGER.info(() -> String.format("Winner: Player %d with %d victory points!",
-                        winner.getId(), winner.getVictoryPoints()));
+                LOGGER.info(() -> String.format("Winner: Player %d with %d VP!", winner.getId(), winner.getVictoryPoints()));
                 return;
             }
         }
-
         LOGGER.info("=== SIMULATION ENDED ===");
         printFinalStandings();
     }
 
     public void runRound() {
-        // Only called in interactive mode (hasHumanPlayer == true)
         for (Player player : players) {
             if (player instanceof AIPlayer) {
                 waitForGoCommand(player.getId());
@@ -103,117 +75,126 @@ public class GameMaster {
         printRoundSummary();
     }
 
-
-    /**
-     * Delegates the turn logic to the player object.
-     */
     public void runTurn(Player player) {
-        // The player class now decides when to call rollAndDistribute()
         player.takeTurn(this);
-        
         JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
     }
 
     /**
-     * Logic for rolling dice and distributing resources.
-     * This is called by players during their takeTurn() method.
+     * Issue 1 FIXED: Cognitive Complexity reduced from 24 to 2.
+     * Delegates specific logic to helper methods.
      */
     public void rollAndDistribute(Player roller) {
         int roll = dice.roll();
         logAction(roller, "rolled " + roll);
-
+        
         if (roll == 7) {
-            LOGGER.info("A 7 was rolled! Robber activated.");
-
-            // Step 1: Discard cards (R2.5)
-         // Inside GameMaster.rollAndDistribute (roll == 7 block)
-            for (Player p : players) {
-                if (p.getHand().totalCards() > 7) {
-                    if (p instanceof HumanPlayer) {
-                        ((HumanPlayer) p).discardHalf(); // Interactive selection
-                    } else {
-                        p.getHand().discardRandomCards(p.getHand().totalCards() / 2); // AI random
-                    }
-                    logAction(p, "discarded cards due to robber.");
-                }
-            }
-
-            // Step 2: Move the Robber to a DIFFERENT random tile (R2.5 + Rulebook 4a)
-            List<Tile> potentialTiles = new ArrayList<>(board.getTiles());
-            Tile currentTile = board.getRobber().getCurrentTile();
-            potentialTiles.remove(currentTile); // Prevents staying on the same hex
-
-            Tile newTile = potentialTiles.get(new java.util.Random().nextInt(potentialTiles.size()));
-            board.getRobber().moveTo(newTile);
-            LOGGER.info("Robber moved to " + newTile.toString());
-
-            // Step 3: Steal 1 random card from a randomly chosen QUALIFYING player (R2.5)
-            // Use a Set to ensure we only pick from UNIQUE players adjacent to the tile
-            java.util.Set<Player> qualifyingPlayers = new java.util.HashSet<>();
-            for (Vertex v : newTile.getAdjacentVertices()) {
-                if (v.isOccupied() && v.getOwner() != roller) {
-                    qualifyingPlayers.add(v.getOwner());
-                }
-            }
-
-            if (!qualifyingPlayers.isEmpty()) {
-                List<Player> victimList = new ArrayList<>(qualifyingPlayers);
-                Player victim = victimList.get(new java.util.Random().nextInt(victimList.size()));
-                
-                ResourceType stolen = victim.getHand().removeRandomCard();
-                if (stolen != null) {
-                    roller.collectResource(stolen, 1);
-                    logAction(roller, "stole a card from Player " + victim.getId());
-                }
-            } else {
-                LOGGER.info("No qualifying players to steal from on " + newTile.toString());
-            }
+            handleRobberAction(roller);
         } else {
             produceResources(roll);
         }
     }
 
+    private void handleRobberAction(Player roller) {
+        LOGGER.info("A 7 was rolled! Robber activated.");
+        
+        // Step 1: Discard excess cards
+        discardExcessCards();
+        
+        // Step 2: Move the Robber
+        Tile newTile = moveRobber();
+        
+        // Step 3: Steal from a qualifying player
+        stealCard(roller, newTile);
+    }
+
+    private void discardExcessCards() {
+        for (Player p : players) {
+            int total = p.getHand().totalCards();
+            if (total > 7) {
+                if (p instanceof HumanPlayer) {
+                    ((HumanPlayer) p).discardHalf();
+                } else {
+                    p.getHand().discardRandomCards(total / 2);
+                }
+                logAction(p, "discarded cards due to robber.");
+            }
+        }
+    }
+
+    private Tile moveRobber() {
+        List<Tile> potentialTiles = new ArrayList<>(board.getTiles());
+        potentialTiles.remove(board.getRobber().getCurrentTile());
+        
+        Tile newTile = potentialTiles.get(new Random().nextInt(potentialTiles.size()));
+        board.getRobber().moveTo(newTile);
+        LOGGER.info("Robber moved to " + newTile.toString());
+        return newTile;
+    }
+
+    private void stealCard(Player roller, Tile tile) {
+        Set<Player> qualifyingPlayers = new HashSet<>();
+        for (Vertex v : tile.getAdjacentVertices()) {
+            if (v.isOccupied() && v.getOwner() != roller) {
+                qualifyingPlayers.add(v.getOwner());
+            }
+        }
+
+        if (qualifyingPlayers.isEmpty()) {
+            LOGGER.info("No qualifying players to steal from on " + tile.toString());
+            return;
+        }
+
+        List<Player> victimList = new ArrayList<>(qualifyingPlayers);
+        Player victim = victimList.get(new Random().nextInt(victimList.size()));
+        ResourceType stolen = victim.getHand().removeRandomCard();
+        
+        if (stolen != null) {
+            roller.collectResource(stolen, 1);
+            logAction(roller, "stole a card from Player " + victim.getId());
+        }
+    }
+
     /**
-     * R2.4: Pauses the console and waits for the user to type 'go'.
+     * Issue 2 FIXED: Cognitive Complexity reduced from 16 to 6.
+     * Nested loops and logic extracted to distributeFromTile.
      */
+    private void produceResources(int roll) {
+        Tile robberTile = board.getRobber().getCurrentTile();
+        for (Tile tile : board.getTiles()) {
+            if (tile.producesOnRoll(roll) && !tile.equals(robberTile)) {
+                distributeFromTile(tile);
+            }
+        }
+    }
+
+    private void distributeFromTile(Tile tile) {
+        ResourceType resource = tile.getResourceType();
+        for (Vertex vertex : tile.getAdjacentVertices()) {
+            if (vertex.isOccupied()) {
+                Buildings building = vertex.getBuilding();
+                Player owner = building.getOwner();
+                int amount = (building instanceof City) ? 2 : 1;
+                owner.collectResource(resource, amount);
+            }
+        }
+    }
+
     private void waitForGoCommand(int nextPlayerId) {
         System.out.println("\n[PAUSED] Ready for AI Player " + nextPlayerId + ".");
         System.out.println("Type 'go' to proceed to the next agent's turn:");
-        
         Scanner sc = new Scanner(System.in);
         while (true) {
-            String input = sc.nextLine().trim();
-            if (input.equalsIgnoreCase("go")) {
-                break;
-            }
+            if (sc.nextLine().trim().equalsIgnoreCase("go")) break;
             System.out.println("Waiting for 'go' command...");
         }
     }
 
-    private void produceResources(int roll) {
-        for (Tile tile : board.getTiles()) {
-            // R2.5: Only produce if the robber is NOT on this tile
-            if (tile.producesOnRoll(roll) && !board.getRobber().getCurrentTile().equals(tile)) {
-                ResourceType resource = tile.getResourceType();
-                for (Vertex vertex : tile.getAdjacentVertices()) {
-                    if (vertex.isOccupied()) {
-                        Buildings building = vertex.getBuilding();
-                        Player owner = building.getOwner();
-                        int amount = (building instanceof City) ? 2 : 1;
-                        owner.collectResource(resource, amount);
-                    }
-                }
-            }
-        }
-    }
-
     public Player checkVictory() {
-        for (Player player : players) {
-            if (player.getVictoryPoints() >= MAX_VICTORY_POINTS) {
-                return player;
-            }
-        }
-        return null;
+        return players.stream()
+                .filter(p -> p.getVictoryPoints() >= MAX_VICTORY_POINTS)
+                .findFirst()
+                .orElse(null);
     }
 
     public void logAction(Player player, String action) {
@@ -224,9 +205,7 @@ public class GameMaster {
         LOGGER.info("Summary:");
         for (Player player : players) {
             LOGGER.info(() -> String.format("  Player %d: %d VP | %s", 
-                                       player.getId(), 
-                                       player.getVictoryPoints(),
-                                       player.getHand().toString()));
+                player.getId(), player.getVictoryPoints(), player.getHand().toString()));
         }
         LOGGER.info("");
     }
@@ -239,7 +218,6 @@ public class GameMaster {
         }
     }
 
-    // Getters
     public Board getBoard() { return board; }
     public List<Player> getPlayers() { return players; }
     public RuleValidator getRuleValidator() { return ruleValidator; }
