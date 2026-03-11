@@ -87,7 +87,6 @@ public class Board {
     private void connectVerticesFromManualList() {
         // i is the ID of the vertex we are looking at
         for (int i = 0; i < VERTEX_ADJACENCY.length; i++) {
-            // neighbors are the numbers you typed in the { }
             for (int neighborId : VERTEX_ADJACENCY[i]) {
                 addVertexConnection(i, neighborId);
             }

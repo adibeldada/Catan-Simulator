@@ -131,23 +131,27 @@ public class HumanPlayer extends Player {
         LOGGER.info(() -> "ROBBER ALERT! You must discard " + toDiscard + " cards.");
         LOGGER.info(() -> "Your current hand: " + getHand().toString());
 
-        for (int i = 0; i < toDiscard; i++) {
-            final int count = i + 1;
-            LOGGER.info(() -> String.format("Enter resource type to discard (%d/%d): ", count, toDiscard));
+        int discardedCount = 0;
+        while (discardedCount < toDiscard) {
+            final int currentStep = discardedCount + 1;
+            LOGGER.info(() -> String.format("Enter resource type to discard (%d/%d): ", currentStep, toDiscard));
             
             String resStr = scanner.nextLine().toUpperCase().trim();
+            
             try {
                 ResourceType res = ResourceType.valueOf(resStr);
+                
                 if (getHand().getCount(res) > 0) {
                     getHand().remove(res, 1); 
                     LOGGER.info(() -> "Discarded 1 " + res + ". Hand: " + getHand().toString());
+                    
+                    // Increment counter ONLY on success
+                    discardedCount++; 
                 } else {
-                    LOGGER.warning("Error: You don't have any " + res + ". Try again.");
-                    i--;
+                    LOGGER.warning(() -> "Error: You don't have any " + res + ". Try again.");
                 }
             } catch (IllegalArgumentException e) {
                 LOGGER.warning("Error: Invalid resource name. Enter WOOD, BRICK, SHEEP, WHEAT, or ORE.");
-                i--; 
             }
         }
     }

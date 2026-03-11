@@ -20,7 +20,7 @@ public abstract class Player {
     protected List<Buildings> buildingsBuilt;
     protected Random random;
 
-    public Player(int id) {
+    protected Player(int id) {
         this.id = id;
         this.hand = new ResourceHand();
         this.victoryPoints = 0;

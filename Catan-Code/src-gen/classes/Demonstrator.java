@@ -71,7 +71,9 @@ public class Demonstrator {
             }
         }
         JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
-        printStartingResources(players, game);
+        
+        // FIXED: Removed the unused 'game' argument here
+        printStartingResources(players);
     }
 
     private static void placeInitialPieces(Player p, int round, GameMaster game, List<Integer> assigned, Random rand) {
@@ -101,9 +103,6 @@ public class Demonstrator {
         }
     }
 
-    /**
-     * Fixed: System.out replaced with LOGGER.info for Sonar S106 compliance.
-     */
     private static Vertex handleHumanSettlementPlacement(Player p, int round, GameMaster game, List<Integer> assigned, Scanner scanner) {
         while (true) {
             LOGGER.info(() -> String.format("[Setup Round %d] Player %d, enter Vertex ID for settlement: ", round, p.getId()));
@@ -121,9 +120,6 @@ public class Demonstrator {
         }
     }
 
-    /**
-     * Fixed: System.out replaced with LOGGER.info for Sonar S106 compliance.
-     */
     private static Vertex handleHumanRoadPlacement(Player p, int round, Vertex startVertex, GameMaster game, Scanner scanner) {
         while (true) {
             LOGGER.info(() -> String.format("[Setup Round %d] Player %d, enter adjacent Vertex ID for road from node %d: ",
@@ -188,7 +184,10 @@ public class Demonstrator {
         }
     }
 
-    private static void printStartingResources(List<Player> players, GameMaster game) {
+    /**
+     * FIXED: Removed the unused method parameter "game" (Sonar S1172).
+     */
+    private static void printStartingResources(List<Player> players) {
         LOGGER.info("");
         LOGGER.info("Initial placement complete. Starting cards:");
         for (Player p : players) {
