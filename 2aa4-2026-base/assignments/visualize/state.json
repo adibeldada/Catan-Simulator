@@ -4,32 +4,32 @@
     "owner" : "RED",
     "type" : "SETTLEMENT"
   }, {
-    "node" : 0,
+    "node" : 4,
     "owner" : "RED",
     "type" : "SETTLEMENT"
   }, {
-    "node" : 7,
-    "owner" : "ORANGE",
-    "type" : "SETTLEMENT"
-  }, {
-    "node" : 12,
-    "owner" : "BLUE",
-    "type" : "SETTLEMENT"
-  }, {
-    "node" : 19,
-    "owner" : "BLUE",
-    "type" : "SETTLEMENT"
-  }, {
-    "node" : 26,
+    "node" : 0,
     "owner" : "WHITE",
     "type" : "SETTLEMENT"
   }, {
-    "node" : 36,
+    "node" : 14,
+    "owner" : "BLUE",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 23,
+    "owner" : "ORANGE",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 28,
     "owner" : "WHITE",
     "type" : "SETTLEMENT"
   }, {
-    "node" : 52,
+    "node" : 33,
     "owner" : "ORANGE",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 35,
+    "owner" : "BLUE",
     "type" : "SETTLEMENT"
   } ],
   "roads" : [ {
@@ -37,33 +37,33 @@
     "b" : 1,
     "owner" : "RED"
   }, {
-    "a" : 19,
-    "b" : 17,
+    "a" : 35,
+    "b" : 15,
     "owner" : "BLUE"
-  }, {
-    "a" : 36,
-    "b" : 34,
-    "owner" : "WHITE"
-  }, {
-    "a" : 52,
-    "b" : 23,
-    "owner" : "ORANGE"
   }, {
     "a" : 0,
-    "b" : 17,
-    "owner" : "RED"
-  }, {
-    "a" : 12,
-    "b" : 4,
-    "owner" : "BLUE"
-  }, {
-    "a" : 26,
-    "b" : 25,
+    "b" : 1,
     "owner" : "WHITE"
   }, {
-    "a" : 7,
+    "a" : 23,
     "b" : 6,
     "owner" : "ORANGE"
+  }, {
+    "a" : 4,
+    "b" : 3,
+    "owner" : "RED"
+  }, {
+    "a" : 14,
+    "b" : 12,
+    "owner" : "BLUE"
+  }, {
+    "a" : 28,
+    "b" : 27,
+    "owner" : "WHITE"
+  }, {
+    "a" : 33,
+    "b" : 32,
+    "owner" : "ORANGE"
   } ],
-  "robber" : 16
+  "robber" : 2
 }

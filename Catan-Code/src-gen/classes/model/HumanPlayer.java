@@ -4,14 +4,16 @@ import classes.controller.GameMaster;
 import classes.enums.ResourceType;
 import classes.moves.*;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * Represents a human-controlled player.
  * Uses console input to execute moves and enforces turn-based rules.
  */
 public class HumanPlayer extends Player {
+    private static final Logger LOGGER = Logger.getLogger(HumanPlayer.class.getName());
     private final Scanner scanner;
-    private boolean hasRolled; // Prevents taking actions or ending turn before rolling (R2.4)
+    private boolean hasRolled; 
 
     public HumanPlayer(int id) {
         super(id);
@@ -20,8 +22,8 @@ public class HumanPlayer extends Player {
 
     @Override
     public void takeTurn(GameMaster game) {
-        System.out.println("\n--- IT IS YOUR TURN (Player " + id + ") ---");
-        System.out.println("Commands: Roll, Build settlement [id], Build road [id1, id2], Build city [id], List, Go");
+        LOGGER.info(() -> String.format("%n--- IT IS YOUR TURN (Player %d) ---", id));
+        LOGGER.info("Commands: Roll, Build settlement [id], Build road [id1, id2], Build city [id], List, Go");
 
         this.hasRolled = false;
         boolean turnActive = true;
@@ -36,49 +38,39 @@ public class HumanPlayer extends Player {
         }
     }
 
-    /**
-     * Refactored: Complexity reduced by extracting system commands 
-     * and mapping logic into helper methods.
-     */
     @Override
     protected PlayerAction decideMove(GameMaster game, boolean mustBuild) {
-        System.out.print("> ");
-        String[] cmd = classes.util.CommandParser.parse(scanner.nextLine());
+        LOGGER.info("> "); // Using logger for the input prompt
+        String input = scanner.nextLine();
+        String[] cmd = classes.util.CommandParser.parse(input);
 
         if (cmd == null) {
-            System.out.println("Unknown command format.");
+            LOGGER.warning("Unknown command format.");
             return null;
         }
 
         String actionType = cmd[0];
 
-        // 1. Handle non-move commands (LIST, ROLL)
         if (handleSystemCommands(actionType, game)) {
             return null;
         }
 
-        // 2. Validate turn state (must roll before game actions)
         if (!hasRolled && !"GO".equals(actionType)) {
-            System.out.println("Error: Must 'roll' first.");
+            LOGGER.warning("Error: Must 'roll' first.");
             return null;
         }
 
-        // 3. Map input to Game Actions
         return parseGameAction(actionType, cmd, game);
     }
 
-    /**
-     * Handles commands that don't result in a move (List, Roll).
-     * Returns true if the command was processed.
-     */
     private boolean handleSystemCommands(String action, GameMaster game) {
         if ("LIST".equals(action)) {
-            System.out.println("Your hand: " + getHand().toString());
+            LOGGER.info(() -> "Your hand: " + getHand().toString());
             return true;
         }
         if ("ROLL".equals(action)) {
             if (hasRolled) {
-                System.out.println("Error: Already rolled.");
+                LOGGER.warning("Error: Already rolled.");
             } else {
                 game.rollAndDistribute(this);
                 hasRolled = true;
@@ -88,62 +80,73 @@ public class HumanPlayer extends Player {
         return false;
     }
 
-    /**
-     * Maps the parsed string command to a PlayerAction object.
-     */
     private PlayerAction parseGameAction(String action, String[] cmd, GameMaster game) {
         switch (action) {
             case "GO":
                 return hasRolled ? new PassAction(this) : null;
 
             case "SETTLE":
-                Vertex vSet = game.getBoard().getVertex(Integer.parseInt(cmd[1]));
-                if (game.getRuleValidator().canBuildSettlement(this, vSet)) {
-                    return new BuildSettlementAction(this, vSet);
-                }
-                break;
+                return handleSettle(cmd, game);
 
             case "ROAD":
-                Vertex v1 = game.getBoard().getVertex(Integer.parseInt(cmd[1]));
-                Vertex v2 = game.getBoard().getVertex(Integer.parseInt(cmd[2]));
-                if (game.getRuleValidator().canBuildRoad(this, v1, v2)) {
-                    return new BuildRoadAction(this, v1, v2);
-                }
-                break;
+                return handleRoad(cmd, game);
 
             case "CITY":
-                Vertex vCity = game.getBoard().getVertex(Integer.parseInt(cmd[1]));
-                if (game.getRuleValidator().canBuildCity(this, vCity)) {
-                    return new BuildCityAction(this, vCity);
-                }
-                break;
+                return handleCity(cmd, game);
 
             default:
-                // Rule S131: Switch statements should have default clauses
                 break;
+        }
+        return null;
+    }
+
+    // Extracted helpers to keep parseGameAction complexity low
+    private PlayerAction handleSettle(String[] cmd, GameMaster game) {
+        Vertex vSet = game.getBoard().getVertex(Integer.parseInt(cmd[1]));
+        if (game.getRuleValidator().canBuildSettlement(this, vSet)) {
+            return new BuildSettlementAction(this, vSet);
+        }
+        return null;
+    }
+
+    private PlayerAction handleRoad(String[] cmd, GameMaster game) {
+        Vertex v1 = game.getBoard().getVertex(Integer.parseInt(cmd[1]));
+        Vertex v2 = game.getBoard().getVertex(Integer.parseInt(cmd[2]));
+        if (game.getRuleValidator().canBuildRoad(this, v1, v2)) {
+            return new BuildRoadAction(this, v1, v2);
+        }
+        return null;
+    }
+
+    private PlayerAction handleCity(String[] cmd, GameMaster game) {
+        Vertex vCity = game.getBoard().getVertex(Integer.parseInt(cmd[1]));
+        if (game.getRuleValidator().canBuildCity(this, vCity)) {
+            return new BuildCityAction(this, vCity);
         }
         return null;
     }
 
     public void discardHalf() {
         int toDiscard = getHand().totalCards() / 2;
-        System.out.println("ROBBER ALERT! You must discard " + toDiscard + " cards.");
-        System.out.println("Your current hand: " + getHand().toString());
+        LOGGER.info(() -> "ROBBER ALERT! You must discard " + toDiscard + " cards.");
+        LOGGER.info(() -> "Your current hand: " + getHand().toString());
 
         for (int i = 0; i < toDiscard; i++) {
-            System.out.print("Enter resource type to discard (" + (i + 1) + "/" + toDiscard + "): ");
+            final int count = i + 1;
+            LOGGER.info(() -> String.format("Enter resource type to discard (%d/%d): ", count, toDiscard));
+            
             String resStr = scanner.nextLine().toUpperCase().trim();
             try {
                 ResourceType res = ResourceType.valueOf(resStr);
                 if (getHand().getCount(res) > 0) {
                     getHand().remove(res, 1); 
-                    System.out.println("Discarded 1 " + res + ". Hand: " + getHand().toString());
+                    LOGGER.info(() -> "Discarded 1 " + res + ". Hand: " + getHand().toString());
                 } else {
-                    System.out.println("Error: You don't have any " + res + ". Try again.");
+                    LOGGER.warning("Error: You don't have any " + res + ". Try again.");
                     i--;
                 }
             } catch (IllegalArgumentException e) {
-                System.out.println("Error: Invalid resource name. Enter WOOD, BRICK, SHEEP, WHEAT, or ORE.");
+                LOGGER.warning("Error: Invalid resource name. Enter WOOD, BRICK, SHEEP, WHEAT, or ORE.");
                 i--; 
             }
         }

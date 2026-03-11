@@ -74,15 +74,10 @@ public class Demonstrator {
         printStartingResources(players, game);
     }
 
-    /**
-     * Refactored method: Cognitive Complexity reduced by extracting 
-     * input handling and placement logic.
-     */
     private static void placeInitialPieces(Player p, int round, GameMaster game, List<Integer> assigned, Random rand) {
         Vertex startVertex;
         Vertex neighbor;
 
-        // 1. Determine placement based on player type
         if (p instanceof classes.model.HumanPlayer) {
             Scanner scanner = new Scanner(System.in);
             startVertex = handleHumanSettlementPlacement(p, round, game, assigned, scanner);
@@ -94,10 +89,8 @@ public class Demonstrator {
             neighbor = startVertex.getAdjacentVertices().get(0);
         }
 
-        // 2. Execute the placement on the board
         executePlacement(p, startVertex, neighbor, game);
 
-        // 3. Award resources and log action
         if (round == 2) {
             awardStartingResources(p, startVertex, game);
         }
@@ -108,9 +101,12 @@ public class Demonstrator {
         }
     }
 
+    /**
+     * Fixed: System.out replaced with LOGGER.info for Sonar S106 compliance.
+     */
     private static Vertex handleHumanSettlementPlacement(Player p, int round, GameMaster game, List<Integer> assigned, Scanner scanner) {
         while (true) {
-            System.out.printf("[Setup Round %d] Player %d, enter Vertex ID for settlement: ", round, p.getId());
+            LOGGER.info(() -> String.format("[Setup Round %d] Player %d, enter Vertex ID for settlement: ", round, p.getId()));
             try {
                 int vertexId = Integer.parseInt(scanner.nextLine());
                 Vertex startVertex = game.getBoard().getVertex(vertexId);
@@ -118,17 +114,20 @@ public class Demonstrator {
                 if (startVertex != null && isValidPlacement(startVertex, assigned, game)) {
                     return startVertex;
                 }
-                System.out.println("Invalid placement. Vertex must be unoccupied and follow the distance rule.");
+                LOGGER.warning("Invalid placement. Vertex must be unoccupied and follow the distance rule.");
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a numeric Vertex ID.");
+                LOGGER.warning("Invalid input. Please enter a numeric Vertex ID.");
             }
         }
     }
 
+    /**
+     * Fixed: System.out replaced with LOGGER.info for Sonar S106 compliance.
+     */
     private static Vertex handleHumanRoadPlacement(Player p, int round, Vertex startVertex, GameMaster game, Scanner scanner) {
         while (true) {
-            System.out.printf("[Setup Round %d] Player %d, enter adjacent Vertex ID for road from node %d: ",
-                    round, p.getId(), startVertex.getId());
+            LOGGER.info(() -> String.format("[Setup Round %d] Player %d, enter adjacent Vertex ID for road from node %d: ",
+                    round, p.getId(), startVertex.getId()));
             try {
                 int neighborId = Integer.parseInt(scanner.nextLine());
                 Vertex neighbor = game.getBoard().getVertex(neighborId);
@@ -136,9 +135,9 @@ public class Demonstrator {
                 if (neighbor != null && startVertex.getAdjacentVertices().contains(neighbor)) {
                     return neighbor;
                 }
-                System.out.println("Invalid road. Vertex must be adjacent to your settlement.");
+                LOGGER.warning("Invalid road. Vertex must be adjacent to your settlement.");
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a numeric Vertex ID.");
+                LOGGER.warning("Invalid input. Please enter a numeric Vertex ID.");
             }
         }
     }
@@ -169,7 +168,7 @@ public class Demonstrator {
     }
 
     private static boolean isValidPlacement(Vertex candidate, List<Integer> assigned, GameMaster game) {
-        if (candidate.getAdjacentVertices().size() < 2) {
+        if (candidate.getAdjacentVertices().isEmpty()) {
             return false;
         }
         for (int occupiedId : assigned) {
@@ -196,9 +195,6 @@ public class Demonstrator {
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.info(() -> String.format("  Player %d: %d cards", p.getId(), p.getHand().totalCards()));
             }
-        }
-        if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.info(() -> String.format("Vertex 0 adjacents: %d", game.getBoard().getVertex(0).getAdjacentVertices().size()));
         }
     }
 

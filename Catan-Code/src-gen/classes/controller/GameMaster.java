@@ -34,6 +34,7 @@ public class GameMaster {
         
         board.initializeDefaultMap();
         players.add(new HumanPlayer(1)); 
+
         for (int i = 2; i <= 4; i++) {
             players.add(new AIPlayer(i));
         }
@@ -80,10 +81,6 @@ public class GameMaster {
         JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
     }
 
-    /**
-     * Issue 1 FIXED: Cognitive Complexity reduced from 24 to 2.
-     * Delegates specific logic to helper methods.
-     */
     public void rollAndDistribute(Player roller) {
         int roll = dice.roll();
         logAction(roller, "rolled " + roll);
@@ -97,14 +94,8 @@ public class GameMaster {
 
     private void handleRobberAction(Player roller) {
         LOGGER.info("A 7 was rolled! Robber activated.");
-        
-        // Step 1: Discard excess cards
         discardExcessCards();
-        
-        // Step 2: Move the Robber
         Tile newTile = moveRobber();
-        
-        // Step 3: Steal from a qualifying player
         stealCard(roller, newTile);
     }
 
@@ -128,6 +119,7 @@ public class GameMaster {
         
         Tile newTile = potentialTiles.get(new Random().nextInt(potentialTiles.size()));
         board.getRobber().moveTo(newTile);
+
         LOGGER.info("Robber moved to " + newTile.toString());
         return newTile;
     }
@@ -155,10 +147,6 @@ public class GameMaster {
         }
     }
 
-    /**
-     * Issue 2 FIXED: Cognitive Complexity reduced from 16 to 6.
-     * Nested loops and logic extracted to distributeFromTile.
-     */
     private void produceResources(int roll) {
         Tile robberTile = board.getRobber().getCurrentTile();
         for (Tile tile : board.getTiles()) {
@@ -180,13 +168,20 @@ public class GameMaster {
         }
     }
 
+    /**
+     * Fixed: System.out replaced with LOGGER.info for Sonar S106 compliance.
+     */
     private void waitForGoCommand(int nextPlayerId) {
-        System.out.println("\n[PAUSED] Ready for AI Player " + nextPlayerId + ".");
-        System.out.println("Type 'go' to proceed to the next agent's turn:");
+        LOGGER.info(() -> String.format("%n[PAUSED] Ready for AI Player %d.", nextPlayerId));
+        LOGGER.info("Type 'go' to proceed to the next agent's turn:");
+
         Scanner sc = new Scanner(System.in);
         while (true) {
-            if (sc.nextLine().trim().equalsIgnoreCase("go")) break;
-            System.out.println("Waiting for 'go' command...");
+            String input = sc.nextLine().trim();
+            if (input.equalsIgnoreCase("go")) {
+                break;
+            }
+            LOGGER.info("Waiting for 'go' command...");
         }
     }
 
