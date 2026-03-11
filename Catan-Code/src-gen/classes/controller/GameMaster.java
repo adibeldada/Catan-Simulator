@@ -33,16 +33,16 @@ public class GameMaster {
         this.maxRounds = Math.min(maxRounds, 8192);
         
         board.initializeDefaultMap();
-        players.add(new HumanPlayer(1)); 
+        //players.add(new HumanPlayer(1)); 
 
-        for (int i = 2; i <= 4; i++) {
+        for (int i = 1; i <= 4; i++) {
             players.add(new AIPlayer(i));
         }
     }
     
     public void startSimulation() {
         LOGGER.info("=== Starting Catan Simulation ===");
-        boolean hasHumanPlayer = players.stream().anyMatch(p -> p instanceof HumanPlayer);
+        boolean hasHumanPlayer = players.stream().anyMatch(HumanPlayer.class::isInstance);
 
         while (currentRound < maxRounds) {
             currentRound++;

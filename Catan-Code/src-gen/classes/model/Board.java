@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Board {
 	
-	public static final int[][] VERTEX_ADJACENCY = {
+	protected static final int[][] VERTEX_ADJACENCY = {
 	        {1,5,20}, {0,6,2}, {1,9,3}, {2,12,4}, {3,15,5}, {4,16,0},
 	        {1,7,23}, {6,8,24}, {7,27,9}, {8,10,2}, {9,11,29}, {10,12,32},
 	        {11,13,3}, {12,14,34}, {13,15,37}, {14,17,4}, {5,18,21}, {15,18,39},
