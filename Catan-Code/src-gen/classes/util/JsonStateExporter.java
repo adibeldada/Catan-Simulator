@@ -7,12 +7,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class for exporting the game state to JSON.
  */
 public class JsonStateExporter {
 
+    // Added Logger to comply with SonarQube java:S4507 and match project logging standards
+    private static final Logger LOGGER = Logger.getLogger(JsonStateExporter.class.getName());
     private static final ObjectMapper mapper = new ObjectMapper();
 
     // S1118: Private constructor to prevent instantiation
@@ -22,7 +26,6 @@ public class JsonStateExporter {
 
     /**
      * Maps Java vertex IDs (0–53) to catanatron node IDs (0–53).
-     * (Mapping logic omitted for brevity, but kept intact in your file)
      */
     private static final int[] JAVA_TO_CAT = {
             1,  2,  3,  4,  5,  0,  6,  7,  8,  9,
@@ -71,8 +74,8 @@ public class JsonStateExporter {
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filePath), root);
         } catch (IOException e) {
-            // Note: In a production app, you'd want to use a logger here too!
-            e.printStackTrace();
+            // FIXED: Replaced e.printStackTrace() with LOGGER.log to avoid leaking stack trace data
+            LOGGER.log(Level.SEVERE, "Failed to export game state to {0}", filePath);
         }
     }
 
