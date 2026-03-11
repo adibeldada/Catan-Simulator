@@ -1,23 +1,23 @@
 {
   "buildings" : [ {
-    "node" : 2,
-    "owner" : "RED",
+    "node" : 1,
+    "owner" : "BLUE",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 3,
+    "owner" : "ORANGE",
     "type" : "CITY"
   }, {
     "node" : 5,
-    "owner" : "WHITE",
+    "owner" : "RED",
     "type" : "SETTLEMENT"
   }, {
-    "node" : 8,
+    "node" : 6,
     "owner" : "BLUE",
-    "type" : "CITY"
+    "type" : "SETTLEMENT"
   }, {
     "node" : 10,
     "owner" : "BLUE",
-    "type" : "CITY"
-  }, {
-    "node" : 12,
-    "owner" : "RED",
     "type" : "CITY"
   }, {
     "node" : 15,
@@ -26,240 +26,256 @@
   }, {
     "node" : 17,
     "owner" : "WHITE",
-    "type" : "SETTLEMENT"
+    "type" : "CITY"
   }, {
     "node" : 18,
     "owner" : "WHITE",
     "type" : "CITY"
   }, {
-    "node" : 21,
+    "node" : 22,
     "owner" : "RED",
-    "type" : "CITY"
-  }, {
-    "node" : 23,
-    "owner" : "ORANGE",
     "type" : "SETTLEMENT"
+  }, {
+    "node" : 24,
+    "owner" : "BLUE",
+    "type" : "SETTLEMENT"
+  }, {
+    "node" : 27,
+    "owner" : "WHITE",
+    "type" : "CITY"
   }, {
     "node" : 34,
-    "owner" : "RED",
+    "owner" : "ORANGE",
     "type" : "CITY"
-  }, {
-    "node" : 37,
-    "owner" : "WHITE",
-    "type" : "SETTLEMENT"
-  }, {
-    "node" : 39,
-    "owner" : "WHITE",
-    "type" : "SETTLEMENT"
   }, {
     "node" : 41,
     "owner" : "WHITE",
     "type" : "SETTLEMENT"
   }, {
-    "node" : 42,
+    "node" : 44,
     "owner" : "WHITE",
     "type" : "SETTLEMENT"
   }, {
-    "node" : 49,
-    "owner" : "ORANGE",
+    "node" : 52,
+    "owner" : "BLUE",
     "type" : "SETTLEMENT"
   } ],
   "roads" : [ {
-    "a" : 12,
-    "b" : 4,
+    "a" : 22,
+    "b" : 21,
     "owner" : "RED"
   }, {
-    "a" : 8,
-    "b" : 7,
+    "a" : 6,
+    "b" : 2,
     "owner" : "BLUE"
   }, {
     "a" : 18,
     "b" : 13,
     "owner" : "WHITE"
   }, {
-    "a" : 49,
-    "b" : 22,
+    "a" : 3,
+    "b" : 2,
     "owner" : "ORANGE"
   }, {
-    "a" : 2,
-    "b" : 1,
+    "a" : 5,
+    "b" : 4,
     "owner" : "RED"
   }, {
     "a" : 10,
     "b" : 9,
     "owner" : "BLUE"
   }, {
-    "a" : 15,
-    "b" : 14,
+    "a" : 27,
+    "b" : 8,
     "owner" : "WHITE"
   }, {
-    "a" : 23,
-    "b" : 6,
+    "a" : 34,
+    "b" : 14,
     "owner" : "ORANGE"
   }, {
-    "a" : 6,
-    "b" : 7,
+    "a" : 2,
+    "b" : 1,
     "owner" : "BLUE"
   }, {
-    "a" : 12,
-    "b" : 14,
+    "a" : 14,
+    "b" : 15,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 3,
+    "b" : 4,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 18,
+    "b" : 16,
+    "owner" : "WHITE"
+  }, {
+    "a" : 21,
+    "b" : 20,
     "owner" : "RED"
   }, {
+    "a" : 8,
+    "b" : 9,
+    "owner" : "BLUE"
+  }, {
+    "a" : 3,
+    "b" : 9,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 14,
+    "b" : 12,
+    "owner" : "ORANGE"
+  }, {
     "a" : 13,
-    "b" : 5,
+    "b" : 15,
     "owner" : "WHITE"
   }, {
     "a" : 8,
-    "b" : 27,
-    "owner" : "BLUE"
-  }, {
-    "a" : 21,
-    "b" : 1,
-    "owner" : "RED"
-  }, {
-    "a" : 5,
-    "b" : 4,
+    "b" : 7,
     "owner" : "WHITE"
   }, {
+    "a" : 33,
+    "b" : 34,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 22,
+    "b" : 49,
+    "owner" : "RED"
+  }, {
+    "a" : 33,
+    "b" : 32,
+    "owner" : "ORANGE"
+  }, {
     "a" : 11,
+    "b" : 12,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 27,
+    "b" : 26,
+    "owner" : "WHITE"
+  }, {
+    "a" : 10,
+    "b" : 11,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 1,
+    "b" : 21,
+    "owner" : "BLUE"
+  }, {
+    "a" : 32,
+    "b" : 31,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 12,
+    "b" : 4,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 34,
+    "b" : 36,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 29,
     "b" : 10,
     "owner" : "BLUE"
   }, {
     "a" : 32,
     "b" : 11,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 36,
+    "b" : 37,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 30,
+    "b" : 31,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 6,
+    "b" : 23,
     "owner" : "BLUE"
   }, {
-    "a" : 3,
-    "b" : 2,
+    "a" : 35,
+    "b" : 37,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 35,
+    "b" : 39,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 48,
+    "b" : 49,
     "owner" : "RED"
   }, {
-    "a" : 3,
-    "b" : 4,
-    "owner" : "RED"
-  }, {
-    "a" : 12,
-    "b" : 11,
+    "a" : 6,
+    "b" : 7,
     "owner" : "BLUE"
   }, {
-    "a" : 31,
-    "b" : 32,
+    "a" : 30,
+    "b" : 29,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 7,
+    "b" : 24,
     "owner" : "BLUE"
   }, {
-    "a" : 26,
-    "b" : 27,
+    "a" : 23,
+    "b" : 22,
     "owner" : "BLUE"
   }, {
-    "a" : 2,
-    "b" : 6,
-    "owner" : "BLUE"
-  }, {
-    "a" : 32,
-    "b" : 33,
-    "owner" : "BLUE"
-  }, {
-    "a" : 33,
-    "b" : 34,
-    "owner" : "BLUE"
-  }, {
-    "a" : 3,
-    "b" : 9,
-    "owner" : "RED"
-  }, {
-    "a" : 9,
-    "b" : 8,
-    "owner" : "RED"
-  }, {
-    "a" : 16,
-    "b" : 18,
-    "owner" : "WHITE"
-  }, {
-    "a" : 18,
-    "b" : 38,
-    "owner" : "WHITE"
-  }, {
-    "a" : 22,
-    "b" : 21,
-    "owner" : "RED"
-  }, {
-    "a" : 0,
-    "b" : 5,
-    "owner" : "WHITE"
-  }, {
-    "a" : 31,
-    "b" : 30,
-    "owner" : "BLUE"
-  }, {
-    "a" : 34,
-    "b" : 36,
+    "a" : 24,
+    "b" : 53,
     "owner" : "BLUE"
   }, {
     "a" : 15,
-    "b" : 13,
+    "b" : 35,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 39,
+    "b" : 38,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 38,
+    "b" : 42,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 42,
+    "b" : 40,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 52,
+    "b" : 23,
+    "owner" : "BLUE"
+  }, {
+    "a" : 41,
+    "b" : 40,
+    "owner" : "ORANGE"
+  }, {
+    "a" : 25,
+    "b" : 26,
     "owner" : "WHITE"
   }, {
     "a" : 17,
     "b" : 16,
     "owner" : "WHITE"
   }, {
-    "a" : 24,
-    "b" : 7,
-    "owner" : "BLUE"
-  }, {
-    "a" : 53,
-    "b" : 24,
-    "owner" : "BLUE"
-  }, {
-    "a" : 0,
-    "b" : 1,
-    "owner" : "WHITE"
-  }, {
-    "a" : 42,
-    "b" : 38,
-    "owner" : "WHITE"
-  }, {
-    "a" : 40,
-    "b" : 42,
-    "owner" : "WHITE"
-  }, {
-    "a" : 14,
-    "b" : 34,
-    "owner" : "RED"
-  }, {
-    "a" : 0,
-    "b" : 17,
-    "owner" : "WHITE"
-  }, {
-    "a" : 15,
-    "b" : 35,
-    "owner" : "WHITE"
-  }, {
-    "a" : 35,
-    "b" : 37,
+    "a" : 28,
+    "b" : 27,
     "owner" : "WHITE"
   }, {
     "a" : 41,
-    "b" : 40,
+    "b" : 16,
     "owner" : "WHITE"
   }, {
-    "a" : 20,
-    "b" : 21,
-    "owner" : "RED"
+    "a" : 41,
+    "b" : 43,
+    "owner" : "WHITE"
   }, {
-    "a" : 20,
-    "b" : 19,
-    "owner" : "RED"
+    "a" : 43,
+    "b" : 44,
+    "owner" : "WHITE"
   }, {
-    "a" : 17,
-    "b" : 19,
-    "owner" : "RED"
-  }, {
-    "a" : 23,
-    "b" : 22,
-    "owner" : "RED"
-  }, {
-    "a" : 35,
-    "b" : 39,
+    "a" : 13,
+    "b" : 5,
     "owner" : "WHITE"
   } ],
-  "robber" : 0
+  "robber" : 17
 }
