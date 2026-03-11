@@ -51,7 +51,7 @@ Supports values from `1` to `8192` turns (1 turn = 1 player acting).
 2. Navigate to the **`Catan-Code`** folder.
 3. Locate and run the Demonstrator:
    ```
-   src/CatanSimulatorDomainModel/catanUML/Demonstrator.java
+   src/CatanSimulatorDomainModel/Catan-Code/src-gen/classes/Demonstrator.java
    ```
    - **Eclipse:** Right-click > **Run As** > **Java Application**
    - **IntelliJ:** Click the green **Run** icon next to `main`
@@ -59,12 +59,12 @@ Supports values from `1` to `8192` turns (1 turn = 1 player acting).
 4. When it is your turn, enter one of the supported commands at the console prompt.
 
 ### 3. Running the Visualizer (Python)
-Ensure Python is installed, then follow the instructions in the visualizer README:
+Ensure Python is installed, then follow the instructions in the visualizer README (from src):
 ```bash
-cd assignments/visualize
-python visualize.py --file <path-to-game-state.json>
+cd 2aa4-2026-base/assignments/visualize
+python light_visualizer.py base_map.json state.json
 ```
-For live mode, refer to the `--live` flag documented in the visualizer repo.
+For live mode, refer to the `--watch` flag documented in the visualizer repo.
 
 ---
 
