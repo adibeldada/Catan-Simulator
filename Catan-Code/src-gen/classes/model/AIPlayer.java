@@ -26,7 +26,6 @@ public class AIPlayer extends Player {
             safetyBreak++;
             
             // Note: R2.5 logic for discarding >7 cards is handled in GameMaster, 
-            // but AI still tries to build if it can afford it.
             boolean mustBuild = hand.totalCards() > 7;
             PlayerAction action = decideMove(game, mustBuild);
 

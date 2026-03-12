@@ -169,9 +169,6 @@ public class GameMaster {
         }
     }
 
-    /**
-     * Fixed: System.out replaced with LOGGER.info for Sonar S106 compliance.
-     */
     private void waitForGoCommand(int nextPlayerId) {
         LOGGER.info(() -> String.format("%n[PAUSED] Ready for AI Player %d.", nextPlayerId));
         LOGGER.info("Type 'go' to proceed to the next agent's turn:");

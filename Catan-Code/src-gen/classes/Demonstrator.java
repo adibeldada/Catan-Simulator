@@ -24,6 +24,10 @@ import java.util.logging.Logger;
 public class Demonstrator {
     private static final Logger LOGGER = Logger.getLogger(Demonstrator.class.getName());
 
+    /**
+     * Main entry point for the Catan Simulator Demonstrator.
+     * Sets up logging, reads configuration, performs setup phase, and starts the simulation.
+     */
     public static void main(String[] args) {
         LoggerUtil.setupLogging();
         printWelcomeBanner();
@@ -38,6 +42,9 @@ public class Demonstrator {
         printTerminationBanner();
     }
 
+    /**
+     * Prints a welcome banner to indicate the start of the simulator.
+     */
     private static void printWelcomeBanner() {
         LOGGER.info("╔════════════════════════════════════════════════╗");
         LOGGER.info("║   SETTLERS OF CATAN - SIMULATOR DEMONSTRATOR   ║");
@@ -45,6 +52,9 @@ public class Demonstrator {
         LOGGER.info("");
     }
 
+    /**
+     * Logs the loaded configuration, including maximum turns and rounds.
+     */
     private static void printConfiguration(ConfigReader config) {
         if (LOGGER.isLoggable(Level.INFO)) {
             LOGGER.info("Configuration loaded:");
@@ -54,6 +64,10 @@ public class Demonstrator {
         }
     }
 
+    /**
+     * Performs the initial setup phase for all players, including placing settlements and roads.
+     * Exports the board state to JSON after each placement.
+     */
     private static void performSetupPhase(GameMaster game) {
         List<Player> players = game.getPlayers();
         List<Integer> assignedVertices = new ArrayList<>();
@@ -72,10 +86,13 @@ public class Demonstrator {
         }
         JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
         
-        // FIXED: Removed the unused 'game' argument here
         printStartingResources(players);
     }
 
+    /**
+     * Handles placing the initial settlement and road for a single player in a setup round.
+     * Awards starting resources during the second setup round.
+     */
     private static void placeInitialPieces(Player p, int round, GameMaster game, List<Integer> assigned, Random rand) {
         Vertex startVertex;
         Vertex neighbor;
@@ -103,6 +120,10 @@ public class Demonstrator {
         }
     }
 
+    /**
+     * Prompts a human player to select a valid vertex for placing a settlement.
+     * Ensures the vertex is unoccupied and follows distance rules.
+     */
     private static Vertex handleHumanSettlementPlacement(Player p, int round, GameMaster game, List<Integer> assigned, Scanner scanner) {
         while (true) {
             LOGGER.info(() -> String.format("[Setup Round %d] Player %d, enter Vertex ID for settlement: ", round, p.getId()));
@@ -120,6 +141,10 @@ public class Demonstrator {
         }
     }
 
+    /**
+     * Prompts a human player to select an adjacent vertex for placing a road.
+     * Ensures the road is adjacent to the settlement.
+     */
     private static Vertex handleHumanRoadPlacement(Player p, int round, Vertex startVertex, GameMaster game, Scanner scanner) {
         while (true) {
             LOGGER.info(() -> String.format("[Setup Round %d] Player %d, enter adjacent Vertex ID for road from node %d: ",
@@ -138,6 +163,10 @@ public class Demonstrator {
         }
     }
 
+    /**
+     * Executes placement of a settlement and a road for a player on the board,
+     * updates the player's victory points and adds buildings and roads.
+     */
     private static void executePlacement(Player p, Vertex startVertex, Vertex neighbor, GameMaster game) {
         Settlement s = new Settlement(p);
         s.placeOn(startVertex);
@@ -148,6 +177,10 @@ public class Demonstrator {
         game.getBoard().placeRoad(r);
     }
 
+    /**
+     * Finds a valid vertex for an AI player to place a settlement,
+     * considering distance rules and resource diversity.
+     */
     private static Vertex findValidVertex(Player p, int round, GameMaster game, List<Integer> assigned, Random rand) {
         int attempts = 0;
         while (true) {
@@ -162,6 +195,10 @@ public class Demonstrator {
         }
     }
 
+    /**
+     * Checks if a candidate vertex is valid for settlement placement,
+     * ensuring it is unoccupied and not adjacent to another settlement.
+     */
     private static boolean isValidPlacement(Vertex candidate, List<Integer> assigned, GameMaster game) {
         if (candidate.getAdjacentVertices().isEmpty()) {
             return false;
@@ -175,6 +212,9 @@ public class Demonstrator {
         return true;
     }
 
+    /**
+     * Awards starting resources to a player based on tiles adjacent to their settlement.
+     */
     private static void awardStartingResources(Player p, Vertex vertex, GameMaster game) {
         for (Tile tile : game.getBoard().getTiles()) {
             if (tile.getAdjacentVertices().contains(vertex)) {
@@ -184,7 +224,7 @@ public class Demonstrator {
     }
 
     /**
-     * FIXED: Removed the unused method parameter "game" (Sonar S1172).
+     * Prints the initial resources/cards for all players after setup is complete.
      */
     private static void printStartingResources(List<Player> players) {
         LOGGER.info("");
@@ -196,6 +236,9 @@ public class Demonstrator {
         }
     }
 
+    /**
+     * Checks if placing a settlement on a candidate vertex provides access to a diverse set of essential resources.
+     */
     private static boolean hasEssentialTrio(Player p, Vertex candidate, GameMaster game) {
         if (p.getBuildingsBuilt().isEmpty()) return false;
         
@@ -211,6 +254,9 @@ public class Demonstrator {
         return hasWood && hasBrick && hasWheat && hasOre;
     }
 
+    /**
+     * Returns a list of resources produced by a vertex based on its adjacent tiles.
+     */
     private static List<ResourceType> getProducedResources(Vertex v, GameMaster game) {
         List<ResourceType> resources = new ArrayList<>();
         for (Tile t : game.getBoard().getTiles()) {
@@ -221,6 +267,9 @@ public class Demonstrator {
         return resources;
     }
 
+    /**
+     * Prints a termination banner to indicate the end of the demonstration.
+     */
     private static void printTerminationBanner() {
         LOGGER.info("");
         LOGGER.info("╔════════════════════════════════════════════════╗");
@@ -228,6 +277,9 @@ public class Demonstrator {
         LOGGER.info("╚════════════════════════════════════════════════╝");
     }
 
+    /**
+     * Runs a custom demonstration of the simulation with a specified number of rounds.
+     */
     public static void runCustomDemo(int maxRounds) {
         LoggerUtil.setupLogging();
         GameMaster game = new GameMaster(maxRounds);
