@@ -20,22 +20,25 @@ import java.util.logging.Logger;
 
 /**
  * Demonstrator class for the Catan Simulator.
+ * @author Adib El Dada
  */
 public class Demonstrator {
+    /** The logger instance for recording simulation events **/
     private static final Logger LOGGER = Logger.getLogger(Demonstrator.class.getName());
 
     /**
      * Main entry point for the Catan Simulator Demonstrator.
      * Sets up logging, reads configuration, performs setup phase, and starts the simulation.
+     * @param args Command line arguments (unused)
      */
     public static void main(String[] args) {
         LoggerUtil.setupLogging();
         printWelcomeBanner();
 
-        ConfigReader config = new ConfigReader("config.txt");
+        ConfigReader config = new ConfigReader("config.txt"); // provides game settings from file
         printConfiguration(config);
 
-        GameMaster game = new GameMaster(config.getMaxRounds());
+        GameMaster game = new GameMaster(config.getMaxRounds()); // the controller for the game session
         performSetupPhase(game);
 
         game.startSimulation();
@@ -54,6 +57,7 @@ public class Demonstrator {
 
     /**
      * Logs the loaded configuration, including maximum turns and rounds.
+     * @param config The ConfigReader object containing loaded settings
      */
     private static void printConfiguration(ConfigReader config) {
         if (LOGGER.isLoggable(Level.INFO)) {
@@ -67,20 +71,23 @@ public class Demonstrator {
     /**
      * Performs the initial setup phase for all players, including placing settlements and roads.
      * Exports the board state to JSON after each placement.
+     * @param game The GameMaster object managing the current simulation
      */
     private static void performSetupPhase(GameMaster game) {
-        List<Player> players = game.getPlayers();
-        List<Integer> assignedVertices = new ArrayList<>();
+        List<Player> players = game.getPlayers(); // the list of participants
+        List<Integer> assignedVertices = new ArrayList<>(); // tracks vertices where settlements are placed
         @SuppressWarnings("java:S2245")
-        Random rand = new Random();
+        Random rand = new Random(); // random generator for AI decision making
 
+        // Standard Catan setup: two rounds of initial placements
         for (int setupRound = 1; setupRound <= 2; setupRound++) {
-            final int round = setupRound;
+            final int round = setupRound; // effective final variable for lambda use
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.info(() -> String.format("--- Setup Round %d ---", round));
             }
             for (Player p : players) {
                 placeInitialPieces(p, round, game, assignedVertices, rand);
+                // Update the visualizer state after every move
                 JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
             }
         }
@@ -92,24 +99,31 @@ public class Demonstrator {
     /**
      * Handles placing the initial settlement and road for a single player in a setup round.
      * Awards starting resources during the second setup round.
+     * @param p The player placing pieces
+     * @param round The current setup round (1 or 2)
+     * @param game The game master controller
+     * @param assigned The list of vertex IDs already occupied
+     * @param rand Random generator for AI logic
      */
     private static void placeInitialPieces(Player p, int round, GameMaster game, List<Integer> assigned, Random rand) {
-        Vertex startVertex;
-        Vertex neighbor;
+        Vertex startVertex; // the vertex chosen for the settlement
+        Vertex neighbor; // the target vertex for the road connection
 
+        // Check if the player is controlled by a human or AI
         if (p instanceof classes.model.HumanPlayer) {
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in); // input reader for human choices
             startVertex = handleHumanSettlementPlacement(p, round, game, assigned, scanner);
             assigned.add(startVertex.getId());
             neighbor = handleHumanRoadPlacement(p, round, startVertex, game, scanner);
         } else {
             startVertex = findValidVertex(p, round, game, assigned, rand);
             assigned.add(startVertex.getId());
-            neighbor = startVertex.getAdjacentVertices().get(0);
+            neighbor = startVertex.getAdjacentVertices().get(0); // AI defaults to the first valid neighbor
         }
 
         executePlacement(p, startVertex, neighbor, game);
 
+        // In round 2, players receive resources from tiles adjacent to their settlement
         if (round == 2) {
             awardStartingResources(p, startVertex, game);
         }
@@ -123,13 +137,19 @@ public class Demonstrator {
     /**
      * Prompts a human player to select a valid vertex for placing a settlement.
      * Ensures the vertex is unoccupied and follows distance rules.
+     * @param p The human player
+     * @param round The current setup round
+     * @param game The game master controller
+     * @param assigned The list of occupied vertex IDs
+     * @param scanner The scanner for user input
+     * @return The chosen valid Vertex
      */
     private static Vertex handleHumanSettlementPlacement(Player p, int round, GameMaster game, List<Integer> assigned, Scanner scanner) {
         while (true) {
             LOGGER.info(() -> String.format("[Setup Round %d] Player %d, enter Vertex ID for settlement: ", round, p.getId()));
             try {
-                int vertexId = Integer.parseInt(scanner.nextLine());
-                Vertex startVertex = game.getBoard().getVertex(vertexId);
+                int vertexId = Integer.parseInt(scanner.nextLine()); // the raw ID input from user
+                Vertex startVertex = game.getBoard().getVertex(vertexId); // the corresponding vertex object
 
                 if (startVertex != null && isValidPlacement(startVertex, assigned, game)) {
                     return startVertex;
@@ -144,14 +164,20 @@ public class Demonstrator {
     /**
      * Prompts a human player to select an adjacent vertex for placing a road.
      * Ensures the road is adjacent to the settlement.
+     * @param p The human player
+     * @param round The current setup round
+     * @param startVertex The settlement vertex from which the road starts
+     * @param game The game master controller
+     * @param scanner The scanner for user input
+     * @return The chosen neighbor Vertex
      */
     private static Vertex handleHumanRoadPlacement(Player p, int round, Vertex startVertex, GameMaster game, Scanner scanner) {
         while (true) {
             LOGGER.info(() -> String.format("[Setup Round %d] Player %d, enter adjacent Vertex ID for road from node %d: ",
                     round, p.getId(), startVertex.getId()));
             try {
-                int neighborId = Integer.parseInt(scanner.nextLine());
-                Vertex neighbor = game.getBoard().getVertex(neighborId);
+                int neighborId = Integer.parseInt(scanner.nextLine()); // the raw ID input for road target
+                Vertex neighbor = game.getBoard().getVertex(neighborId); // the corresponding neighbor vertex object
 
                 if (neighbor != null && startVertex.getAdjacentVertices().contains(neighbor)) {
                     return neighbor;
@@ -166,13 +192,17 @@ public class Demonstrator {
     /**
      * Executes placement of a settlement and a road for a player on the board,
      * updates the player's victory points and adds buildings and roads.
+     * @param p The player placing pieces
+     * @param startVertex The vertex for the settlement
+     * @param neighbor The vertex for the road end-point
+     * @param game The game master controller
      */
     private static void executePlacement(Player p, Vertex startVertex, Vertex neighbor, GameMaster game) {
-        Settlement s = new Settlement(p);
+        Settlement s = new Settlement(p); // the settlement object to be placed
         s.placeOn(startVertex);
         p.addBuilding(s);
         p.addVictoryPoints(1);
-        Road r = new Road(p, startVertex, neighbor);
+        Road r = new Road(p, startVertex, neighbor); // the road object to be placed
         p.addRoad(r);
         game.getBoard().placeRoad(r);
     }
@@ -180,14 +210,21 @@ public class Demonstrator {
     /**
      * Finds a valid vertex for an AI player to place a settlement,
      * considering distance rules and resource diversity.
+     * @param p The AI player
+     * @param round The current setup round
+     * @param game The game master controller
+     * @param assigned The list of occupied vertex IDs
+     * @param rand Random generator for selection
+     * @return A valid Vertex for placement
      */
     private static Vertex findValidVertex(Player p, int round, GameMaster game, List<Integer> assigned, Random rand) {
-        int attempts = 0;
+        int attempts = 0; // counter to prevent infinite loops in constrained boards
         while (true) {
             attempts++;
-            int randomIndex = rand.nextInt(54);
-            Vertex candidate = game.getBoard().getVertex(randomIndex);
+            int randomIndex = rand.nextInt(54); // standard Catan board has 54 vertices
+            Vertex candidate = game.getBoard().getVertex(randomIndex); // the vertex being evaluated
 
+            // Logic: Must be valid, and in Round 2, try to get a diverse resource set (Essential Trio)
             if (isValidPlacement(candidate, assigned, game) &&
                 (round == 1 || hasEssentialTrio(p, candidate, game) || attempts > 200)) {
                 return candidate;
@@ -198,13 +235,18 @@ public class Demonstrator {
     /**
      * Checks if a candidate vertex is valid for settlement placement,
      * ensuring it is unoccupied and not adjacent to another settlement.
+     * @param candidate The vertex being checked
+     * @param assigned The list of currently occupied vertex IDs
+     * @param game The game master controller
+     * @return True if placement is valid, false otherwise
      */
     private static boolean isValidPlacement(Vertex candidate, List<Integer> assigned, GameMaster game) {
         if (candidate.getAdjacentVertices().isEmpty()) {
             return false;
         }
         for (int occupiedId : assigned) {
-            Vertex occupied = game.getBoard().getVertex(occupiedId);
+            Vertex occupied = game.getBoard().getVertex(occupiedId); // an existing settlement vertex
+            // Enforce Distance Rule: No settlement can be on or adjacent to another settlement
             if (candidate == occupied || candidate.getAdjacentVertices().contains(occupied)) {
                 return false;
             }
@@ -214,6 +256,9 @@ public class Demonstrator {
 
     /**
      * Awards starting resources to a player based on tiles adjacent to their settlement.
+     * @param p The player receiving resources
+     * @param vertex The vertex where the settlement was placed
+     * @param game The game master controller
      */
     private static void awardStartingResources(Player p, Vertex vertex, GameMaster game) {
         for (Tile tile : game.getBoard().getTiles()) {
@@ -225,6 +270,7 @@ public class Demonstrator {
 
     /**
      * Prints the initial resources/cards for all players after setup is complete.
+     * @param players The list of players in the game
      */
     private static void printStartingResources(List<Player> players) {
         LOGGER.info("");
@@ -238,14 +284,19 @@ public class Demonstrator {
 
     /**
      * Checks if placing a settlement on a candidate vertex provides access to a diverse set of essential resources.
+     * @param p The player whose resources are being checked
+     * @param candidate The vertex being considered for the second settlement
+     * @param game The game master controller
+     * @return True if the combination of settlements provides Wood, Brick, Wheat, and Ore
      */
     private static boolean hasEssentialTrio(Player p, Vertex candidate, GameMaster game) {
         if (p.getBuildingsBuilt().isEmpty()) return false;
         
-        Vertex firstVertex = p.getBuildingsBuilt().get(0).getLocation();
-        List<ResourceType> current = getProducedResources(firstVertex, game);
-        List<ResourceType> potential = getProducedResources(candidate, game);
+        Vertex firstVertex = p.getBuildingsBuilt().get(0).getLocation(); // the first settlement placed
+        List<ResourceType> current = getProducedResources(firstVertex, game); // resources from first settlement
+        List<ResourceType> potential = getProducedResources(candidate, game); // resources from second settlement
 
+        // Check for the "Essential Trio" (and Ore) to ensure a strong start
         boolean hasWood = current.contains(ResourceType.WOOD) || potential.contains(ResourceType.WOOD);
         boolean hasBrick = current.contains(ResourceType.BRICK) || potential.contains(ResourceType.BRICK);
         boolean hasWheat = current.contains(ResourceType.WHEAT) || potential.contains(ResourceType.WHEAT);
@@ -256,9 +307,12 @@ public class Demonstrator {
 
     /**
      * Returns a list of resources produced by a vertex based on its adjacent tiles.
+     * @param v The vertex to check
+     * @param game The game master controller
+     * @return A list of ResourceType available at this vertex
      */
     private static List<ResourceType> getProducedResources(Vertex v, GameMaster game) {
-        List<ResourceType> resources = new ArrayList<>();
+        List<ResourceType> resources = new ArrayList<>(); // accumulator for found resources
         for (Tile t : game.getBoard().getTiles()) {
             if (t.getAdjacentVertices().contains(v)) {
                 resources.add(t.getResourceType());
@@ -279,10 +333,11 @@ public class Demonstrator {
 
     /**
      * Runs a custom demonstration of the simulation with a specified number of rounds.
+     * @param maxRounds The maximum number of rounds to simulate
      */
     public static void runCustomDemo(int maxRounds) {
         LoggerUtil.setupLogging();
-        GameMaster game = new GameMaster(maxRounds);
+        GameMaster game = new GameMaster(maxRounds); // custom game instance
         game.startSimulation();
     }
 }
