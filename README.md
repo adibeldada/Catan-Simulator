@@ -8,7 +8,7 @@ This project extends the Assignment 1 Java-based Catan simulator with human play
 ## New Features in Assignment 2
 
 ### Human Player (R2.1 – R2.4)
-- A human player replaces one of the computer agents and interacts via the command line on their turn.
+- A human player replaces one of the computer agents and interacts via the command line on their turn. Can add players by going through GameMaster.java class (Lines 36-41)
 - The following commands are supported:
 
 | Command | Description |
