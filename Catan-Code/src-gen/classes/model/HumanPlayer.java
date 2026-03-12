@@ -83,7 +83,12 @@ public class HumanPlayer extends Player {
     private PlayerAction parseGameAction(String action, String[] cmd, GameMaster game) {
         switch (action) {
             case "GO":
-                return hasRolled ? new PassAction(this) : null;
+            	if (hasRolled) {
+                    return new PassAction(this);
+                } else {
+                    LOGGER.warning("Error: You cannot end your turn without rolling first!");
+                    return null; 
+                }
 
             case "SETTLE":
                 return handleSettle(cmd, game);
