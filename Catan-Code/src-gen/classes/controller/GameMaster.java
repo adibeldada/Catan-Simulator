@@ -1,6 +1,7 @@
 package classes.controller;
 
 import classes.model.*;
+import classes.moves.PlayerAction;
 import classes.util.Dice;
 import classes.util.RuleValidator;
 import classes.util.LoggerUtil;
@@ -12,6 +13,9 @@ import java.util.logging.Logger;
 /**
  * Main controller for the Catan simulation.
  * Handles turn order, game loops, and resource distribution.
+ *
+ * R3.1: Holds a CommandManager (Invoker) so that build actions executed
+ * through it are recorded and can be undone or redone within a turn.
  */
 public class GameMaster {
     private static final Logger LOGGER = Logger.getLogger(GameMaster.class.getName());
@@ -24,23 +28,26 @@ public class GameMaster {
     private static final int MAX_VICTORY_POINTS = 10;
     private final Scanner scanner = new Scanner(System.in);
 
+    /** R3.1: The Invoker that records executed actions for undo/redo. */
+    private final CommandManager commandManager = new CommandManager();
+
     public GameMaster(int maxRounds) {
-        LoggerUtil.setupLogging(); 
+        LoggerUtil.setupLogging();
         this.board = new Board();
         this.players = new ArrayList<>();
         this.dice = new Dice();
         this.ruleValidator = new RuleValidator(board);
         this.currentRound = 0;
         this.maxRounds = Math.min(maxRounds, 8192);
-        
+
         board.initializeDefaultMap();
-        players.add(new HumanPlayer(1)); 
+        players.add(new HumanPlayer(1));
 
         for (int i = 2; i <= 4; i++) {
             players.add(new AIPlayer(i));
         }
     }
-    
+
     public void startSimulation() {
         LOGGER.info("=== Starting Catan Simulation ===");
         boolean hasHumanPlayer = players.stream().anyMatch(HumanPlayer.class::isInstance);
@@ -48,9 +55,9 @@ public class GameMaster {
         while (currentRound < maxRounds) {
             currentRound++;
             LOGGER.info(() -> String.format("--- Round %d ---", currentRound));
-            
+
             if (hasHumanPlayer) {
-                runRound(); 
+                runRound();
             } else {
                 players.forEach(this::runTurn);
                 printRoundSummary();
@@ -78,14 +85,45 @@ public class GameMaster {
     }
 
     public void runTurn(Player player) {
+        // R3.1: Clear undo/redo history at the start of each turn so that
+        // undo cannot reach back into a previous player's turn.
+        commandManager.clearHistory();
         player.takeTurn(this);
         JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
+    }
+
+    /**
+     * R3.1: Executes a build action through the CommandManager so it is
+     * recorded on the undo stack. All HumanPlayer build actions must go
+     * through this method instead of calling action.execute() directly.
+     *
+     * @param action The build action to execute and record
+     */
+    public void executeAction(PlayerAction action) {
+        commandManager.executeCommand(action, this);
+        JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
+    }
+
+    public boolean undoLastAction() {
+        boolean result = commandManager.undo(this);
+        if (result) {
+            JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
+        }
+        return result;
+    }
+
+    public boolean redoLastAction() {
+        boolean result = commandManager.redo(this);
+        if (result) {
+            JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
+        }
+        return result;
     }
 
     public void rollAndDistribute(Player roller) {
         int roll = dice.roll();
         logAction(roller, "rolled " + roll);
-        
+
         if (roll == 7) {
             handleRobberAction(roller);
         } else {
@@ -117,7 +155,7 @@ public class GameMaster {
     private Tile moveRobber() {
         List<Tile> potentialTiles = new ArrayList<>(board.getTiles());
         potentialTiles.remove(board.getRobber().getCurrentTile());
-        
+
         Tile newTile = potentialTiles.get(new Random().nextInt(potentialTiles.size()));
         board.getRobber().moveTo(newTile);
 
@@ -141,7 +179,7 @@ public class GameMaster {
         List<Player> victimList = new ArrayList<>(qualifyingPlayers);
         Player victim = victimList.get(new Random().nextInt(victimList.size()));
         ResourceType stolen = victim.getHand().removeRandomCard();
-        
+
         if (stolen != null) {
             roller.collectResource(stolen, 1);
             logAction(roller, "stole a card from Player " + victim.getId());
@@ -195,8 +233,8 @@ public class GameMaster {
     public void printRoundSummary() {
         LOGGER.info("Summary:");
         for (Player player : players) {
-            LOGGER.info(() -> String.format("  Player %d: %d VP | %s", 
-                player.getId(), player.getVictoryPoints(), player.getHand().toString()));
+            LOGGER.info(() -> String.format("  Player %d: %d VP | %s",
+                    player.getId(), player.getVictoryPoints(), player.getHand().toString()));
         }
         LOGGER.info("");
     }
@@ -213,4 +251,5 @@ public class GameMaster {
     public List<Player> getPlayers() { return players; }
     public RuleValidator getRuleValidator() { return ruleValidator; }
     public int getCurrentRound() { return currentRound; }
+    public CommandManager getCommandManager() { return commandManager; }
 }

@@ -2,22 +2,26 @@ package classes.moves;
 
 import classes.model.*;
 import classes.controller.GameMaster;
+
 /**
  * Represents the action of building a settlement.
- * 
+ *
  * Cost: 1 wood, 1 brick, 1 wheat, 1 sheep
  * Effect: Creates a settlement at a vertex
  * Victory Points: +1
- * 
- * The settlement is added to both the vertex and the player's collection.
+ *
+ * Command pattern (R3.1): execute() places the settlement;
+ * undo() removes it and refunds resources.
  */
 public class BuildSettlementAction extends PlayerAction {
     private Vertex location;
+    /** The settlement object created during execute(), needed for undo(). */
+    private Settlement placedSettlement;
 
     /**
-     * Constructs a BuildSettlementMove.
-     * 
-     * @param player The player building the settlement
+     * Constructs a BuildSettlementAction.
+     *
+     * @param player   The player building the settlement
      * @param location The vertex where the settlement will be placed
      */
     public BuildSettlementAction(Player player, Vertex location) {
@@ -27,42 +31,60 @@ public class BuildSettlementAction extends PlayerAction {
 
     /**
      * Executes the settlement building action.
-     * 
+     *
      * Steps:
      * 1. Deduct resources (1 wood, 1 brick, 1 wheat, 1 sheep)
-     * 2. Create the settlement object
-     * 3. Place settlement on vertex
-     * 4. Add settlement to player's collection
-     * 5. Award 1 victory point
-     * 6. Log the action
+     * 2. Create and place the settlement on the vertex
+     * 3. Add settlement to player's collection
+     * 4. Award 1 victory point
+     * 5. Log the action
      */
     @Override
     public void execute(GameMaster game) {
-        // Deduct resources
         player.spendResources(Cost.settlementCost());
 
-        // Create and place settlement
-        Settlement settlement = new Settlement(player);
-        settlement.placeOn(location);
-        player.addBuilding(settlement);
+        placedSettlement = new Settlement(player);
+        placedSettlement.placeOn(location);
+        player.addBuilding(placedSettlement);
+        player.addVictoryPoints(placedSettlement.getVictoryPoints());
 
-        // Award victory points
-        player.addVictoryPoints(settlement.getVictoryPoints());
-        
-        // Log the action (R1.7)
         game.logAction(player, describe());
     }
 
     /**
-     * Returns a description of this move for logging.
-     * 
-     * @return Human-readable description
+     * Undoes the settlement building action (R3.1).
+     *
+     * Reverses every change made by execute():
+     * 1. Remove the settlement from the vertex
+     * 2. Remove settlement from player's collection
+     * 3. Deduct 1 victory point
+     * 4. Refund resources (1 wood, 1 brick, 1 wheat, 1 sheep)
+     * 5. Log the undo
      */
+    @Override
+    public void undo(GameMaster game) {
+        // Remove the building from the vertex
+        location.setBuilding(null);
+
+        // Remove from player's collection
+        player.getBuildingsBuilt().remove(placedSettlement);
+
+        // Reverse the victory point award
+        player.addVictoryPoints(-placedSettlement.getVictoryPoints());
+
+        // Refund resources
+        player.collectResource(classes.enums.ResourceType.WOOD,  1);
+        player.collectResource(classes.enums.ResourceType.BRICK, 1);
+        player.collectResource(classes.enums.ResourceType.WHEAT, 1);
+        player.collectResource(classes.enums.ResourceType.SHEEP, 1);
+
+        game.logAction(player, "Undid: " + describe());
+    }
+
     @Override
     public String describe() {
         return String.format("Built settlement at vertex %d", location.getId());
     }
 
-    // Getter
     public Vertex getLocation() { return location; }
 }

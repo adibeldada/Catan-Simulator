@@ -2,43 +2,34 @@ package classes.moves;
 
 import classes.model.Player;
 import classes.controller.GameMaster;
-/*import classes.epresents passing without taking an action.
- * 
- * Cost: None
+
+/**
+ * Represents passing without taking an action.
+ *
+ * Cost:   None
  * Effect: Player takes no action this turn
- * 
- * This move is selected when:
- * - Player cannot afford any buildings
- * - Player chooses not to build (random decision)
- * - No valid moves are available
+ *
+ * Command pattern (R3.1): undo() is a no-op because passing changes no game state.
  */
 public class PassAction extends PlayerAction {
 
-    /**
-     * Constructs a PassMove.
-     * 
-     * @param player The player passing their turn
-     */
     public PassAction(Player player) {
         super(player);
     }
 
-    /**
-     * Executes the pass action.
-     * No game state changes occur.
-     * Only logs that the player passed.
-     */
     @Override
     public void execute(GameMaster game) {
-        // No action taken
         game.logAction(player, describe());
     }
 
     /**
-     * Returns a description of this move for logging.
-     * 
-     * @return Human-readable description
+     * Undoing a pass is a no-op — it changes no game state.
      */
+    @Override
+    public void undo(GameMaster game) {
+        // Nothing to reverse for a pass
+    }
+
     @Override
     public String describe() {
         return "Passed turn";
