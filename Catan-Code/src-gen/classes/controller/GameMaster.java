@@ -41,9 +41,12 @@ public class GameMaster {
         this.maxRounds = Math.min(maxRounds, 8192);
 
         board.initializeDefaultMap();
-        players.add(new HumanPlayer(1));
 
-        for (int i = 2; i <= 4; i++) {
+        // To run with a human player, uncomment the line below
+        // and change the loop to start at i = 2
+        //players.add(new HumanPlayer(1));
+
+        for (int i = 1; i <= 4; i++) {
             players.add(new AIPlayer(i));
         }
     }
@@ -101,23 +104,24 @@ public class GameMaster {
      */
     public void executeAction(PlayerAction action) {
         commandManager.executeCommand(action, this);
-        JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
     }
 
+    /**
+     * R3.1: Undoes the last build action within the current turn.
+     *
+     * @return true if an action was successfully undone
+     */
     public boolean undoLastAction() {
-        boolean result = commandManager.undo(this);
-        if (result) {
-            JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
-        }
-        return result;
+        return commandManager.undo(this);
     }
 
+    /**
+     * R3.1: Redoes the last undone build action within the current turn.
+     *
+     * @return true if an action was successfully redone
+     */
     public boolean redoLastAction() {
-        boolean result = commandManager.redo(this);
-        if (result) {
-            JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
-        }
-        return result;
+        return commandManager.redo(this);
     }
 
     public void rollAndDistribute(Player roller) {
