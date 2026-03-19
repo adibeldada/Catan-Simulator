@@ -35,6 +35,7 @@ public class HumanPlayer extends Player {
         while (turnActive) {
             PlayerAction action = decideMove(game, false);
             if (action instanceof PassAction) {
+            	game.executeAction(action);
                 turnActive = false;
             } else if (action != null) {
                 // R3.1: Route through CommandManager so the action is recorded

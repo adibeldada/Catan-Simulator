@@ -44,9 +44,9 @@ public class GameMaster {
 
         // To run with a human player, uncomment the line below
         // and change the loop to start at i = 2
-        //players.add(new HumanPlayer(1));
+        players.add(new HumanPlayer(1));
 
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 2; i <= 4; i++) {
             players.add(new AIPlayer(i));
         }
     }
