@@ -1026,7 +1026,11 @@
         </ownedOperation>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_GCMtwBsjEfGmVqx7S1jwyQ" name="AIPlayer">
-        <generalization xmi:type="uml:Generalization" xmi:id="_UH7jQBssEfGmVqx7S1jwyQ" general="_G1_hYP4HEfCOd8UCBhMXvw"/>
+        <generalization xmi:type="uml:Generalization" xmi:id="_u8EP4CNKEfGBfKT8qbQ1rg" general="_1T_QsCNJEfGBfKT8qbQ1rg"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_ljO7cCNOEfGBfKT8qbQ1rg" name="scoredaction" type="_KxcJYCNNEfGBfKT8qbQ1rg" aggregation="composite" association="_ljL4ICNOEfGBfKT8qbQ1rg">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_pY8owCNOEfGBfKT8qbQ1rg" name="LiteralInteger1" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_pY924CNOEfGBfKT8qbQ1rg" name="LiteralUnlimitedNatural1" value="1"/>
+        </ownedAttribute>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_u_KTIBsmEfGmVqx7S1jwyQ" name="checkBankTrade" visibility="private">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_YY-7ABsnEfGmVqx7S1jwyQ" name="" type="_bOG_IP4JEfCOd8UCBhMXvw" direction="return"/>
         </ownedOperation>
@@ -1039,6 +1043,14 @@
         </ownedOperation>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_2smf8BsmEfGmVqx7S1jwyQ" name="takeTurn" visibility="public">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_lntmIBsnEfGmVqx7S1jwyQ" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_86VhkCNKEfGBfKT8qbQ1rg" name="resolveConstraint" visibility="protected">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_86VhkSNKEfGBfKT8qbQ1rg" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_86VhkiNKEfGBfKT8qbQ1rg" name="" type="_bOG_IP4JEfCOd8UCBhMXvw" direction="return"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_86WIoCNKEfGBfKT8qbQ1rg" name="pickBestValueMove" visibility="protected">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_86WIoSNKEfGBfKT8qbQ1rg" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_86WIoiNKEfGBfKT8qbQ1rg" name="" type="_bOG_IP4JEfCOd8UCBhMXvw" direction="return"/>
         </ownedOperation>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_ZJwbMBsoEfGmVqx7S1jwyQ" name="HumanPlayer">
@@ -1133,6 +1145,38 @@
         </ownedOperation>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_hVllYCNFEfGBfKT8qbQ1rg" name="clearHistory"/>
       </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_1T_QsCNJEfGBfKT8qbQ1rg" name="RuleBasedAIPlayer">
+        <generalization xmi:type="uml:Generalization" xmi:id="_zJOM0CNKEfGBfKT8qbQ1rg" general="_G1_hYP4HEfCOd8UCBhMXvw"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_9mB_YCNJEfGBfKT8qbQ1rg" name="RuleBasedAIPlayer" visibility="protected">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ai1uwCNKEfGBfKT8qbQ1rg" name="id">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+          </ownedParameter>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_DSEVICNKEfGBfKT8qbQ1rg" name="takeTurn" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ii9nACNKEfGBfKT8qbQ1rg" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_LB5uoCNKEfGBfKT8qbQ1rg" name="resolveConstraint" visibility="protected" isAbstract="true">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_LB5uoSNKEfGBfKT8qbQ1rg" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_OGjLYCNKEfGBfKT8qbQ1rg" name="" type="_bOG_IP4JEfCOd8UCBhMXvw" direction="return"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SnrNMCNKEfGBfKT8qbQ1rg" name="pickBestValueMove" visibility="protected" isAbstract="true">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_SnrNMSNKEfGBfKT8qbQ1rg" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_SnrNMiNKEfGBfKT8qbQ1rg" name="" type="_bOG_IP4JEfCOd8UCBhMXvw" direction="return"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_VEHacCNKEfGBfKT8qbQ1rg" name="decideMove" visibility="protected">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_VEHacSNKEfGBfKT8qbQ1rg" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_VEHaciNKEfGBfKT8qbQ1rg" name="" type="_bOG_IP4JEfCOd8UCBhMXvw" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_YN85MCNKEfGBfKT8qbQ1rg" name="mustBuild">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+          </ownedParameter>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_KxcJYCNNEfGBfKT8qbQ1rg" name="ScoredAction">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_YmgbwCNNEfGBfKT8qbQ1rg" name="action" visibility="private" type="_bOG_IP4JEfCOd8UCBhMXvw"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_diqzwCNNEfGBfKT8qbQ1rg" name="value" visibility="private">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+        </ownedAttribute>
+      </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_GawBkBssEfGmVqx7S1jwyQ" memberEnd="_Ga0TABssEfGmVqx7S1jwyQ _Ga1hIhssEfGmVqx7S1jwyQ">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GazE4BssEfGmVqx7S1jwyQ" source="org.eclipse.papyrus">
@@ -1151,6 +1195,12 @@
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__mFvcCNFEfGBfKT8qbQ1rg" key="nature" value="UML_Nature"/>
       </eAnnotations>
       <ownedEnd xmi:type="uml:Property" xmi:id="__mIywCNFEfGBfKT8qbQ1rg" name="gamemaster" type="_IJB2kP4HEfCOd8UCBhMXvw" association="__mCsICNFEfGBfKT8qbQ1rg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_ljL4ICNOEfGBfKT8qbQ1rg" memberEnd="_ljO7cCNOEfGBfKT8qbQ1rg _ljRXsCNOEfGBfKT8qbQ1rg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ljOUYCNOEfGBfKT8qbQ1rg" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ljOUYSNOEfGBfKT8qbQ1rg" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_ljRXsCNOEfGBfKT8qbQ1rg" name="aiplayer" type="_GCMtwBsjEfGmVqx7S1jwyQ" association="_ljL4ICNOEfGBfKT8qbQ1rg"/>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_S4gAUP_QEfCPDcBx7W850w">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S4s0oP_QEfCPDcBx7W850w" source="http://www.eclipse.org/uml2/2.0.0/UML">
