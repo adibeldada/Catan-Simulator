@@ -29,6 +29,11 @@ public class PassAction extends PlayerAction {
     public void undo(GameMaster game) {
         // Nothing to reverse for a pass
     }
+    
+    @Override
+    public double accept(ActionVisitor visitor) {
+        return visitor.visit(this);
+    }
 
     @Override
     public String describe() {

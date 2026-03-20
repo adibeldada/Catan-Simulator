@@ -62,6 +62,14 @@ public abstract class PlayerAction {
      * @return Description of the action
      */
     public abstract String describe();
+    
+    /**
+     * Accepts a visitor for value evaluation (R3.2).
+     *
+     * @param visitor The visitor evaluating this action
+     * @return The evaluated value of this action
+     */
+    public abstract double accept(ActionVisitor visitor);
 
     /**
      * Gets the player making this action.

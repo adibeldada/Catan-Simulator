@@ -63,6 +63,11 @@ public class RollAction extends PlayerAction {
         game.getBoard().getRobber().moveTo(robberTileBefore);
         game.logAction(player, "Undid: " + describe());
     }
+    
+    @Override
+    public double accept(ActionVisitor visitor) {
+        return 0.0;
+    }
 
     @Override
     public String describe() {

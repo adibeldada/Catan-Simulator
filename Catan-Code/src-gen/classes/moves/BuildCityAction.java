@@ -86,6 +86,11 @@ public class BuildCityAction extends PlayerAction {
 
         game.logAction(player, "Undid: " + describe());
     }
+    
+    @Override
+    public double accept(ActionVisitor visitor) {
+        return visitor.visit(this);
+    }
 
     @Override
     public String describe() {

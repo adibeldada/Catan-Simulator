@@ -50,6 +50,11 @@ public class BuildSettlementAction extends PlayerAction {
 
         game.logAction(player, describe());
     }
+    
+    @Override
+    public double accept(ActionVisitor visitor) {
+        return visitor.visit(this);
+    }
 
     /**
      * Undoes the settlement building action (R3.1).
