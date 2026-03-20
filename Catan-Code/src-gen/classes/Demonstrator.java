@@ -4,6 +4,7 @@ import classes.controller.GameMaster;
 import classes.util.ConfigReader;
 import classes.util.LoggerUtil;
 import classes.model.Player;
+import classes.model.Buildings;
 import classes.enums.ResourceType;
 import classes.model.Road;
 import classes.model.Settlement;
@@ -72,6 +73,7 @@ public class Demonstrator {
     /**
      * Performs the initial setup phase for all players, including placing settlements and roads.
      * Exports the board state to JSON after each placement.
+     * Supports undo/redo for human players during setup.
      * @param game The GameMaster object managing the current simulation
      */
     private static void performSetupPhase(GameMaster game) {
@@ -100,6 +102,7 @@ public class Demonstrator {
     /**
      * Handles placing the initial settlement and road for a single player in a setup round.
      * Awards starting resources during the second setup round.
+     * For human players, supports undo after settlement and road placement.
      * @param p The player placing pieces
      * @param round The current setup round (1 or 2)
      * @param game The game master controller
@@ -113,25 +116,84 @@ public class Demonstrator {
         // Check if the player is controlled by a human or AI
         if (p instanceof classes.model.HumanPlayer) {
             Scanner scanner = new Scanner(System.in); // input reader for human choices
-            startVertex = handleHumanSettlementPlacement(p, round, game, assigned, scanner);
-            assigned.add(startVertex.getId());
-            neighbor = handleHumanRoadPlacement(p, round, startVertex, game, scanner);
+
+            // Keep looping until the human confirms both placements
+            while (true) {
+                // Step 1: Place settlement
+                startVertex = handleHumanSettlementPlacement(p, round, game, assigned, scanner);
+                Settlement s = new Settlement(p);
+                s.placeOn(startVertex);
+                p.addBuilding(s);
+                p.addVictoryPoints(1);
+                JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
+                LOGGER.info("Settlement placed at vertex " + startVertex.getId() + ". Type 'undo' to redo, or press Enter to place road:");
+                String confirmSettle = scanner.nextLine().trim();
+
+                if (confirmSettle.equalsIgnoreCase("undo")) {
+                    // Undo the settlement placement
+                    startVertex.setBuilding(null);
+                    p.getBuildingsBuilt().remove(s);
+                    p.addVictoryPoints(-1);
+                    JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
+                    LOGGER.info("Settlement undone. Please choose again.");
+                    continue; // restart the loop
+                }
+
+                // Step 2: Place road
+                neighbor = handleHumanRoadPlacement(p, round, startVertex, game, scanner);
+                Road r = new Road(p, startVertex, neighbor);
+                p.addRoad(r);
+                game.getBoard().placeRoad(r);
+                JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
+                LOGGER.info("Road placed from vertex " + startVertex.getId() + " to vertex " + neighbor.getId() + ". Type 'undo' to redo road, or press Enter to confirm:");
+                String confirmRoad = scanner.nextLine().trim();
+
+                if (confirmRoad.equalsIgnoreCase("undo")) {
+                    // Undo the road placement only — go back to road selection
+                    game.getBoard().getRoads().remove(r);
+                    p.getRoadsBuilt().remove(r);
+                    JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
+                    LOGGER.info("Road undone. Please choose road again.");
+                    // Re-place road only
+                    neighbor = handleHumanRoadPlacement(p, round, startVertex, game, scanner);
+                    r = new Road(p, startVertex, neighbor);
+                    p.addRoad(r);
+                    game.getBoard().placeRoad(r);
+                    JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
+                }
+
+                // Both placements confirmed
+                assigned.add(startVertex.getId());
+
+                // In round 2, players receive resources from tiles adjacent to their settlement
+                if (round == 2) {
+                    awardStartingResources(p, startVertex, game);
+                }
+
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    game.logAction(p, String.format("Placed initial settlement at vertex %d and road to vertex %d (Setup Round %d)",
+                            startVertex.getId(), neighbor.getId(), round));
+                }
+                break; // exit the while loop — placements confirmed
+            }
+
         } else {
+            // AI placement — no undo needed
             startVertex = findValidVertex(p, round, game, assigned, rand);
             assigned.add(startVertex.getId());
             neighbor = startVertex.getAdjacentVertices().get(0); // AI defaults to the first valid neighbor
-        }
 
-        executePlacement(p, startVertex, neighbor, game);
+            executePlacement(p, startVertex, neighbor, game);
 
-        // In round 2, players receive resources from tiles adjacent to their settlement
-        if (round == 2) {
-            awardStartingResources(p, startVertex, game);
-        }
+            // In round 2, players receive resources from tiles adjacent to their settlement
+            if (round == 2) {
+                awardStartingResources(p, startVertex, game);
+            }
 
-        if (LOGGER.isLoggable(Level.INFO)) {
-            game.logAction(p, String.format("Placed initial settlement at vertex %d and road to vertex %d (Setup Round %d)",
-                    startVertex.getId(), neighbor.getId(), round));
+            if (LOGGER.isLoggable(Level.INFO)) {
+                game.logAction(p, String.format("Placed initial settlement at vertex %d and road to vertex %d (Setup Round %d)",
+                        startVertex.getId(), neighbor.getId(), round));
+            }
         }
     }
 
@@ -193,6 +255,7 @@ public class Demonstrator {
     /**
      * Executes placement of a settlement and a road for a player on the board,
      * updates the player's victory points and adds buildings and roads.
+     * Used for AI players only — human players use the undo-aware flow in placeInitialPieces.
      * @param p The player placing pieces
      * @param startVertex The vertex for the settlement
      * @param neighbor The vertex for the road end-point
