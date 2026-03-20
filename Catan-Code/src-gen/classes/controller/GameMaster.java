@@ -31,7 +31,15 @@ public class GameMaster {
     /** R3.1: The Invoker that records executed actions for undo/redo. */
     private final CommandManager commandManager = new CommandManager();
 
-    public GameMaster(int maxRounds) {
+    /**
+     * Constructs a GameMaster with player configuration read from config file.
+     * Players are created based on the config entries instead of being hardcoded.
+     *
+     * @param maxRounds     The maximum number of rounds to simulate
+     * @param playerConfigs List of player config entries from ConfigReader,
+     *                      each entry is a String array: [id, type]
+     */
+    public GameMaster(int maxRounds, List<String[]> playerConfigs) {
         LoggerUtil.setupLogging();
         this.board = new Board();
         this.players = new ArrayList<>();
@@ -42,12 +50,17 @@ public class GameMaster {
 
         board.initializeDefaultMap();
 
-        // To run with a human player, uncomment the line below
-        // and change the loop to start at i = 2
-        //players.add(new HumanPlayer(1));
-
-        for (int i = 1; i <= 4; i++) {
-            players.add(new AIPlayer(i));
+        // Players are configured via config.txt instead of being hardcoded
+        for (String[] entry : playerConfigs) {
+            int id = Integer.parseInt(entry[0]);
+            String type = entry[1];
+            if ("HUMAN".equals(type)) {
+                players.add(new HumanPlayer(id));
+                LOGGER.info(() -> String.format("Added Human Player %d", id));
+            } else {
+                players.add(new AIPlayer(id));
+                LOGGER.info(() -> String.format("Added AI Player %d", id));
+            }
         }
     }
 
@@ -107,12 +120,22 @@ public class GameMaster {
         JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
     }
 
+    /**
+     * R3.1: Undoes the last build action within the current turn.
+     *
+     * @return true if an action was successfully undone
+     */
     public boolean undoLastAction() {
         boolean result = commandManager.undo(this);
         JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
         return result;
     }
 
+    /**
+     * R3.1: Redoes the last undone build action within the current turn.
+     *
+     * @return true if an action was successfully redone
+     */
     public boolean redoLastAction() {
         boolean result = commandManager.redo(this);
         JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");

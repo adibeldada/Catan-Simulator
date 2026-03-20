@@ -38,7 +38,8 @@ public class Demonstrator {
         ConfigReader config = new ConfigReader("config.txt"); // provides game settings from file
         printConfiguration(config);
 
-        GameMaster game = new GameMaster(config.getMaxRounds()); // the controller for the game session
+        // GameMaster is now configured via config.txt — no hardcoded players
+        GameMaster game = new GameMaster(config.getMaxRounds(), config.getPlayerConfigs());
         performSetupPhase(game);
 
         game.startSimulation();
@@ -92,7 +93,7 @@ public class Demonstrator {
             }
         }
         JsonStateExporter.exportState(game.getBoard(), "../2aa4-2026-base/assignments/visualize/state.json");
-        
+
         printStartingResources(players);
     }
 
@@ -291,7 +292,7 @@ public class Demonstrator {
      */
     private static boolean hasEssentialTrio(Player p, Vertex candidate, GameMaster game) {
         if (p.getBuildingsBuilt().isEmpty()) return false;
-        
+
         Vertex firstVertex = p.getBuildingsBuilt().get(0).getLocation(); // the first settlement placed
         List<ResourceType> current = getProducedResources(firstVertex, game); // resources from first settlement
         List<ResourceType> potential = getProducedResources(candidate, game); // resources from second settlement
@@ -332,12 +333,13 @@ public class Demonstrator {
     }
 
     /**
-     * Runs a custom demonstration of the simulation with a specified number of rounds.
-     * @param maxRounds The maximum number of rounds to simulate
+     * Runs a custom demonstration using settings from a specified config file.
+     * @param configFilePath Path to the configuration file
      */
-    public static void runCustomDemo(int maxRounds) {
+    public static void runCustomDemo(String configFilePath) {
         LoggerUtil.setupLogging();
-        GameMaster game = new GameMaster(maxRounds); // custom game instance
+        ConfigReader config = new ConfigReader(configFilePath); // read config from file
+        GameMaster game = new GameMaster(config.getMaxRounds(), config.getPlayerConfigs());
         game.startSimulation();
     }
 }
