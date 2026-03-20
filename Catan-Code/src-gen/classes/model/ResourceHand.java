@@ -63,6 +63,18 @@ public class ResourceHand {
             case DESERT: break;
         }
     }
+    
+ 
+    public void set(ResourceType resource, int amount) {
+        switch (resource) {
+            case WOOD:  wood  = amount; break;
+            case BRICK: brick = amount; break;
+            case WHEAT: wheat = amount; break;
+            case SHEEP: sheep = amount; break;
+            case ORE:   ore   = amount; break;
+            case DESERT: break;
+        }
+    }
 
     public int totalCards() {
         return wood + brick + wheat + sheep + ore;

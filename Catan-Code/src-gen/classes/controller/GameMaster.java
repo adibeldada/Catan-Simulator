@@ -104,24 +104,19 @@ public class GameMaster {
      */
     public void executeAction(PlayerAction action) {
         commandManager.executeCommand(action, this);
+        JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
     }
 
-    /**
-     * R3.1: Undoes the last build action within the current turn.
-     *
-     * @return true if an action was successfully undone
-     */
     public boolean undoLastAction() {
-        return commandManager.undo(this);
+        boolean result = commandManager.undo(this);
+        JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
+        return result;
     }
 
-    /**
-     * R3.1: Redoes the last undone build action within the current turn.
-     *
-     * @return true if an action was successfully redone
-     */
     public boolean redoLastAction() {
-        return commandManager.redo(this);
+        boolean result = commandManager.redo(this);
+        JsonStateExporter.exportState(this.board, "../2aa4-2026-base/assignments/visualize/state.json");
+        return result;
     }
 
     public void rollAndDistribute(Player roller) {

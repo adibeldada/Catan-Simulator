@@ -8,11 +8,10 @@ import java.util.logging.Logger;
 
 /**
  * Represents a human-controlled player.
- * Uses console input to execute moves and enforces turn-based rules.
  *
- * R3.1: Build actions are routed through GameMaster.executeAction() so they
- * are recorded by the CommandManager. The human player can type "undo" or
- * "redo" at any point in their turn to reverse or reapply a build action.
+ * R3.1: ALL actions (roll, build, pass) are routed through
+ * GameMaster.executeAction() so they are recorded by the CommandManager
+ * and can be undone or redone within the same turn.
  */
 public class HumanPlayer extends Player {
     private static final Logger LOGGER = Logger.getLogger(HumanPlayer.class.getName());
@@ -35,11 +34,21 @@ public class HumanPlayer extends Player {
         while (turnActive) {
             PlayerAction action = decideMove(game, false);
             if (action instanceof PassAction) {
-            	game.executeAction(action);
-                turnActive = false;
-            } else if (action != null) {
-                // R3.1: Route through CommandManager so the action is recorded
                 game.executeAction(action);
+                // After logging the pass, ask for confirmation
+                LOGGER.info("Turn ended. Type 'undo' to take it back, or press Enter to confirm:");
+                String confirm = scanner.nextLine().trim();
+                if (confirm.equalsIgnoreCase("undo")) {
+                    game.undoLastAction();
+                    hasRolled = true; // roll is still on the stack
+                } else {
+                    turnActive = false;
+                }
+            } else if (action != null) {
+                game.executeAction(action);
+                if (action instanceof RollAction) {
+                    hasRolled = true;
+                }
             }
         }
     }
@@ -57,12 +66,21 @@ public class HumanPlayer extends Player {
 
         String actionType = cmd[0];
 
-        // Handle system / meta commands (no roll required)
-        if (handleSystemCommands(actionType, game)) {
+        // Handle meta commands that don't produce actions
+        if (handleMetaCommands(actionType, game)) {
             return null;
         }
 
-        // Roll must happen before build commands
+        // ROLL returns a RollAction — no prior roll required
+        if ("ROLL".equals(actionType)) {
+            if (hasRolled) {
+                LOGGER.warning("Error: Already rolled.");
+                return null;
+            }
+            return new RollAction(this);
+        }
+
+        // Everything else requires a prior roll
         if (!hasRolled && !"GO".equals(actionType)) {
             LOGGER.warning("Error: Must 'roll' first.");
             return null;
@@ -72,37 +90,32 @@ public class HumanPlayer extends Player {
     }
 
     /**
-     * Handles commands that don't produce a PlayerAction object.
+     * Handles LIST, UNDO, REDO — commands that consume input but produce no action.
      * Returns true if the command was consumed here.
      */
-    private boolean handleSystemCommands(String action, GameMaster game) {
+    private boolean handleMetaCommands(String action, GameMaster game) {
         if ("LIST".equals(action)) {
             LOGGER.info(() -> "Your hand: " + getHand().toString());
             return true;
         }
-        if ("ROLL".equals(action)) {
-            if (hasRolled) {
-                LOGGER.warning("Error: Already rolled.");
-            } else {
-                game.rollAndDistribute(this);
-                hasRolled = true;
-            }
-            return true;
-        }
-        // R3.1: Undo / Redo are handled here so they never enter the action pipeline
         if ("UNDO".equals(action)) {
-            if (!hasRolled) {
-                LOGGER.warning("Error: Must roll before you can undo a build action.");
-            } else {
-                game.undoLastAction();
+            boolean undid = game.undoLastAction();
+            // The roll is always the first action pushed, so the stack being
+            // empty after an undo means the roll was just undone.
+            if (undid && !game.getCommandManager().canUndo()) {
+                hasRolled = false;
             }
             return true;
         }
         if ("REDO".equals(action)) {
-            if (!hasRolled) {
-                LOGGER.warning("Error: Must roll before you can redo a build action.");
-            } else {
-                game.redoLastAction();
+            boolean redid = game.redoLastAction();
+            if (redid) {
+                // If the top of the undo stack is now a RollAction,
+                // the roll was just redone — mark hasRolled accordingly.
+                PlayerAction top = game.getCommandManager().peekUndo();
+                if (top instanceof RollAction) {
+                    hasRolled = true;
+                }
             }
             return true;
         }
@@ -118,16 +131,12 @@ public class HumanPlayer extends Player {
                     LOGGER.warning("Error: You cannot end your turn without rolling first!");
                     return null;
                 }
-
             case "SETTLE":
                 return handleSettle(cmd, game);
-
             case "ROAD":
                 return handleRoad(cmd, game);
-
             case "CITY":
                 return handleCity(cmd, game);
-
             default:
                 break;
         }
