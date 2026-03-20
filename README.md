@@ -31,8 +31,8 @@ The AI agent evaluates a pre-defined set of rules each turn and selects the high
 | Constraint | Response |
 |---|---|
 | Hand size > 7 cards | Must spend cards immediately |
-| Two road segments ≤ 2 units apart | Buy roads to connect them |
-| Opponent's longest road ≤ 1 shorter than agent's | Buy a connected road segment |
+| Two road segments =< 2 units apart | Buy roads to connect them |
+| Opponent's longest road =< 1 shorter than agent's | Buy a connected road segment |
 
 ---
 
