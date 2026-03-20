@@ -1,98 +1,195 @@
-# Settlers of Catan 
-**McMaster University | SFWRENG 2AA4 - Assignment 2**
+# Settlers of Catan
+**McMaster University | SFWRENG 2AA4 - Assignment 3**
 **Contributors:** Adib El Dada (eldada1) | Youssef Elshafei (elshafey) | Youssef Khafagy (khafagyy) | Riken Allen (allenr16)
 
+---
+
 ## Project Overview
-This project extends the Assignment 1 Java-based Catan simulator with human player support, board visualization, trading, and the Robber mechanism. The focus of A2 is software evolution: adapting an existing codebase to new requirements while maintaining design quality through OO and SOLID principles, unit testing, and UML-driven design updates.
+This project extends the Assignment 2 Java-based Catan simulator with undo/redo functionality and a rule-based machine intelligence agent. The focus of A3 is applying **design patterns** to achieve clean, extensible software: each new feature is introduced through a deliberately chosen pattern, improving structure without requiring wholesale rewrites of existing code.
 
-## New Features in Assignment 2
+---
 
-### Human Player (R2.1 – R2.4)
-- A human player replaces one of the computer agents and interacts via the command line on their turn. Can add players by going through GameMaster.java class (Lines 36-41)
-- The following commands are supported:
+## New Features in Assignment 3
 
-| Command | Description |
+### Undo / Redo (R3.1)
+- Every game action (build road, build settlement, build city, buy development card, pass) can be **undone and redone** during a session.
+- The undo/redo history is maintained per-turn and is available to both human and AI players.
+- Implemented via the **Command Pattern** (see Design Patterns section).
+
+### Rule-Based Machine Intelligence (R3.2 – R3.3)
+The AI agent evaluates a pre-defined set of rules each turn and selects the highest-value action.
+
+#### Value scoring (R3.2)
+| Action | Value |
 |---|---|
-| `Roll` | Roll the dice and collect resources |
-| `Go` | End your turn (proceed to next agent) |
-| `List` | Display all cards currently in your hand |
-| `Build settlement <nodeId>` | Build a settlement at the specified node |
-| `Build city <nodeId>` | Upgrade a settlement to a city |
-| `Build road <fromNodeId, toNodeId>` | Build a road between two nodes |
+| Earns a Victory Point | 1.0 |
+| Builds without earning a VP (road, dev card) | 0.8 |
+| Spends cards leaving fewer than 5 in hand | 0.5 |
+| Tie between actions | Random selection |
 
-- All human input is parsed using **regular expressions** for robust command handling.
-- A **"step forward"** mode (R2.4) pauses the simulation between turns and waits for the `Go` command before proceeding.
+#### Constraints — resolved before value-added actions (R3.3)
+| Constraint | Response |
+|---|---|
+| Hand size > 7 cards | Must spend cards immediately |
+| Two road segments ≤ 2 units apart | Buy roads to connect them |
+| Opponent's longest road ≤ 1 shorter than agent's | Buy a connected road segment |
 
-### Visualization Integration (R2.2 – R2.3)
-- The simulator writes the live game state to an external **JSON file** after each turn.
-- This JSON feeds the visualizer provided:
-  > https://github.com/ssm-lab/2aa4-2026-base/tree/main/assignments/visualize
-- The visualizer is a Python script. Run it manually or use live visualization mode (see the visualizer's README for setup).
+---
 
-### Robber Mechanism (R2.5)
-- When a **7** is rolled, the following occurs:
-  1. Any player with more than 7 resource cards discards half (rounded down).
-  2. The Robber is placed on a **randomly selected tile**.
-  3. A qualifying player (one with a settlement or city adjacent to the Robber's new tile) is **randomly chosen** to pass one random card to the player who rolled the 7.
+## Design Patterns
+
+### Task 1 — Command Pattern (Undo/Redo, R3.1)
+
+**Why:** Undo/redo is the canonical use case for the Command pattern. Each game action (build road, build settlement, etc.) is encapsulated as a `Command` object carrying both an `execute()` and an `undo()` method. Two stacks — an undo stack and a redo stack — hold these objects. Undoing pops from the undo stack, calls `undo()`, and pushes to the redo stack; redoing reverses that flow.
+
+**Structure:**
+```
+<<interface>> Command
+  + execute(): void
+  + undo(): void
+
+BuildRoadCommand implements Command
+BuildSettlementCommand implements Command
+BuildCityCommand implements Command
+BuyDevCardCommand implements Command
+PassCommand implements Command
+
+GameHistory
+  - undoStack: Deque<Command>
+  - redoStack: Deque<Command>
+  + push(Command): void
+  + undo(): void
+  + redo(): void
+```
+
+**Design benefit:** No existing game logic needs to change — each move class simply gains an `undo()` counterpart. The `GameHistory` manager is entirely new, satisfying the Open/Closed principle. Adding new undoable actions in the future requires only a new `Command` implementation, not changes to the history manager.
+
+---
+
+### Task 2 — Strategy Pattern (Rule-Based AI, R3.2)
+
+**Why:** The AI agent's rules are naturally independent behaviours that share a common interface: each rule evaluates the current game state and returns a scored action. The Strategy pattern lets rules be added, removed, or swapped without touching the agent or the evaluation loop.
+
+**Structure:**
+```
+<<interface>> AIRule
+  + isApplicable(GameState): boolean
+  + evaluate(GameState): ScoredAction
+
+EarnVPRule implements AIRule
+BuildRoadRule implements AIRule
+BuyDevCardRule implements AIRule
+SpendExcessCardsRule implements AIRule
+
+AIAgent
+  - rules: List<AIRule>
+  + chooseBestAction(GameState): Action
+```
+
+**Evaluation loop (R3.2):**
+```java
+List<ScoredAction> candidates = rules.stream()
+    .filter(r -> r.isApplicable(state))
+    .map(r -> r.evaluate(state))
+    .collect(toList());
+// pick highest score; random tiebreak
+```
+
+**Design benefit:** Constraints (R3.3) are implemented as high-priority `AIRule` implementations with a fixed score ceiling above normal value-added rules, ensuring they are always chosen first when applicable — without any `if`-chains in the agent itself.
+
+---
+
+### Task 3 — Observer Pattern (Game Event Notifications)
+
+**Why:** Multiple components need to react to game events (a 7 is rolled → trigger robber; a VP is earned → check win condition; a card is spent → update hand display). Rather than hardwiring these reactions into the event sources, the Observer pattern decouples producers from consumers.
+
+**Structure:**
+```
+<<interface>> GameEventListener
+  + onEvent(GameEvent): void
+
+VictoryConditionChecker implements GameEventListener
+RobberTrigger implements GameEventListener
+HandDisplayUpdater implements GameEventListener
+
+GameEventBus
+  + subscribe(EventType, GameEventListener): void
+  + publish(GameEvent): void
+```
+
+**Design benefit:** New reactions to existing events (e.g., logging, achievements, AI notifications) are added by registering a new listener — zero changes to the event-publishing code. This cleanly replaces the ad-hoc method calls that previously scattered event-handling logic across `GameMaster`.
 
 ---
 
 ## How to Run the Simulation
 
 ### 1. Configuration
-The simulation duration is controlled by `config.txt` in the **project root directory**.
+Simulation duration is set in `config.txt` in the project root:
 ```
 turns: 100
 ```
-Supports values from `1` to `8192` turns (1 turn = 1 player acting).
+Supports values from `1` to `8192` (1 turn = 1 player acting).
 
 ### 2. Running the Java Simulator
 1. Open your IDE (Eclipse / IntelliJ / VS Code).
 2. Navigate to the **`Catan-Code`** folder.
-3. Locate and run the Demonstrator:
+3. Run the Demonstrator:
    ```
    src/CatanSimulatorDomainModel/Catan-Code/src-gen/classes/Demonstrator.java
    ```
-   - **Eclipse:** Right-click > **Run As** > **Java Application**
+   - **Eclipse:** Right-click → **Run As** → **Java Application**
    - **IntelliJ:** Click the green **Run** icon next to `main`
 
-4. When it is your turn, enter one of the supported commands at the console prompt.
+### 3. Human Player Commands
 
-### 3. Running the Visualizer (Python)
-Ensure Python is installed, then follow the instructions in the visualizer README (from src):
+| Command | Description |
+|---|---|
+| `Roll` | Roll the dice and collect resources |
+| `Go` | End your turn |
+| `List` | Display all cards in your hand |
+| `Build settlement <nodeId>` | Build a settlement |
+| `Build city <nodeId>` | Upgrade a settlement to a city |
+| `Build road <fromNodeId, toNodeId>` | Build a road |
+| `Undo` | Undo the last action this turn |
+| `Redo` | Redo a previously undone action |
+
+### 4. Running the Visualizer (Python)
 ```bash
 cd 2aa4-2026-base/assignments/visualize
 python light_visualizer.py base_map.json state.json
 ```
-For live mode, refer to the `--watch` flag documented in the visualizer repo.
+Use the `--watch` flag for live updates between turns.
 
 ---
 
 ## System Architecture
 
-### Key Design Changes from A1
-- **Human Player abstraction:** A `HumanPlayer` class extends the existing `Agent` hierarchy, keeping the turn-loop logic unchanged.
-- **Command Parser:** A dedicated parser class uses regular expressions to tokenize and validate human input, decoupled from game logic.
-- **Game State Serializer:** A new component serializes the board and player state to JSON after every turn, satisfying the visualizer's expected format.
-- **Robber component:** Encapsulated as its own class, triggered by the dice roll event and operating on the existing tile/vertex model.
-- **Automaton-based turn model:** Each agent's action space within a turn is modelled as a finite automaton, clearly defining which actions are valid in which states (e.g., must Roll before Build, Go ends the turn).
+### Key Design Changes from A2
+- **Command objects:** Every `Move` subclass now implements `Command`, gaining an `undo()` method alongside `execute()`. The `GameHistory` class manages the undo/redo stacks.
+- **AIRule interface:** The monolithic AI decision block is decomposed into individual `AIRule` implementations evaluated by a scoring loop inside `AIAgent`.
+- **GameEventBus:** Centralises event dispatch; `GameMaster` now publishes events rather than calling subsystem methods directly.
+- **Constraint rules:** R3.3 constraints are `AIRule` implementations that return a score above the normal value ceiling, guaranteeing priority without branching logic.
 
-### SOLID & OO Principles Applied
-- **Single Responsibility:** Parser, serializer, and game logic are separated into distinct classes.
-- **Open/Closed:** New player types (human vs. agent) are added by extension, not modification.
-- **Liskov Substitution:** `HumanPlayer` is a drop-in replacement for any `Agent` in the turn loop.
-- **Dependency Inversion:** High-level game flow depends on the `Agent` abstraction, not concrete player types.
+### SOLID Principles Applied
+- **Single Responsibility:** `GameHistory`, `AIAgent`, and `GameEventBus` each have one clearly defined role.
+- **Open/Closed:** New moves, AI rules, and event listeners are added by extension — no modification to existing classes.
+- **Liskov Substitution:** `AIAgent` and `HumanPlayer` remain interchangeable in the turn loop.
+- **Interface Segregation:** `Command`, `AIRule`, and `GameEventListener` are narrow, focused interfaces.
+- **Dependency Inversion:** `GameMaster` depends on abstractions (`Command`, `AIRule`, `GameEventListener`), not concrete implementations.
 
 ---
 
 ## Testing
 
-### Unit Tests (Task 1 – JUnit)
-- **10–20 unit tests** are implemented before any new code was written, covering core game logic from A1.
-- Tests use **partition testing** and **boundary testing** where applicable and are organized into **test suites**.
+### Unit Tests
+- Existing test suite from A2 is retained and extended.
+- New tests cover: undo/redo correctness (execute → undo → state restored), redo after undo, AI rule scoring, constraint priority over value-added actions, and observer notification delivery.
 
-### Parser Tests (Task 3)
-- **5–10 additional tests** validate the correctness of the regular-expression-based command parser, covering valid inputs, invalid inputs, edge cases, and boundary conditions.
+### Running Tests
+```bash
+cd Catan-Code
+mvn test
+```
 
 ---
 
@@ -102,8 +199,9 @@ For live mode, refer to the `--watch` flag documented in the visualizer repo.
 ```
 Example:
 ```
-12 / Player2: Built settlement at node 34
-13 / Human: Rolled 7 - Robber placed on tile 5
+24 / AIAgent: Built road (rule: ConnectSegmentsRule, constraint priority)
+25 / Human: Built settlement at node 12
+25 / Human: Undo — settlement at node 12 removed
 ```
 
 ---
