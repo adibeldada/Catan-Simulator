@@ -19,14 +19,14 @@ public class ValueEvaluator implements ActionVisitor {
 
     @Override
     public double visit(BuildSettlementAction action) {
-        // Settlements earn a VP → 1.0
-        return 1.0;
+        // settlement costs 4 cards
+        return (hand.totalCards() - 4 < 5) ? 0.5 : 1.0;
     }
 
     @Override
     public double visit(BuildCityAction action) {
-        // Cities earn a VP → 1.0
-        return 1.0;
+        // city costs 5 cards
+        return (hand.totalCards() - 5 < 5) ? 0.5 : 1.0;
     }
 
     @Override
@@ -39,6 +39,11 @@ public class ValueEvaluator implements ActionVisitor {
     @Override
     public double visit(PassAction action) {
         // Passing has no value
+        return 0.0;
+    }
+    
+    @Override
+    public double visit(RollAction action) { 
         return 0.0;
     }
 }

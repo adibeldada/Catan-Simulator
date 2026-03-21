@@ -66,7 +66,7 @@ public class RollAction extends PlayerAction {
     
     @Override
     public double accept(ActionVisitor visitor) {
-        return 0.0;
+        return visitor.visit(this);
     }
 
     @Override

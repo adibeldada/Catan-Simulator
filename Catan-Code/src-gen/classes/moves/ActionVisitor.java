@@ -12,4 +12,5 @@ public interface ActionVisitor {
     double visit(BuildRoadAction action);
     double visit(BuildCityAction action);
     double visit(PassAction action);
+    double visit(RollAction action);
 }
