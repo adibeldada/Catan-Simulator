@@ -36,52 +36,6 @@ The AI agent evaluates a pre-defined set of rules each turn and selects the high
 
 ---
 
-## Design Patterns
-
-### Task 1 - Command Pattern (Undo/Redo, R3.1)
-
-**Pattern components:**
-- `PlayerAction` (abstract) -- the Command interface, extended with an abstract `undo()` method
-- `BuildRoadAction`, `BuildSettlementAction`, `BuildCityAction`, `PassAction` -- Concrete Commands, each storing a reference to the object placed (e.g. `placedSettlement`) so the action can be reversed
-- `CommandManager` -- the Invoker, holding an undo stack and a redo stack with no knowledge of game rules
-- `GameMaster` -- the Client, exposing `executeAction()`, `undoLastAction()`, and `redoLastAction()`
-
-**Why this pattern:** Undo/redo requires reversible, self-contained actions. Encapsulating each move as an object with `execute()` and `undo()` lets `CommandManager` manage history without knowing anything about what a road or a settlement is. The build actions become independently testable units, and the rest of the system interacts with a clean three-method interface.
-
-**Changes made:** `CommandManager` was added as a new class. `undo()` was made abstract in `PlayerAction`. Three action classes were updated to implement `undo()` and store placement references. `GameMaster` gained three new methods and one new field. `HumanPlayer` was updated to route builds through `executeAction()`. `CommandParser` gained two new patterns. Core game logic classes were untouched.
-
----
-
-### Task 2 - Template Method Pattern (Rule-Based AI, R3.2 and R3.3)
-
-**Pattern components:**
-- `RuleBasedAIPlayer` (abstract) -- defines `takeTurn()` as a `final` template method with the skeleton: roll, `resolveConstraint()`, `pickBestValueMove()`, repeat until pass
-- `resolveConstraint()` -- abstract hook method for R3.3 constraint logic
-- `pickBestValueMove()` -- abstract hook method for R3.2 value scoring
-- `AIPlayer` -- extends `RuleBasedAIPlayer` and implements both hooks
-- `ScoredAction` -- helper class binding a `PlayerAction` with its calculated `double` value
-
-**Why this pattern:** The AI turn has a fixed skeleton but variable steps. Template Method defines the algorithm once in the abstract class as a `final` method so no subclass can accidentally break the ordering, while the constraint and scoring logic are explicitly separated into overrideable hooks. This also provides a natural extension point: a future aggressive or defensive AI personality only needs to extend `RuleBasedAIPlayer` and implement the two hooks.
-
-**Changes made:** `RuleBasedAIPlayer` was added as a new abstract class. `AIPlayer` was changed to extend `RuleBasedAIPlayer` instead of `Player`, and `takeTurn()` and `decideMove()` were replaced by the two hook methods. `ScoredAction` was added inside `AIPlayer`. `GameMaster`, `HumanPlayer`, `Board`, `Player`, and `RuleValidator` were not changed.
-
----
-
-### Task 3 - Chain of Responsibility Pattern (Rule Validation, design only)
-
-**Motivation:** The existing `RuleValidator` class has three compounding problems. First, it is a god class handling roads, connectivity, settlements, cities, and distances all in one place, violating the Single Responsibility Principle. Second, each validation method is an if-statement chain where adding or reordering a rule requires editing the method directly, violating the Open/Closed Principle. Third, the class has hidden dependencies on concrete implementations of `Board`, `Player`, `Vertex`, `Road`, and `Buildings`, violating the Dependency Inversion Principle.
-
-**Pattern structure (design only, not implemented):**
-- `RoadBuildRequest` -- request object that makes all validation inputs explicit, removing hidden dependencies
-- `Result` -- structured return type replacing `boolean`, including pass/fail status and a custom error message
-- `ValidationHandler` (interface) -- each rule implements this, accepting a request and returning a `Result`
-- Concrete handlers: `RoadCostRule`, `RoadAdjacencyRule`, `RoadOccupancyRule`, `RoadConnectivityRule`
-- `RoadRuleChain` -- the pipeline, holding an ordered list of handlers and stopping on the first failure
-
-**Why this pattern:** CoR turns each validation rule into an independent, single-responsibility class. Rules become reusable across different action types, reorderable without touching existing logic, and individually testable in isolation. Validation logic depends on the `ValidationHandler` abstraction rather than concrete domain classes.
-
----
-
 ## How to Run the Simulation
 
 ### 1. Configuration
