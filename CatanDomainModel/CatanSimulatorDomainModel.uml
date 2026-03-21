@@ -532,6 +532,7 @@
         <ownedOperation xmi:type="uml:Operation" xmi:id="_xEuUkCNBEfGBfKT8qbQ1rg" name="undo" visibility="public">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_xEuUkSNBEfGBfKT8qbQ1rg" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
         </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_zKOSQCTSEfGBfKT8qbQ1rg" name="accept"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_eWWicP4JEfCOd8UCBhMXvw" name="ResourceHand">
         <ownedAttribute xmi:type="uml:Property" xmi:id="_KKN4QP8lEfCAfM7SqUCuhg" name="wood" visibility="private">
@@ -1232,6 +1233,7 @@
         </ownedOperation>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_dYGcACTNEfGBfKT8qbQ1rg" name="ValueEvaluator">
+        <generalization xmi:type="uml:Generalization" xmi:id="_LgcBcCTOEfGBfKT8qbQ1rg" general="_ybhA4CTMEfGBfKT8qbQ1rg"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_gpVjQCTNEfGBfKT8qbQ1rg" name="hand" visibility="private" type="_eWWicP4JEfCOd8UCBhMXvw"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_mCYrkCTNEfGBfKT8qbQ1rg" name="ValueEvaluator">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_pfKUcCTNEfGBfKT8qbQ1rg" name="hand" type="_eWWicP4JEfCOd8UCBhMXvw"/>
@@ -1837,6 +1839,7 @@
         <ownedOperation xmi:type="uml:Operation" xmi:id="_xEuUkCNBEfGBfKT8qbQ1rg" name="undo" visibility="public">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_xEuUkSNBEfGBfKT8qbQ1rg" name="game" type="_IJB2kP4HEfCOd8UCBhMXvw"/>
         </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_zKOSQCTSEfGBfKT8qbQ1rg" name="accept"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_eWWicP4JEfCOd8UCBhMXvw" name="ResourceHand">
         <ownedAttribute xmi:type="uml:Property" xmi:id="_KKN4QP8lEfCAfM7SqUCuhg" name="wood" visibility="private">
@@ -2537,6 +2540,7 @@
         </ownedOperation>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_dYGcACTNEfGBfKT8qbQ1rg" name="ValueEvaluator">
+        <generalization xmi:type="uml:Generalization" xmi:id="_LgcBcCTOEfGBfKT8qbQ1rg" general="_ybhA4CTMEfGBfKT8qbQ1rg"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_gpVjQCTNEfGBfKT8qbQ1rg" name="hand" visibility="private" type="_eWWicP4JEfCOd8UCBhMXvw"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_mCYrkCTNEfGBfKT8qbQ1rg" name="ValueEvaluator">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_pfKUcCTNEfGBfKT8qbQ1rg" name="hand" type="_eWWicP4JEfCOd8UCBhMXvw"/>
@@ -2596,6 +2600,13 @@
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ljOUYSNOEfGBfKT8qbQ1rg" key="nature" value="UML_Nature"/>
       </eAnnotations>
       <ownedEnd xmi:type="uml:Property" xmi:id="_ljRXsCNOEfGBfKT8qbQ1rg" name="aiplayer" type="_GCMtwBsjEfGmVqx7S1jwyQ" association="_ljL4ICNOEfGBfKT8qbQ1rg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="__MYSACTREfGBfKT8qbQ1rg" memberEnd="__MiDACTREfGBfKT8qbQ1rg __M2MECTREfGBfKT8qbQ1rg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__Mg04CTREfGBfKT8qbQ1rg" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__Mhb8CTREfGBfKT8qbQ1rg" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="__MiDACTREfGBfKT8qbQ1rg" name="aiplayer" type="_GCMtwBsjEfGmVqx7S1jwyQ" association="__MYSACTREfGBfKT8qbQ1rg"/>
+      <ownedEnd xmi:type="uml:Property" xmi:id="__M2MECTREfGBfKT8qbQ1rg" name="valueevaluator" type="_dYGcACTNEfGBfKT8qbQ1rg" association="__MYSACTREfGBfKT8qbQ1rg"/>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_S4gAUP_QEfCPDcBx7W850w">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S4s0oP_QEfCPDcBx7W850w" source="http://www.eclipse.org/uml2/2.0.0/UML">

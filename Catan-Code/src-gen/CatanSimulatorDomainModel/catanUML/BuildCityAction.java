@@ -53,4 +53,12 @@ public class BuildCityAction extends PlayerAction {
 	 */
 	public void undo(GameMaster game) {
 	}
+
+	/**
+	 * 
+	 * @return 
+	 * @param visitor 
+	 */
+	public float accept(ActionVisitor visitor) {
+	}
 }

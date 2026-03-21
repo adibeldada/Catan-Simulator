@@ -36,4 +36,12 @@ public class PassAction extends PlayerAction {
 	 */
 	public void undo(GameMaster game) {
 	}
+
+	/**
+	 * 
+	 * @return 
+	 * @param visitor 
+	 */
+	public float accept(ActionVisitor visitor) {
+	}
 }
