@@ -36,19 +36,6 @@ The AI agent evaluates a pre-defined set of rules each turn and selects the high
 
 ---
 
-## Design Patterns
-
-### Task 1 - Command Pattern (R3.1)
-`PlayerAction` serves as the Command interface with an abstract `undo()` method. Concrete commands (`BuildRoadAction`, `BuildSettlementAction`, `BuildCityAction`, `RollAction`, `PassAction`) each store the state needed to reverse themselves. `CommandManager` acts as the Invoker, managing undo/redo stacks with no knowledge of game rules. `GameMaster` exposes `executeAction()`, `undoLastAction()`, and `redoLastAction()` to the rest of the system.
-
-### Task 2 - Template Method Pattern (R3.2, R3.3)
-`RuleBasedAIPlayer` defines a `final` template method `takeTurn()` with the skeleton: roll → resolve constraints → pick best value move → repeat until pass. Two abstract hooks, `resolveConstraint()` (R3.3) and `pickBestValueMove()` (R3.2), are implemented by `AIPlayer`. This guarantees constraint resolution always occurs before value-added actions.
-
-### Task 3 - Visitor Pattern (R3.2) + Chain of Responsibility (design only)
-The **Visitor pattern** decouples action scoring from action classes. `ActionVisitor` defines typed `visit()` methods; `ValueEvaluator` implements the R3.2 scoring rules. Each `PlayerAction` subclass implements `accept(ActionVisitor)` for double dispatch. The **Chain of Responsibility** pattern was designed (not implemented) as an improvement to `RuleValidator`, decomposing its god-class structure into independent, reorderable validation handlers.
-
----
-
 ## How to Run the Simulation
 
 ### 1. Configuration
@@ -103,18 +90,6 @@ Use the `--watch` flag for live updates between turns.
 - **Open/Closed:** New moves are added by creating a new `PlayerAction` subclass. New AI behaviours are added by extending `RuleBasedAIPlayer`. New scoring strategies are added by implementing `ActionVisitor`.
 - **Liskov Substitution:** `AIPlayer` and `HumanPlayer` remain interchangeable in the turn loop.
 - **Dependency Inversion:** `CommandManager` depends on the `PlayerAction` abstraction, not concrete move classes.
-
----
-
-## Testing
-
-### Running Tests
-```bash
-cd Catan-Code
-mvn test
-```
-
-Tests cover board initialization, resource management, building placement, dice rolling, rule validation, cost affordability, and command parsing.
 
 ---
 
