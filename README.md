@@ -12,7 +12,7 @@ This project extends the Assignment 2 Java-based Catan simulator with undo/redo 
 ## New Features in Assignment 3
 
 ### Undo / Redo (R3.1)
-- Every game action (build road, build settlement, build city, pass) can be undone and redone during a session.
+- Every game action (build road, build settlement, build city, roll, pass) can be undone and redone within a turn.
 - Implemented using the **Command Pattern** via a new `CommandManager` class with undo and redo stacks.
 - No changes were made to any core game logic classes (`Board`, `Player`, `RuleValidator`, `Tile`, `Vertex`).
 
@@ -33,6 +33,19 @@ The AI agent evaluates a pre-defined set of rules each turn and selects the high
 | Hand size > 7 cards | Must spend cards immediately |
 | Two road segments at most 2 units apart | Buy roads to connect them |
 | Opponent's longest road is at most 1 shorter than the agent's | Buy a connected road segment |
+
+---
+
+## Design Patterns
+
+### Task 1 — Command Pattern (R3.1)
+`PlayerAction` serves as the Command interface with an abstract `undo()` method. Concrete commands (`BuildRoadAction`, `BuildSettlementAction`, `BuildCityAction`, `RollAction`, `PassAction`) each store the state needed to reverse themselves. `CommandManager` acts as the Invoker, managing undo/redo stacks with no knowledge of game rules. `GameMaster` exposes `executeAction()`, `undoLastAction()`, and `redoLastAction()` to the rest of the system.
+
+### Task 2 — Template Method Pattern (R3.2, R3.3)
+`RuleBasedAIPlayer` defines a `final` template method `takeTurn()` with the skeleton: roll → resolve constraints → pick best value move → repeat until pass. Two abstract hooks, `resolveConstraint()` (R3.3) and `pickBestValueMove()` (R3.2), are implemented by `AIPlayer`. This guarantees constraint resolution always occurs before value-added actions.
+
+### Task 3 — Visitor Pattern (R3.2) + Chain of Responsibility (design only)
+The **Visitor pattern** decouples action scoring from action classes. `ActionVisitor` defines typed `visit()` methods; `ValueEvaluator` implements the R3.2 scoring rules. Each `PlayerAction` subclass implements `accept(ActionVisitor)` for double dispatch. The **Chain of Responsibility** pattern was designed (not implemented) as an improvement to `RuleValidator`, decomposing its god-class structure into independent, reorderable validation handlers.
 
 ---
 
@@ -82,28 +95,17 @@ Use the `--watch` flag for live updates between turns.
 ### Key Design Changes from A2
 - **Command objects:** `PlayerAction` now declares an abstract `undo()` method. Each build action stores what it placed so it can be reversed. `CommandManager` owns the two history stacks.
 - **Template Method for AI:** The monolithic `decideMove()` is replaced by a `final` `takeTurn()` skeleton in `RuleBasedAIPlayer` with two abstract hooks implemented by `AIPlayer`.
-- **ScoredAction helper:** Binds a `PlayerAction` to its computed value score so the AI evaluation loop stays clean.
-- **Constraint priority:** `resolveConstraint()` is called before `pickBestValueMove()` in the template method, guaranteeing constraints are handled first without any extra conditional logic in the agent.
+- **Visitor for scoring:** `ValueEvaluator` visits each candidate action via `accept()`, replacing hardcoded instanceof checks with double dispatch.
+- **Constraint priority:** `resolveConstraint()` is called before `pickBestValueMove()` in the template method, guaranteeing constraints are handled first.
 
 ### SOLID Principles Applied
-- **Single Responsibility:** `CommandManager`, `RuleBasedAIPlayer`, and `ScoredAction` each have one clearly defined role.
-- **Open/Closed:** New moves are added by creating a new `PlayerAction` subclass. New AI behaviours are added by extending `RuleBasedAIPlayer`. No existing classes need modification.
+- **Single Responsibility:** `CommandManager`, `RuleBasedAIPlayer`, `ValueEvaluator`, and `ScoredAction` each have one clearly defined role.
+- **Open/Closed:** New moves are added by creating a new `PlayerAction` subclass. New AI behaviours are added by extending `RuleBasedAIPlayer`. New scoring strategies are added by implementing `ActionVisitor`.
 - **Liskov Substitution:** `AIPlayer` and `HumanPlayer` remain interchangeable in the turn loop.
 - **Dependency Inversion:** `CommandManager` depends on the `PlayerAction` abstraction, not concrete move classes.
 
 ---
 
-## Testing
-
-### Running Tests
-```bash
-cd Catan-Code
-mvn test
-```
-
-Tests cover undo/redo correctness (execute, undo, verify state restored), redo after undo, AI value scoring, constraint priority over value-added actions, and existing A2 test cases.
-
----
 
 ## Console Output Format
 ```
