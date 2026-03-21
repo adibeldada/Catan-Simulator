@@ -5,7 +5,7 @@ turns: 32768
 # Format: player: <id>, <type>
 # Types: HUMAN or AI
 # Must define exactly 4 players (ids 1-4)
-player: 1, AI
+player: 1, HUMAN
 player: 2, AI
 player: 3, AI
 player: 4, AI
