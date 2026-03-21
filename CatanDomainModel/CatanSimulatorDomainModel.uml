@@ -1178,6 +1178,7 @@
         </ownedAttribute>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_hmFZACTFEfGBfKT8qbQ1rg" name="RollAction">
+        <generalization xmi:type="uml:Generalization" xmi:id="_2r8tkCTHEfGBfKT8qbQ1rg" general="_bOG_IP4JEfCOd8UCBhMXvw"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_k2gA4CTFEfGBfKT8qbQ1rg" name="resourcesBefore: Map&lt;Player, int[]>" visibility="private"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_52PKMCTFEfGBfKT8qbQ1rg" name="robberTileBefore" visibility="private" type="_7uBcgP4IEfCOd8UCBhMXvw"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_Ap5PUCTGEfGBfKT8qbQ1rg" name="snapshotTaken" visibility="private">
@@ -1196,6 +1197,74 @@
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_WsNagCTHEfGBfKT8qbQ1rg" name="" direction="return">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
           </ownedParameter>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_ybhA4CTMEfGBfKT8qbQ1rg" name="ActionVisitor">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_2_HH4CTMEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_7h4vgCTMEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ap3V8CTNEfGBfKT8qbQ1rg" name="action" type="_tt4tIP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_FLREkCTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_FLREkSTNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_FLREkiTNEfGBfKT8qbQ1rg" name="action" type="_v6LlkP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_LSEqwCTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_LSEqwSTNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_LSEqwiTNEfGBfKT8qbQ1rg" name="action" type="_6kZFgP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_Ll6z0CTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ll6z0STNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ll6z0iTNEfGBfKT8qbQ1rg" name="action" type="_8f7lIP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_L0_KkCTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_L0_KkSTNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_L0_KkiTNEfGBfKT8qbQ1rg" name="action" type="_hmFZACTFEfGBfKT8qbQ1rg"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_dYGcACTNEfGBfKT8qbQ1rg" name="ValueEvaluator">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_gpVjQCTNEfGBfKT8qbQ1rg" name="hand" visibility="private" type="_eWWicP4JEfCOd8UCBhMXvw"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_mCYrkCTNEfGBfKT8qbQ1rg" name="ValueEvaluator">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_pfKUcCTNEfGBfKT8qbQ1rg" name="hand" type="_eWWicP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ukhrwCTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukhrwSTNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukhrwiTNEfGBfKT8qbQ1rg" name="action" type="_tt4tIP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ukiS0CTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukiS0STNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukiS0iTNEfGBfKT8qbQ1rg" name="action" type="_v6LlkP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_uki54CTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_uki54STNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_uki54iTNEfGBfKT8qbQ1rg" name="action" type="_6kZFgP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ukjg8CTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukjg8STNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukjg8iTNEfGBfKT8qbQ1rg" name="action" type="_8f7lIP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ukkIACTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukkIASTNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukkIAiTNEfGBfKT8qbQ1rg" name="action" type="_hmFZACTFEfGBfKT8qbQ1rg"/>
         </ownedOperation>
       </packagedElement>
     </packagedElement>
@@ -2414,6 +2483,7 @@
         </ownedAttribute>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_hmFZACTFEfGBfKT8qbQ1rg" name="RollAction">
+        <generalization xmi:type="uml:Generalization" xmi:id="_2r8tkCTHEfGBfKT8qbQ1rg" general="_bOG_IP4JEfCOd8UCBhMXvw"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_k2gA4CTFEfGBfKT8qbQ1rg" name="resourcesBefore: Map&lt;Player, int[]>" visibility="private"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_52PKMCTFEfGBfKT8qbQ1rg" name="robberTileBefore" visibility="private" type="_7uBcgP4IEfCOd8UCBhMXvw"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_Ap5PUCTGEfGBfKT8qbQ1rg" name="snapshotTaken" visibility="private">
@@ -2432,6 +2502,74 @@
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_WsNagCTHEfGBfKT8qbQ1rg" name="" direction="return">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
           </ownedParameter>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_ybhA4CTMEfGBfKT8qbQ1rg" name="ActionVisitor">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_2_HH4CTMEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_7h4vgCTMEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ap3V8CTNEfGBfKT8qbQ1rg" name="action" type="_tt4tIP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_FLREkCTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_FLREkSTNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_FLREkiTNEfGBfKT8qbQ1rg" name="action" type="_v6LlkP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_LSEqwCTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_LSEqwSTNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_LSEqwiTNEfGBfKT8qbQ1rg" name="action" type="_6kZFgP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_Ll6z0CTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ll6z0STNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ll6z0iTNEfGBfKT8qbQ1rg" name="action" type="_8f7lIP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_L0_KkCTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_L0_KkSTNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_L0_KkiTNEfGBfKT8qbQ1rg" name="action" type="_hmFZACTFEfGBfKT8qbQ1rg"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_dYGcACTNEfGBfKT8qbQ1rg" name="ValueEvaluator">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_gpVjQCTNEfGBfKT8qbQ1rg" name="hand" visibility="private" type="_eWWicP4JEfCOd8UCBhMXvw"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_mCYrkCTNEfGBfKT8qbQ1rg" name="ValueEvaluator">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_pfKUcCTNEfGBfKT8qbQ1rg" name="hand" type="_eWWicP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ukhrwCTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukhrwSTNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukhrwiTNEfGBfKT8qbQ1rg" name="action" type="_tt4tIP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ukiS0CTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukiS0STNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukiS0iTNEfGBfKT8qbQ1rg" name="action" type="_v6LlkP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_uki54CTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_uki54STNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_uki54iTNEfGBfKT8qbQ1rg" name="action" type="_6kZFgP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ukjg8CTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukjg8STNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukjg8iTNEfGBfKT8qbQ1rg" name="action" type="_8f7lIP4JEfCOd8UCBhMXvw"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ukkIACTNEfGBfKT8qbQ1rg" name="visit">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukkIASTNEfGBfKT8qbQ1rg" name="" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+          </ownedParameter>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="_ukkIAiTNEfGBfKT8qbQ1rg" name="action" type="_hmFZACTFEfGBfKT8qbQ1rg"/>
         </ownedOperation>
       </packagedElement>
     </packagedElement>
