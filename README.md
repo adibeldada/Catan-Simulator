@@ -39,9 +39,13 @@ The AI agent evaluates a pre-defined set of rules each turn and selects the high
 ## How to Run the Simulation
 
 ### 1. Configuration
-Simulation duration is set in `config.txt` in the project root:
+Simulation duration is set in `config.txt` as well as the players in game in the project root; can change the amount of human players and ai players by typing in the config.txt file:
 ```
 turns: 100
+player 1: HUMAN
+player 2: AI
+player 3: AI
+player 4: AI
 ```
 Supports values from `1` to `8192` (1 turn = 1 player acting).
 
