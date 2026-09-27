@@ -8,7 +8,7 @@ This project extends the Assignment 2 Java-based Catan simulator with undo/redo 
 
 ---
 
-## New Features in Assignment 3
+## New Features
 
 ### Undo / Redo (R3.1)
 - Every game action (build road, build settlement, build city, roll, pass) can be undone and redone within a turn.
